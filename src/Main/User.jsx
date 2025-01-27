@@ -3,7 +3,7 @@ import { Navigate, useParams, useNavigate } from "react-router-dom";
 
 function User({ isAuthenticated, isNurse }) {
   const { patientId } = useParams(); // Access patientId from the URL
-  const navigate = useNavigate(); // Move useNavigate to the top
+  const navigate = useNavigate();
 
   // Redirect to login if not authenticated or is a nurse
   if (!isAuthenticated || isNurse) {
@@ -18,7 +18,11 @@ function User({ isAuthenticated, isNurse }) {
     <div>
       <h1>Welcome, User!</h1>
       <h1>This is the User Page</h1>
-      {patientId && <p>Your Patient ID: {patientId}</p>} {/* Conditionally render patientId */}
+      {patientId ? (
+        <p>Your Patient ID: {patientId}</p>
+      ) : (
+        <p>No Patient ID found.</p>
+      )}
       <button className="btn btn-danger w-100" onClick={handleLogout}>
         Logout
       </button>

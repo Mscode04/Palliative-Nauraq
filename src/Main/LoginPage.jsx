@@ -25,37 +25,39 @@ const LoginPage = ({ setIsAuthenticated, setIsNurse }) => {
     e.preventDefault();
     setLoading(true);
     setError("");
-
+  
     try {
       const usersRef = collection(db, "users");
       const q = query(usersRef, where("email", "==", email));
       const querySnapshot = await getDocs(q);
-
+  
       if (querySnapshot.empty) {
         setError("User not found. Please check your email.");
         return;
       }
-
+  
       const userDoc = querySnapshot.docs[0];
       const userData = userDoc.data();
-
+      console.log("User Data:", userData); // Debugging log
+  
       if (userData.password !== password) {
         setError("Incorrect password. Please try again.");
         return;
       }
-
+  
       setIsAuthenticated(true);
       setIsNurse(userData.is_nurse);
-
-      // Save authentication state to localStorage
+  
+      // Save authentication state and patientId to localStorage
       localStorage.setItem("isAuthenticated", true);
       localStorage.setItem("isNurse", userData.is_nurse);
-
+      localStorage.setItem("patientId", userData.patientId); // Save patientId
+  
       if (userData.is_nurse) {
         navigate("/main"); // Redirect to the Main component for nurses
       } else {
-        // Redirect to the User component for non-nurses and pass the patientId
-        navigate("/users", { state: { patientId: userData.patientId } });
+        // Redirect to the User component for non-nurses and pass the patientId in the URL
+        navigate(`/users/${userData.patientId}`);
       }
     } catch (error) {
       console.error("Error during login:", error);
@@ -64,7 +66,6 @@ const LoginPage = ({ setIsAuthenticated, setIsNurse }) => {
       setLoading(false);
     }
   };
-
   return (
     <div className="login-page-container">
       <h2>Login</h2>

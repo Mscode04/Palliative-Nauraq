@@ -11,7 +11,71 @@ const NHC = () => {
   const navigate = useNavigate();
   const [patientData, setPatientData] = useState(null);
   const [formData, setFormData] = useState({
-    // ... (your existing formData state)
+    date: "",
+    team1: "Null",
+    team2: "",
+    team3: "",
+    team4: "",
+    firstImpression: "",
+    patientAwareness: "Yes",
+    caretakerAwareness: "Yes",
+    extraDetailsAwareness: "",
+    badHabit: "No",
+    complimentaryRx: "nill",
+    food: "Good",
+    drink: "Good",
+    pee: "Good",
+    pop: "Good",
+    sleep: "Good",
+    selfHygiene: "Good",
+    basicMattersNotes: "",
+    sexuality: "nill",
+    exercise: "No",
+    exerciseFrequency: "daily",
+    exerciseTime: "",
+    exerciseLocation: "in",
+    entertainmentTime: "",
+    houseCleanliness: "clean",
+    surroundingsCleanliness: "clean",
+    bedroomCleanliness: "clean",
+    bedCleanliness: "clean",
+    dressCleanliness: "clean",
+    generalStatus: "stable",
+    patientCurrently: "sitting",
+    memoryStatus: "remember",
+    responseStatus: "good",
+    activityScore: "1",
+    scalp: "Good",
+    hair: "Good",
+    skin: "Good",
+    nails: "Good",
+    mouth: "Good",
+    perineum: "Good",
+    hiddenSpaces: "Good",
+    pressureSpaces: "Good",
+    joints: "Good",
+    headToFootNotes: "",
+    specialCareAreas: "",
+    summaryDiscussion: "",
+    medicineChanges: "",
+    otherActivities: "",
+    homeCarePlan: "def",
+    homeCareType: "nhc",
+    consultation: "",
+    formType: "NHC",
+    submittedAt: "",
+    bp: "",
+    ulLl: "Null",
+    position: "Null",
+    rr: "",
+    rrType: "R",
+    pulse: "",
+    pulseType: "R",
+    temperature: "",
+    temperatureType: "O",
+    spo2: "",
+    gcs: "",
+    grbs: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -46,39 +110,99 @@ const NHC = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-  
+
     try {
       const currentDate = new Date();
       const timestamp = currentDate.toISOString();
-  
+
       const reportData = {
         ...formData,
         ...patientData,
         patientId,
         submittedAt: timestamp,
       };
-  
+
       await addDoc(collection(db, "Reports"), reportData);
-  
-      // Show success toast and navigate back after the toast is closed
+
       toast.success("Report submitted successfully!", {
         position: "top-center",
-        autoClose: 5000, // 5 seconds
+        autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
-        onClose: () => navigate(-1), // Navigate back after toast is closed
+        onClose: () => navigate(-1),
       });
-  
-      // Reset form data
+
       setFormData({
-        // ... (reset all fields to their initial values)
+        date: "",
+        team1: "Null",
+        team2: "",
+        team3: "",
+        team4: "",
+        firstImpression: "",
+        patientAwareness: "Yes",
+        caretakerAwareness: "Yes",
+        extraDetailsAwareness: "",
+        badHabit: "No",
+        complimentaryRx: "nill",
+        food: "Good",
+        drink: "Good",
+        pee: "Good",
+        pop: "Good",
+        sleep: "Good",
+        selfHygiene: "Good",
+        basicMattersNotes: "",
+        sexuality: "nill",
+        exercise: "No",
+        exerciseFrequency: "daily",
+        exerciseTime: "",
+        exerciseLocation: "in",
+        entertainmentTime: "",
+        houseCleanliness: "clean",
+        surroundingsCleanliness: "clean",
+        bedroomCleanliness: "clean",
+        bedCleanliness: "clean",
+        dressCleanliness: "clean",
+        generalStatus: "stable",
+        patientCurrently: "sitting",
+        memoryStatus: "remember",
+        responseStatus: "good",
+        activityScore: "1",
+        scalp: "Good",
+        hair: "Good",
+        skin: "Good",
+        nails: "Good",
+        mouth: "Good",
+        perineum: "Good",
+        hiddenSpaces: "Good",
+        pressureSpaces: "Good",
+        joints: "Good",
+        headToFootNotes: "",
+        specialCareAreas: "",
+        summaryDiscussion: "",
+        medicineChanges: "",
+        otherActivities: "",
+        homeCarePlan: "def",
+        homeCareType: "nhc",
+        consultation: "",
+        formType: "NHC",
+        submittedAt: "",
+        bp: "",
+        ulLl: "Null",
+        position: "Null",
+        rr: "",
+        rrType: "R",
+        pulse: "",
+        pulseType: "R",
+        temperature: "",
+        temperatureType: "O",
+        spo2: "",
+        gcs: "",
+        grbs: "",
       });
-  
     } catch (error) {
       console.error("Error adding document: ", error);
-      // Show error toast
       toast.error("Error submitting the report. Please try again.", {
         position: "top-center",
         autoClose: 5000,
@@ -91,6 +215,7 @@ const NHC = () => {
       setIsSubmitting(false);
     }
   };
+
   return (
     <div className="NHCAdd-container">
       <ToastContainer />
@@ -161,10 +286,15 @@ const NHC = () => {
           Bad Habit:
           <select name="badHabit" value={formData.badHabit} onChange={handleChange}>
             <option value="No">No</option>
-            <option value="Smoking">Smoking</option>
-            <option value="beer">Beer</option>
+            <option value="Yes">Yes</option>
           </select>
         </label>
+        {formData.badHabit === "Yes" && (
+          <label>
+            More About Bad Habits:
+            <input type="text" name="moreAboutBadHabits" value={formData.moreAboutBadHabits} onChange={handleChange} />
+          </label>
+        )}
         <label>
           Complimentary Rx:
           <select name="complimentaryRx" value={formData.complimentaryRx} onChange={handleChange}>
@@ -186,10 +316,14 @@ const NHC = () => {
               <option value="Good">Good</option>
               <option value="Bad">Bad</option>
               <option value="Average">Average</option>
-              {field === "food" || field === "drink" ? <option value="Satisfy">Satisfy</option> : null}
+              <option value="Satisfy">Satisfy</option>
             </select>
           </label>
         ))}
+        <label>
+          Additional Notes:
+          <textarea name="basicMattersNotes" value={formData.basicMattersNotes} onChange={handleChange}></textarea>
+        </label>
         <label>
           Sexuality:
           <select name="sexuality" value={formData.sexuality} onChange={handleChange}>
@@ -232,15 +366,7 @@ const NHC = () => {
           <input type="text" name="entertainmentTime" value={formData.entertainmentTime} onChange={handleChange} />
         </label>
 
-        <h3>Section 5: Awareness</h3>
-        <label>
-          Patient Awareness Details:
-          <textarea name="patientAwarenessDetails" value={formData.patientAwarenessDetails} onChange={handleChange}></textarea>
-        </label>
-        <label>
-          Caretaker Awareness Details:
-          <textarea name="caretakerAwarenessDetails" value={formData.caretakerAwarenessDetails} onChange={handleChange}></textarea>
-        </label>
+
 
         <h3>Section 6: Surroundings</h3>
         {["house", "surroundings", "bedroom", "bed", "dress"].map((field) => (
@@ -297,25 +423,109 @@ const NHC = () => {
           <label key={field}>
             {field.charAt(0).toUpperCase() + field.slice(1)}:
             <select name={field} value={formData[field]} onChange={handleChange}>
-              <option value="Good">Good</option>
-              <option value="Bad">Bad</option>
-              <option value="Average">Average</option>
+              {field === "skin" && (
+                <>
+                  <option value="Dry">Dry</option>
+                  <option value="Oily">Oily</option>
+                  <option value="Combination">Combination</option>
+                  <option value="Sensitive">Sensitive</option>
+                  <option value="Normal">Normal</option>
+                  <option value="Wrinkled">Wrinkled</option>
+                </>
+              )}
+              {field === "hair" && (
+                <>
+                  <option value="Messy Hair">Messy Hair</option>
+                  <option value="Well maintain">Well maintain</option>
+                  <option value="Clean">Clean</option>
+                  <option value="Unclean">Unclean</option>
+                  <option value="Normal">Normal</option>
+                </>
+              )}
+              {field === "nails" && (
+                <>
+                  <option value="Clean">Clean</option>
+                  <option value="Unclean">Unclean</option>
+                  <option value="Well maintain">Well maintain</option>
+                  <option value="Normal">Normal</option>
+                  <option value="Not maintain">Not maintain</option>
+                </>
+              )}
+              {field === "mouth" && (
+                <>
+                  <option value="Clean">Clean</option>
+                  <option value="Unclean">Unclean</option>
+                  <option value="Oral candidiasis">Oral candidiasis</option>
+                  <option value="Glotitis">Glotitis</option>
+                </>
+              )}
+              {field === "perineum" && (
+                <>
+                  <option value="Clean">Clean</option>
+                  <option value="Unclean">Unclean</option>
+                  <option value="Normal">Normal</option>
+                </>
+              )}
+              {field === "hiddenSpaces" && (
+                <>
+                  <option value="Clean">Clean</option>
+                  <option value="Unclean">Unclean</option>
+                  <option value="Normal">Normal</option>
+                </>
+              )}
+              {field === "pressureSpaces" && (
+                <>
+                  <option value="Clean">Clean</option>
+                  <option value="Unclean">Unclean</option>
+                  <option value="Normal">Normal</option>
+                </>
+              )}
+              {field === "joints" && (
+                <>
+                  <option value="Movable">Movable</option>
+                  <option value="Slightly movable">Slightly movable</option>
+                  <option value="Fixed">Fixed</option>
+                  <option value="Freely movable">Freely movable</option>
+                </>
+              )}
+              {!["skin", "hair", "nails", "mouth", "perineum", "hiddenSpaces", "pressureSpaces", "joints"].includes(field) && (
+                <>
+                  <option value="Good">Good</option>
+                  <option value="Bad">Bad</option>
+                  <option value="Average">Average</option>
+                </>
+              )}
             </select>
           </label>
         ))}
-           <h3>Section 9: Vital Signs</h3>
+        <label>
+          Additional Notes:
+          <textarea name="headToFootNotes" value={formData.headToFootNotes} onChange={handleChange}></textarea>
+        </label>
+
+        <h3>Section 9: Vital Signs</h3>
         <div className="vital-signs-row">
           <label>
-            BP (UL/LL):
-            <input type="text" name="bpUlLl" value={formData.bpUlLl} onChange={handleChange} />
+            BP:
+            <input type="text" name="bp" value={formData.bp} onChange={handleChange} />
           </label>
           <label>
-            BP (RT/LT):
-            <input type="text" name="bpRtLt" value={formData.bpRtLt} onChange={handleChange} />
+            UL/LL:
+            <select name="ulLl" value={formData.ulLl} onChange={handleChange}>
+              <option value="Null">Null</option>
+              <option value="UL">UL</option>
+              <option value="LL">LL</option>
+            </select>
           </label>
           <label>
-            BP (Sitting/Lying):
-            <input type="text" name="bpSittingLying" value={formData.bpSittingLying} onChange={handleChange} />
+            Position:
+            <select name="position" value={formData.position} onChange={handleChange}>
+              <option value="Null">Null</option>
+              <option value="RT Sitting">RT Sitting</option>
+              <option value="RT Lying">RT Lying</option>
+              <option value="LT Sitting">LT Sitting</option>
+              <option value="LT Lying">LT Lying</option>
+            </select>
           </label>
         </div>
         <div className="vital-signs-row">
@@ -417,7 +627,6 @@ const NHC = () => {
           {isSubmitting ? "Submitting..." : "Submit"}
         </button>
       </form>
-      
     </div>
   );
 };

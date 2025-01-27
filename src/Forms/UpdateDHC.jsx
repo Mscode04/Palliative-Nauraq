@@ -82,489 +82,333 @@ const UpdateDHC = () => {
       </button>
       <h2 className="UpdateDHC-title">Update Patient Report Details</h2>
       <form onSubmit={handleSubmit} className="UpdateDHC-form">
-        {/* Personal Details */}
-        <h3 className="UpdateDHC-section-title">Personal Details</h3>
+        {/* General Details */}
+        <h3 className="UpdateDHC-section-title">General Details</h3>
         <div className="UpdateDHC-field">
-          <label>Patient Name:</label>
-          <input
-            type="text"
-            name="name"
-            value={report.name || ""}
-            onChange={handleChange}
-          />
+          <label>Date:</label>
+          <input type="date" name="date" value={report.date || ""} onChange={handleChange} required />
         </div>
-        <div className="udhc-field">
-          <label>Age:</label>
-          <input
-            type="text"
-            name="age"
-            value={report.age || ""}
-            onChange={handleChange}
-          />
+        <div className="UpdateDHC-field">
+          <label>Team 1:</label>
+          <select name="team1" value={report.team1 || ""} onChange={handleChange} required>
+            <option value="Shameema">Shameema</option>
+            <option value="Divya">Divya</option>
+            <option value="Haseen">Haseen</option>
+            <option value="Null">Null</option>
+          </select>
         </div>
-        <div className="udhc-field">
-          <label>Gender:</label>
-          <input
-            type="text"
-            name="gender"
-            value={report.gender || ""}
-            onChange={handleChange}
-          />
+        {[2, 3, 4].map((num) => (
+          <div className="UpdateDHC-field" key={num}>
+            <label>Team {num}:</label>
+            <input type="text" name={`team${num}`} value={report[`team${num}`] || ""} onChange={handleChange} />
+          </div>
+        ))}
+        <div className="UpdateDHC-field">
+          <label>First Impression:</label>
+          <input type="text" name="firstImpression" value={report.firstImpression || ""} onChange={handleChange} />
         </div>
-        <div className="udhc-field">
-          <label>Date of Birth:</label>
-          <input
-            type="text"
-            name="dob"
-            value={report.dob || ""}
-            onChange={handleChange}
-          />
+        <div className="UpdateDHC-field">
+          <label>Patient Awareness:</label>
+          <select name="patientAwareness" value={report.patientAwareness || ""} onChange={handleChange} required>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+          </select>
         </div>
-        <div className="udhc-field">
-          <label>Address:</label>
-          <input
-            type="text"
-            name="address"
-            value={report.address || ""}
-            onChange={handleChange}
-          />
+        <div className="UpdateDHC-field">
+          <label>Caretaker Awareness:</label>
+          <select name="caretakerAwareness" value={report.caretakerAwareness || ""} onChange={handleChange} required>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+          </select>
         </div>
-        <div className="udhc-field">
-          <label>Email:</label>
-          <input
-            type="text"
-            name="email"
-            value={report.email || ""}
-            onChange={handleChange}
-          />
+        <div className="UpdateDHC-field">
+          <label>Extra Details about Awareness:</label>
+          <textarea name="extraDetailsAwareness" value={report.extraDetailsAwareness || ""} onChange={handleChange}></textarea>
         </div>
-        <div className="udhc-field">
-          <label>Patient ID:</label>
-          <input
-            type="text"
-            name="patientId"
-            value={report.patientId || ""}
-            onChange={handleChange}
-          />
-        </div>
-
-        {/* Medical Details */}
-        <h3 className="udhc-section-title">Medical Details</h3>
-        <div className="udhc-field">
-          <label>Main Diagnosis:</label>
-          <input
-            type="text"
-            name="mainDiagnosis"
-            value={report.mainDiagnosis || ""}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="udhc-field">
-          <label>Medical History:</label>
-          <input
-            type="text"
-            name="medicalHistory"
-            value={report.medicalHistory || ""}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="udhc-field">
-          <label>Medical Examination:</label>
-          <input
-            type="text"
-            name="medicalExamination"
-            value={report.medicalExamination || ""}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="udhc-field">
-          <label>General Status:</label>
-          <input
-            type="text"
-            name="generalStatus"
-            value={report.generalStatus || ""}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="udhc-field">
-          <label>Response Status:</label>
-          <input
-            type="text"
-            name="responseStatus"
-            value={report.responseStatus || ""}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="udhc-field">
-          <label>Current Difficulties:</label>
-          <input
-            type="text"
-            name="currentDifficulties"
-            value={report.currentDifficulties || ""}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="udhc-field">
-          <label>Medicine Changes:</label>
-          <input
-            type="text"
-            name="medicineChanges"
-            value={report.medicineChanges || ""}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="udhc-field">
-          <label>Complimentary Rx:</label>
-          <input
-            type="text"
-            name="complimentaryRx"
-            value={report.complimentaryRx || ""}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="udhc-field">
-          <label>Home Care Plan:</label>
-          <input
-            type="text"
-            name="homeCarePlan"
-            value={report.homeCarePlan || ""}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="udhc-field">
-          <label>Home Care Type:</label>
-          <input
-            type="text"
-            name="homeCareType"
-            value={report.homeCareType || ""}
-            onChange={handleChange}
-          />
-        </div>
-
-        {/* Additional Details */}
-        <h3 className="udhc-section-title">Additional Details</h3>
-        <div className="udhc-field">
-          <label>Activity Score:</label>
-          <input
-            type="text"
-            name="activityScore"
-            value={report.activityScore || ""}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="udhc-field">
+        <div className="UpdateDHC-field">
           <label>Bad Habit:</label>
-          <input
-            type="text"
-            name="badHabit"
-            value={report.badHabit || ""}
-            onChange={handleChange}
-          />
+          <select name="badHabit" value={report.badHabit || ""} onChange={handleChange} required>
+            <option value="No">No</option>
+            <option value="Yes">Yes</option>
+          </select>
         </div>
-        <div className="udhc-field">
-          <label>Exercise:</label>
-          <input
-            type="text"
-            name="exercise"
-            value={report.exercise || ""}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="udhc-field">
-          <label>Exercise Frequency:</label>
-          <input
-            type="text"
-            name="exerciseFrequency"
-            value={report.exerciseFrequency || ""}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="udhc-field">
-          <label>Exercise Location:</label>
-          <input
-            type="text"
-            name="exerciseLocation"
-            value={report.exerciseLocation || ""}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="udhc-field">
-          <label>Exercise Time:</label>
-          <input
-            type="text"
-            name="exerciseTime"
-            value={report.exerciseTime || ""}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="udhc-field">
-          <label>Entertainment Time:</label>
-          <input
-            type="text"
-            name="entertainmentTime"
-            value={report.entertainmentTime || ""}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="udhc-field">
-          <label>Other Activities:</label>
-          <input
-            type="text"
-            name="otherActivities"
-            value={report.otherActivities || ""}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="udhc-field">
-          <label>Special Care Areas:</label>
-          <input
-            type="text"
-            name="specialCareAreas"
-            value={report.specialCareAreas || ""}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="udhc-field">
-          <label>Summary Discussion:</label>
-          <input
-            type="text"
-            name="summaryDiscussion"
-            value={report.summaryDiscussion || ""}
-            onChange={handleChange}
-          />
+        {report.badHabit === "Yes" && (
+          <div className="UpdateDHC-field">
+            <label>More About Bad Habits:</label>
+            <input type="text" name="moreAboutBadHabits" value={report.moreAboutBadHabits || ""} onChange={handleChange} />
+          </div>
+        )}
+        <div className="UpdateDHC-field">
+          <label>Complimentary Rx:</label>
+          <select name="complimentaryRx" value={report.complimentaryRx || ""} onChange={handleChange} required>
+            <option value="nill">Nill</option>
+            <option value="ay">AY</option>
+            <option value="h">H</option>
+            <option value="u">U</option>
+            <option value="sd">Sd</option>
+            <option value="n">N</option>
+            <option value="o">O</option>
+          </select>
         </div>
 
-        {/* Cleanliness and Hygiene */}
-        <h3 className="udhc-section-title">Cleanliness and Hygiene</h3>
-        <div className="udhc-field">
-          <label>House Cleanliness:</label>
-          <input
-            type="text"
-            name="houseCleanliness"
-            value={report.houseCleanliness || ""}
-            onChange={handleChange}
-          />
+        {/* Basic Matters */}
+        <h3 className="UpdateDHC-section-title">Basic Matters</h3>
+        {["food", "drink", "pee", "pop", "sleep", "selfHygiene"].map((field) => (
+          <div className="UpdateDHC-field" key={field}>
+            <label>{field.charAt(0).toUpperCase() + field.slice(1)}:</label>
+            <select name={field} value={report[field] || ""} onChange={handleChange} required>
+              <option value="Good">Good</option>
+              <option value="Bad">Bad</option>
+              <option value="Average">Average</option>
+              <option value="Satisfy">Satisfy</option>
+            </select>
+          </div>
+        ))}
+        <div className="UpdateDHC-field">
+          <label>Additional Notes:</label>
+          <textarea name="basicMattersNotes" value={report.basicMattersNotes || ""} onChange={handleChange}></textarea>
         </div>
-        <div className="udhc-field">
-          <label>Bedroom Cleanliness:</label>
-          <input
-            type="text"
-            name="bedroomCleanliness"
-            value={report.bedroomCleanliness || ""}
-            onChange={handleChange}
-          />
+        <div className="UpdateDHC-field">
+          <label>Sexuality:</label>
+          <select name="sexuality" value={report.sexuality || ""} onChange={handleChange} required>
+            <option value="nill">Nill</option>
+            <option value="yes">Yes</option>
+          </select>
         </div>
-        <div className="udhc-field">
-          <label>Bed Cleanliness:</label>
-          <input
-            type="text"
-            name="bedCleanliness"
-            value={report.bedCleanliness || ""}
-            onChange={handleChange}
-          />
+
+        {/* Exercise */}
+        <h3 className="UpdateDHC-section-title">Exercise</h3>
+        <div className="UpdateDHC-field">
+          <label>Exercise:</label>
+          <select name="exercise" value={report.exercise || ""} onChange={handleChange} required>
+            <option value="No">No</option>
+            <option value="Yes">Yes</option>
+          </select>
         </div>
-        <div className="udhc-field">
-          <label>Surroundings Cleanliness:</label>
-          <input
-            type="text"
-            name="surroundingsCleanliness"
-            value={report.surroundingsCleanliness || ""}
-            onChange={handleChange}
-          />
+        <div className="UpdateDHC-field">
+          <label>Frequency:</label>
+          <select name="exerciseFrequency" value={report.exerciseFrequency || ""} onChange={handleChange} required>
+            <option value="daily">Daily</option>
+            <option value="weekly once">Weekly Once</option>
+            <option value="sometimes">Sometimes</option>
+          </select>
         </div>
-        <div className="udhc-field">
-          <label>Dress Cleanliness:</label>
-          <input
-            type="text"
-            name="dressCleanliness"
-            value={report.dressCleanliness || ""}
-            onChange={handleChange}
-          />
+        <div className="UpdateDHC-field">
+          <label>Time of Exercise:</label>
+          <input type="text" name="exerciseTime" value={report.exerciseTime || ""} onChange={handleChange} />
         </div>
-        <div className="udhc-field">
-          <label>Self Hygiene:</label>
-          <input
-            type="text"
-            name="selfHygiene"
-            value={report.selfHygiene || ""}
-            onChange={handleChange}
-          />
+        <div className="UpdateDHC-field">
+          <label>Location:</label>
+          <select name="exerciseLocation" value={report.exerciseLocation || ""} onChange={handleChange} required>
+            <option value="in">In</option>
+            <option value="out">Out</option>
+          </select>
         </div>
-        <div className="udhc-field">
-          <label>Hair:</label>
-          <input
-            type="text"
-            name="hair"
-            value={report.hair || ""}
-            onChange={handleChange}
-          />
+
+        {/* Habits */}
+        <h3 className="UpdateDHC-section-title">Habits</h3>
+        <div className="UpdateDHC-field">
+          <label>Entertainment / Time Spending:</label>
+          <input type="text" name="entertainmentTime" value={report.entertainmentTime || ""} onChange={handleChange} />
         </div>
-        <div className="udhc-field">
-          <label>Skin:</label>
-          <input
-            type="text"
-            name="skin"
-            value={report.skin || ""}
-            onChange={handleChange}
-          />
+
+        {/* Surroundings */}
+        <h3 className="UpdateDHC-section-title">Surroundings</h3>
+        {["house", "surroundings", "bedroom", "bed", "dress"].map((field) => (
+          <div className="UpdateDHC-field" key={field}>
+            <label>{field.charAt(0).toUpperCase() + field.slice(1)} Cleanliness:</label>
+            <select name={`${field}Cleanliness`} value={report[`${field}Cleanliness`] || ""} onChange={handleChange} required>
+              <option value="clean">Clean</option>
+              <option value="unclean">Unclean</option>
+              <option value="average">Average</option>
+            </select>
+          </div>
+        ))}
+
+        {/* General Matters */}
+        <h3 className="UpdateDHC-section-title">General Matters</h3>
+        <div className="UpdateDHC-field">
+          <label>General Status:</label>
+          <select name="generalStatus" value={report.generalStatus || ""} onChange={handleChange} required>
+            <option value="stable">Stable</option>
+            <option value="unstable">Unstable</option>
+          </select>
         </div>
-        <div className="udhc-field">
-          <label>Nails:</label>
-          <input
-            type="text"
-            name="nails"
-            value={report.nails || ""}
-            onChange={handleChange}
-          />
+        <div className="UpdateDHC-field">
+          <label>Patient Currently:</label>
+          <select name="patientCurrently" value={report.patientCurrently || ""} onChange={handleChange} required>
+            <option value="sitting">Sitting</option>
+            <option value="standing">Standing</option>
+          </select>
         </div>
-        <div className="udhc-field">
-          <label>Mouth:</label>
-          <input
-            type="text"
-            name="mouth"
-            value={report.mouth || ""}
-            onChange={handleChange}
-          />
+        <div className="UpdateDHC-field">
+          <label>Memory Status:</label>
+          <select name="memoryStatus" value={report.memoryStatus || ""} onChange={handleChange} required>
+            <option value="remember">Remember</option>
+            <option value="not remember">Not Remember</option>
+          </select>
         </div>
-        <div className="udhc-field">
-          <label>Perineum:</label>
-          <input
-            type="text"
-            name="perineum"
-            value={report.perineum || ""}
-            onChange={handleChange}
-          />
+        <div className="UpdateDHC-field">
+          <label>Response Status:</label>
+          <select name="responseStatus" value={report.responseStatus || ""} onChange={handleChange} required>
+            <option value="good">Good</option>
+            <option value="bad">Bad</option>
+          </select>
         </div>
-        <div className="udhc-field">
-          <label>Pressure Spaces:</label>
-          <input
-            type="text"
-            name="pressureSpaces"
-            value={report.pressureSpaces || ""}
-            onChange={handleChange}
-          />
+        <div className="UpdateDHC-field">
+          <label>Activity Score:</label>
+          <select name="activityScore" value={report.activityScore || ""} onChange={handleChange} required>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+          </select>
         </div>
-        <div className="udhc-field">
-          <label>Hidden Spaces:</label>
-          <input
-            type="text"
-            name="hiddenSpaces"
-            value={report.hiddenSpaces || ""}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="udhc-field">
-          <label>Scalp:</label>
-          <input
-            type="text"
-            name="scalp"
-            value={report.scalp || ""}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="udhc-field">
-          <label>Joints:</label>
-          <input
-            type="text"
-            name="joints"
-            value={report.joints || ""}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="udhc-field">
-          <label>POP:</label>
-          <input
-            type="text"
-            name="pop"
-            value={report.pop || ""}
-            onChange={handleChange}
-          />
+
+        {/* Head to Foot Checkup */}
+        <h3 className="UpdateDHC-section-title">Head to Foot Checkup</h3>
+        {["scalp", "hair", "skin", "nails", "mouth", "perineum", "hiddenSpaces", "pressureSpaces", "joints"].map((field) => (
+          <div className="UpdateDHC-field" key={field}>
+            <label>{field.charAt(0).toUpperCase() + field.slice(1)}:</label>
+            <select name={field} value={report[field] || ""} onChange={handleChange} required>
+              {field === "skin" && (
+                <>
+                  <option value="Dry">Dry</option>
+                  <option value="Oily">Oily</option>
+                  <option value="Combination">Combination</option>
+                  <option value="Sensitive">Sensitive</option>
+                  <option value="Normal">Normal</option>
+                  <option value="Wrinkled">Wrinkled</option>
+                </>
+              )}
+              {field === "hair" && (
+                <>
+                  <option value="Messy Hair">Messy Hair</option>
+                  <option value="Well maintain">Well maintain</option>
+                  <option value="Clean">Clean</option>
+                  <option value="Unclean">Unclean</option>
+                  <option value="Normal">Normal</option>
+                </>
+              )}
+              {field === "nails" && (
+                <>
+                  <option value="Clean">Clean</option>
+                  <option value="Unclean">Unclean</option>
+                  <option value="Well maintain">Well maintain</option>
+                  <option value="Normal">Normal</option>
+                  <option value="Not maintain">Not maintain</option>
+                </>
+              )}
+              {field === "mouth" && (
+                <>
+                  <option value="Clean">Clean</option>
+                  <option value="Unclean">Unclean</option>
+                  <option value="Oral candidiasis">Oral candidiasis</option>
+                  <option value="Glotitis">Glotitis</option>
+                </>
+              )}
+              {field === "perineum" && (
+                <>
+                  <option value="Clean">Clean</option>
+                  <option value="Unclean">Unclean</option>
+                  <option value="Normal">Normal</option>
+                </>
+              )}
+              {field === "hiddenSpaces" && (
+                <>
+                  <option value="Clean">Clean</option>
+                  <option value="Unclean">Unclean</option>
+                  <option value="Normal">Normal</option>
+                </>
+              )}
+              {field === "pressureSpaces" && (
+                <>
+                  <option value="Clean">Clean</option>
+                  <option value="Unclean">Unclean</option>
+                  <option value="Normal">Normal</option>
+                </>
+              )}
+              {field === "joints" && (
+                <>
+                  <option value="Movable">Movable</option>
+                  <option value="Slightly movable">Slightly movable</option>
+                  <option value="Fixed">Fixed</option>
+                  <option value="Freely movable">Freely movable</option>
+                </>
+              )}
+              {!["skin", "hair", "nails", "mouth", "perineum", "hiddenSpaces", "pressureSpaces", "joints"].includes(field) && (
+                <>
+                  <option value="Good">Good</option>
+                  <option value="Bad">Bad</option>
+                  <option value="Average">Average</option>
+                </>
+              )}
+            </select>
+          </div>
+        ))}
+        <div className="UpdateDHC-field">
+          <label>Additional Notes:</label>
+          <textarea name="headToFootNotes" value={report.headToFootNotes || ""} onChange={handleChange}></textarea>
         </div>
 
         {/* Vital Signs */}
-        <h3 className="udhc-section-title">Vital Signs</h3>
-        <div className="udhc-field">
-          <label>BP (Rt/Lt):</label>
-          <input
-            type="text"
-            name="bpRtLt"
-            value={report.bpRtLt || ""}
-            onChange={handleChange}
-          />
+        <h3 className="UpdateDHC-section-title">Vital Signs</h3>
+        <div className="UpdateDHC-field">
+          <label>BP:</label>
+          <input type="text" name="bp" value={report.bp || ""} onChange={handleChange} />
         </div>
-        <div className="udhc-field">
-          <label>BP (Sitting/Lying):</label>
-          <input
-            type="text"
-            name="bpSittingLying"
-            value={report.bpSittingLying || ""}
-            onChange={handleChange}
-          />
+        <div className="UpdateDHC-field">
+          <label>UL/LL:</label>
+          <select name="ulLl" value={report.ulLl || ""} onChange={handleChange}>
+            <option value="UL">UL</option>
+            <option value="LL">LL</option>
+          </select>
         </div>
-        <div className="udhc-field">
-          <label>BP (UL/LL):</label>
-          <input
-            type="text"
-            name="bpUlLl"
-            value={report.bpUlLl || ""}
-            onChange={handleChange}
-          />
+        <div className="UpdateDHC-field">
+          <label>Position:</label>
+          <select name="position" value={report.position || ""} onChange={handleChange}>
+            <option value="Null">Null</option>
+            <option value="RT Sitting">RT Sitting</option>
+            <option value="RT Lying">RT Lying</option>
+            <option value="LT Sitting">LT Sitting</option>
+            <option value="LT Lying">LT Lying</option>
+          </select>
         </div>
-        <div className="udhc-field">
-          <label>Pulse:</label>
-          <input
-            type="text"
-            name="pulse"
-            value={report.pulse || ""}
-            onChange={handleChange}
-          />
+        <div className="UpdateDHC-field">
+          <label>RR:</label>
+          <input type="text" name="rr" value={report.rr || ""} onChange={handleChange} />
         </div>
-        <div className="udhc-field">
-          <label>Pulse Type:</label>
-          <input
-            type="text"
-            name="pulseType"
-            value={report.pulseType || ""}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="udhc-field">
-          <label>Respiratory Rate (RR):</label>
-          <input
-            type="text"
-            name="rr"
-            value={report.rr || ""}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="udhc-field">
+        <div className="UpdateDHC-field">
           <label>RR Type:</label>
-          <input
-            type="text"
-            name="rrType"
-            value={report.rrType || ""}
-            onChange={handleChange}
-          />
+          <select name="rrType" value={report.rrType || ""} onChange={handleChange}>
+            <option value="R">R</option>
+            <option value="IR">IR</option>
+          </select>
         </div>
-        <div className="udhc-field">
+        <div className="UpdateDHC-field">
+          <label>Pulse:</label>
+          <input type="text" name="pulse" value={report.pulse || ""} onChange={handleChange} />
+        </div>
+        <div className="UpdateDHC-field">
+          <label>Pulse Type:</label>
+          <select name="pulseType" value={report.pulseType || ""} onChange={handleChange}>
+            <option value="R">R</option>
+            <option value="IR">IR</option>
+          </select>
+        </div>
+        <div className="UpdateDHC-field">
           <label>Temperature:</label>
-          <input
-            type="text"
-            name="temperature"
-            value={report.temperature || ""}
-            onChange={handleChange}
-          />
+          <input type="text" name="temperature" value={report.temperature || ""} onChange={handleChange} />
         </div>
-        <div className="udhc-field">
+        <div className="UpdateDHC-field">
           <label>Temperature Type:</label>
-          <input
-            type="text"
-            name="temperatureType"
-            value={report.temperatureType || ""}
-            onChange={handleChange}
-          />
+          <select name="temperatureType" value={report.temperatureType || ""}>
+          <option value="O">O</option>
+          <option value="A">A</option>
+          <option value="R">R</option>
+          
+          </select>
         </div>
-        <div className="udhc-field">
+        <div className="UpdateDHC-field">
           <label>SPO2:</label>
           <input
             type="text"
@@ -573,7 +417,7 @@ const UpdateDHC = () => {
             onChange={handleChange}
           />
         </div>
-        <div className="udhc-field">
+        <div className="UpdateDHC-field">
           <label>GRBS:</label>
           <input
             type="text"
@@ -582,7 +426,7 @@ const UpdateDHC = () => {
             onChange={handleChange}
           />
         </div>
-        <div className="udhc-field">
+        <div className="UpdateDHC-field">
           <label>GCS:</label>
           <input
             type="text"
@@ -594,7 +438,7 @@ const UpdateDHC = () => {
 
         {/* Miscellaneous */}
         <h3 className="udhc-section-title">Miscellaneous</h3>
-        <div className="udhc-field">
+        <div className="UpdateDHC-field">
           <label>Form Type:</label>
           <input
             type="text"
@@ -603,7 +447,7 @@ const UpdateDHC = () => {
             onChange={handleChange}
           />
         </div>
-        <div className="udhc-field">
+        <div className="UpdateDHC-field">
           <label>Registration Date:</label>
           <input
             type="text"
@@ -612,7 +456,7 @@ const UpdateDHC = () => {
             onChange={handleChange}
           />
         </div>
-        <div className="udhc-field">
+        <div className="UpdateDHC-field">
           <label>Register Time:</label>
           <input
             type="text"
@@ -621,7 +465,7 @@ const UpdateDHC = () => {
             onChange={handleChange}
           />
         </div>
-        <div className="udhc-field">
+        <div className="UpdateDHC-field">
           <label>Submitted At:</label>
           <input
             type="text"
@@ -630,7 +474,7 @@ const UpdateDHC = () => {
             onChange={handleChange}
           />
         </div>
-        <div className="udhc-field">
+        <div className="UpdateDHC-field">
           <label>Team 1:</label>
           <input
             type="text"
@@ -639,7 +483,7 @@ const UpdateDHC = () => {
             onChange={handleChange}
           />
         </div>
-        <div className="udhc-field">
+        <div className="UpdateDHC-field">
           <label>Team 2:</label>
           <input
             type="text"
@@ -648,7 +492,7 @@ const UpdateDHC = () => {
             onChange={handleChange}
           />
         </div>
-        <div className="udhc-field">
+        <div className="UpdateDHC-field">
           <label>Team 3:</label>
           <input
             type="text"
@@ -657,7 +501,7 @@ const UpdateDHC = () => {
             onChange={handleChange}
           />
         </div>
-        <div className="udhc-field">
+        <div className="UpdateDHC-field">
           <label>Team 4:</label>
           <input
             type="text"
@@ -666,7 +510,7 @@ const UpdateDHC = () => {
             onChange={handleChange}
           />
         </div>
-        <div className="udhc-field">
+        <div className="UpdateDHC-field">
           <label>Consultation:</label>
           <input
             type="text"

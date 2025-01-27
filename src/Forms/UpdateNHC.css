@@ -4,8 +4,11 @@
 .UpdateNHC-container {
   padding: 20px;
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 15px;
+  border-radius: 10px;
+  background-color: #a7d9e4;
   font-family: Arial, sans-serif;
+
 }
 
 /* Back button styling */

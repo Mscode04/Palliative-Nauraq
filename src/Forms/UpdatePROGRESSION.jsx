@@ -133,12 +133,47 @@ const UpdatePROGRESSION = () => {
         </div>
         <div className="uprogression-field">
           <label>Last Home Care:</label>
-          <input
-            type="text"
+          <select
             name="lastHomeCare"
-            value={report.lastHomeCare || ""}
+            value={report.lastHomeCare || "NHC"}
             onChange={handleChange}
-          />
+          >
+            <option value="NHC">NHC</option>
+            <option value="NHC(E)">NHC(E)</option>
+            <option value="DHC">DHC</option>
+            <option value="VHC">VHC</option>
+            <option value="GVHC">GVHC</option>
+            <option value="SPHC">SPHC</option>
+          </select>
+        </div>
+        <div className="uprogression-field">
+          <label>Is this an Emergency:</label>
+          <select
+            name="isEmergency"
+            value={report.isEmergency || "No"}
+            onChange={handleChange}
+          >
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+          </select>
+        </div>
+        <div className="uprogression-field">
+          <label>Pharmaceutical Service:</label>
+          <select
+            name="pharmaceuticalService"
+            value={report.pharmaceuticalService || "O"}
+            onChange={handleChange}
+          >
+            <option value="O">O</option>
+            <option value="SOS">SOS</option>
+            <option value="IR-P">IR-P</option>
+            <option value="R">R</option>
+            <option value="OTC">OTC</option>
+            <option value="DUPL">DUPL</option>
+            <option value="ADV">ADV</option>
+            <option value="MIXUP">MIXUP</option>
+            <option value="ALT">ALT</option>
+          </select>
         </div>
         <div className="uprogression-field">
           <label>Last Home Care Date:</label>
@@ -181,12 +216,16 @@ const UpdatePROGRESSION = () => {
         </div>
         <div className="uprogression-field">
           <label>The Primary Once:</label>
-          <input
-            type="text"
+          <select
             name="primaryOnce"
-            value={report.primaryOnce || ""}
+            value={report.primaryOnce || "0"}
             onChange={handleChange}
-          />
+          >
+            <option value="-1">-1</option>
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+          </select>
         </div>
         <div className="uprogression-field">
           <label>Patient Awareness:</label>
@@ -225,77 +264,104 @@ const UpdatePROGRESSION = () => {
           <label>Emotional State:</label>
           <select
             name="emotionalState"
-            value={report.emotionalState || "No"}
+            value={report.emotionalState || "COP"}
             onChange={handleChange}
           >
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
+            <option value="COP">COP</option>
+            <option value="LAB">LAB</option>
+            <option value="D1">D1</option>
+            <option value="D2">D2</option>
+            <option value="D3">D3</option>
+            <option value="E1">E1</option>
+            <option value="E2">E2</option>
           </select>
         </div>
         <div className="uprogression-field">
           <label>Caretaker:</label>
-          <select
+          <input
+            type="text"
             name="caretaker"
-            value={report.caretaker || "No"}
+            value={report.caretaker || ""}
+            onChange={handleChange}
+          />
+        </div>
+        <div className="uprogression-field">
+          <label>Caretaker Type (Domestic):</label>
+          <select
+            name="caretakerTypeDomestic"
+            value={report.caretakerTypeDomestic || "-1"}
             onChange={handleChange}
           >
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
+            <option value="-1">-1</option>
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
           </select>
         </div>
         <div className="uprogression-field">
-          <label>Caretaker Type:</label>
+          <label>Caretaker Type (Ext):</label>
           <select
-            name="caretakerType"
-            value={report.caretakerType || "ee"}
+            name="caretakerTypeExt"
+            value={report.caretakerTypeExt || "-1"}
             onChange={handleChange}
           >
-            <option value="ee">EE</option>
-            <option value="rr">RR</option>
+            <option value="-1">-1</option>
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
           </select>
         </div>
         <div className="uprogression-field">
           <label>Community Support:</label>
           <select
             name="communitySupport"
-            value={report.communitySupport || "No"}
+            value={report.communitySupport || "-1"}
             onChange={handleChange}
           >
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
+            <option value="-1">-1</option>
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
           </select>
         </div>
         <div className="uprogression-field">
           <label>Palliative Team Support:</label>
           <select
             name="palliativeTeamSupport"
-            value={report.palliativeTeamSupport || "No"}
+            value={report.palliativeTeamSupport || "-1"}
             onChange={handleChange}
           >
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
+            <option value="-1">-1</option>
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
           </select>
         </div>
         <div className="uprogression-field">
           <label>Environmental Hygiene:</label>
           <select
             name="environmentalHygiene"
-            value={report.environmentalHygiene || "No"}
+            value={report.environmentalHygiene || "-1"}
             onChange={handleChange}
           >
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
+            <option value="-1">-1</option>
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
           </select>
         </div>
         <div className="uprogression-field">
           <label>Head to Foot Checkup:</label>
           <select
             name="headToFootCheckup"
-            value={report.headToFootCheckup || "No"}
+            value={report.headToFootCheckup || "1"}
             onChange={handleChange}
           >
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
+            {[...Array(10).keys()].map((i) => (
+              <option key={i + 1} value={i + 1}>
+                {i + 1}
+              </option>
+            ))}
           </select>
         </div>
         <div className="uprogression-field">
@@ -311,86 +377,117 @@ const UpdatePROGRESSION = () => {
           <label>Activity Mobility:</label>
           <select
             name="activityMobility"
-            value={report.activityMobility || "No"}
+            value={report.activityMobility || "1"}
             onChange={handleChange}
           >
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
+            {[...Array(5).keys()].map((i) => (
+              <option key={i + 1} value={i + 1}>
+                {i + 1}
+              </option>
+            ))}
           </select>
         </div>
         <div className="uprogression-field">
           <label>Glassglow:</label>
           <select
             name="glassglow"
-            value={report.glassglow || "No"}
+            value={report.glassglow || "1"}
             onChange={handleChange}
           >
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
+            {[...Array(15).keys()].map((i) => (
+              <option key={i + 1} value={i + 1}>
+                {i + 1}
+              </option>
+            ))}
           </select>
         </div>
         <div className="uprogression-field">
           <label>General Condition:</label>
           <select
             name="generalCondition"
-            value={report.generalCondition || "No"}
+            value={report.generalCondition || "STABLE"}
             onChange={handleChange}
           >
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
+            <option value="STABLE">STABLE</option>
+            <option value="UNSTABLE">UNSTABLE</option>
           </select>
         </div>
         <div className="uprogression-field">
           <label>Care Status:</label>
           <select
             name="careStatus"
-            value={report.careStatus || "No"}
+            value={report.careStatus || "0"}
             onChange={handleChange}
           >
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
+            <option value="0">0</option>
+            <option value="MCC">MCC</option>
+            <option value="-1">-1</option>
+            <option value="-2">-2</option>
+            <option value="-3">-3</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
           </select>
         </div>
         <div className="uprogression-field">
           <label>Quality of Life:</label>
           <select
             name="qualityOfLife"
-            value={report.qualityOfLife || "No"}
+            value={report.qualityOfLife || "1"}
             onChange={handleChange}
           >
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
+            {[...Array(10).keys()].map((i) => (
+              <option key={i + 1} value={i + 1}>
+                {i + 1}
+              </option>
+            ))}
           </select>
         </div>
         <div className="uprogression-field">
           <label>Logistic:</label>
-          <select
+          <input
+            type="text"
             name="logistic"
-            value={report.logistic || "No"}
+            value={report.logistic || ""}
             onChange={handleChange}
-          >
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
-          </select>
+          />
         </div>
         <div className="uprogression-field">
           <label>HC Plan:</label>
-          <input
-            type="text"
+          <select
             name="hcPlan"
-            value={report.hcPlan || ""}
+            value={report.hcPlan || "1/1"}
             onChange={handleChange}
-          />
+          >
+            <option value="1/1">1/1</option>
+            <option value="1/2">1/2</option>
+          </select>
+        </div>
+        <div className="uprogression-field">
+          <label>HC Type:</label>
+          <select
+            name="hcType"
+            value={report.hcType || "NHC"}
+            onChange={handleChange}
+          >
+            <option value="NHC">NHC</option>
+            <option value="NHC(E)">NHC(E)</option>
+            <option value="DHC">DHC</option>
+            <option value="VHC">VHC</option>
+            <option value="GVHC">GVHC</option>
+            <option value="SPHC">SPHC</option>
+          </select>
         </div>
         <div className="uprogression-field">
           <label>Team 1:</label>
           <select
             name="team1"
-            value={report.team1 || "arun"}
+            value={report.team1 || "Null"}
             onChange={handleChange}
           >
-            <option value="arun">Arun</option>
-            <option value="hashir">Hashir</option>
+            <option value="Null">Null</option>
+            <option value="Shemeema">Shemeema</option>
+            <option value="Divya">Divya</option>
+            <option value="Haseena">Haseena</option>
           </select>
         </div>
         <div className="uprogression-field">

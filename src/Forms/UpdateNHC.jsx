@@ -27,14 +27,13 @@ const UpdateNHC = () => {
     pop: "Good",
     sleep: "Good",
     selfHygiene: "Good",
+    basicMattersNotes: "",
     sexuality: "nill",
     exercise: "No",
     exerciseFrequency: "daily",
     exerciseTime: "",
     exerciseLocation: "in",
     entertainmentTime: "",
-    patientAwarenessDetails: "",
-    caretakerAwarenessDetails: "",
     houseCleanliness: "clean",
     surroundingsCleanliness: "clean",
     bedroomCleanliness: "clean",
@@ -54,6 +53,7 @@ const UpdateNHC = () => {
     hiddenSpaces: "Good",
     pressureSpaces: "Good",
     joints: "Good",
+    headToFootNotes: "",
     specialCareAreas: "",
     summaryDiscussion: "",
     medicineChanges: "",
@@ -61,11 +61,11 @@ const UpdateNHC = () => {
     homeCarePlan: "def",
     homeCareType: "nhc",
     consultation: "",
-    formType: "NHC(E)",
+    formType: "NHC",
     submittedAt: "",
-    bpUlLl: "",
-    bpRtLt: "",
-    bpSittingLying: "",
+    bp: "",
+    ulLl: "Null",
+    position: "Null",
     rr: "",
     rrType: "R",
     pulse: "",
@@ -139,7 +139,7 @@ const UpdateNHC = () => {
 
       <h2 className="UpdateNHC-title">Update NHC Report for Patient ID: {report.patientId}</h2>
       <form onSubmit={handleSubmit} className="UpdateNHC-form">
-        <h3>Section 1: General Details</h3>
+      <h3>Section 1: General Details</h3>
         <label>
           Date:
           <input type="date" name="date" value={formData.date} onChange={handleChange} />
@@ -185,10 +185,15 @@ const UpdateNHC = () => {
           Bad Habit:
           <select name="badHabit" value={formData.badHabit} onChange={handleChange}>
             <option value="No">No</option>
-            <option value="Smoking">Smoking</option>
-            <option value="beer">Beer</option>
+            <option value="Yes">Yes</option>
           </select>
         </label>
+        {formData.badHabit === "Yes" && (
+          <label>
+            More About Bad Habits:
+            <input type="text" name="moreAboutBadHabits" value={formData.moreAboutBadHabits} onChange={handleChange} />
+          </label>
+        )}
         <label>
           Complimentary Rx:
           <select name="complimentaryRx" value={formData.complimentaryRx} onChange={handleChange}>
@@ -210,10 +215,14 @@ const UpdateNHC = () => {
               <option value="Good">Good</option>
               <option value="Bad">Bad</option>
               <option value="Average">Average</option>
-              {field === "food" || field === "drink" ? <option value="Satisfy">Satisfy</option> : null}
+              <option value="Satisfy">Satisfy</option>
             </select>
           </label>
         ))}
+        <label>
+          Additional Notes:
+          <textarea name="basicMattersNotes" value={formData.basicMattersNotes} onChange={handleChange}></textarea>
+        </label>
         <label>
           Sexuality:
           <select name="sexuality" value={formData.sexuality} onChange={handleChange}>
@@ -256,15 +265,7 @@ const UpdateNHC = () => {
           <input type="text" name="entertainmentTime" value={formData.entertainmentTime} onChange={handleChange} />
         </label>
 
-        <h3>Section 5: Awareness</h3>
-        <label>
-          Patient Awareness Details:
-          <textarea name="patientAwarenessDetails" value={formData.patientAwarenessDetails} onChange={handleChange}></textarea>
-        </label>
-        <label>
-          Caretaker Awareness Details:
-          <textarea name="caretakerAwarenessDetails" value={formData.caretakerAwarenessDetails} onChange={handleChange}></textarea>
-        </label>
+
 
         <h3>Section 6: Surroundings</h3>
         {["house", "surroundings", "bedroom", "bed", "dress"].map((field) => (
@@ -321,26 +322,109 @@ const UpdateNHC = () => {
           <label key={field}>
             {field.charAt(0).toUpperCase() + field.slice(1)}:
             <select name={field} value={formData[field]} onChange={handleChange}>
-              <option value="Good">Good</option>
-              <option value="Bad">Bad</option>
-              <option value="Average">Average</option>
+              {field === "skin" && (
+                <>
+                  <option value="Dry">Dry</option>
+                  <option value="Oily">Oily</option>
+                  <option value="Combination">Combination</option>
+                  <option value="Sensitive">Sensitive</option>
+                  <option value="Normal">Normal</option>
+                  <option value="Wrinkled">Wrinkled</option>
+                </>
+              )}
+              {field === "hair" && (
+                <>
+                  <option value="Messy Hair">Messy Hair</option>
+                  <option value="Well maintain">Well maintain</option>
+                  <option value="Clean">Clean</option>
+                  <option value="Unclean">Unclean</option>
+                  <option value="Normal">Normal</option>
+                </>
+              )}
+              {field === "nails" && (
+                <>
+                  <option value="Clean">Clean</option>
+                  <option value="Unclean">Unclean</option>
+                  <option value="Well maintain">Well maintain</option>
+                  <option value="Normal">Normal</option>
+                  <option value="Not maintain">Not maintain</option>
+                </>
+              )}
+              {field === "mouth" && (
+                <>
+                  <option value="Clean">Clean</option>
+                  <option value="Unclean">Unclean</option>
+                  <option value="Oral candidiasis">Oral candidiasis</option>
+                  <option value="Glotitis">Glotitis</option>
+                </>
+              )}
+              {field === "perineum" && (
+                <>
+                  <option value="Clean">Clean</option>
+                  <option value="Unclean">Unclean</option>
+                  <option value="Normal">Normal</option>
+                </>
+              )}
+              {field === "hiddenSpaces" && (
+                <>
+                  <option value="Clean">Clean</option>
+                  <option value="Unclean">Unclean</option>
+                  <option value="Normal">Normal</option>
+                </>
+              )}
+              {field === "pressureSpaces" && (
+                <>
+                  <option value="Clean">Clean</option>
+                  <option value="Unclean">Unclean</option>
+                  <option value="Normal">Normal</option>
+                </>
+              )}
+              {field === "joints" && (
+                <>
+                  <option value="Movable">Movable</option>
+                  <option value="Slightly movable">Slightly movable</option>
+                  <option value="Fixed">Fixed</option>
+                  <option value="Freely movable">Freely movable</option>
+                </>
+              )}
+              {!["skin", "hair", "nails", "mouth", "perineum", "hiddenSpaces", "pressureSpaces", "joints"].includes(field) && (
+                <>
+                  <option value="Good">Good</option>
+                  <option value="Bad">Bad</option>
+                  <option value="Average">Average</option>
+                </>
+              )}
             </select>
           </label>
         ))}
+        <label>
+          Additional Notes:
+          <textarea name="headToFootNotes" value={formData.headToFootNotes} onChange={handleChange}></textarea>
+        </label>
 
         <h3>Section 9: Vital Signs</h3>
         <div className="vital-signs-row">
           <label>
-            BP (UL/LL):
-            <input type="text" name="bpUlLl" value={formData.bpUlLl} onChange={handleChange} />
+            BP:
+            <input type="text" name="bp" value={formData.bp} onChange={handleChange} />
           </label>
           <label>
-            BP (RT/LT):
-            <input type="text" name="bpRtLt" value={formData.bpRtLt} onChange={handleChange} />
+            UL/LL:
+            <select name="ulLl" value={formData.ulLl} onChange={handleChange}>
+              <option value="Null">Null</option>
+              <option value="UL">UL</option>
+              <option value="LL">LL</option>
+            </select>
           </label>
           <label>
-            BP (Sitting/Lying):
-            <input type="text" name="bpSittingLying" value={formData.bpSittingLying} onChange={handleChange} />
+            Position:
+            <select name="position" value={formData.position} onChange={handleChange}>
+              <option value="Null">Null</option>
+              <option value="RT Sitting">RT Sitting</option>
+              <option value="RT Lying">RT Lying</option>
+              <option value="LT Sitting">LT Sitting</option>
+              <option value="LT Lying">LT Lying</option>
+            </select>
           </label>
         </div>
         <div className="vital-signs-row">

@@ -28,6 +28,7 @@ const DHC = () => {
     pop: "Good",
     sleep: "Good",
     selfHygiene: "Good",
+    basicMattersNotes: "",
     sexuality: "nill",
     exercise: "No",
     exerciseFrequency: "daily",
@@ -55,6 +56,7 @@ const DHC = () => {
     hiddenSpaces: "Good",
     pressureSpaces: "Good",
     joints: "Good",
+    headToFootNotes: "",
     specialCareAreas: "",
     summaryDiscussion: "",
     medicalExamination: "",
@@ -65,9 +67,9 @@ const DHC = () => {
     consultation: "",
     formType: "DHC",
     submittedAt: "",
-    bpUlLl: "",
-    bpRtLt: "",
-    bpSittingLying: "",
+    bp: "",
+    ulLl: "NUll", 
+    position: "Null", 
     rr: "",
     rrType: "R",
     pulse: "",
@@ -151,7 +153,8 @@ const DHC = () => {
         patientAwareness: "Yes",
         caretakerAwareness: "Yes",
         extraDetailsAwareness: "",
-        badHabit: "No",
+        badHabit: "No", 
+        moreAboutBadHabits: "",
         complimentaryRx: "nill",
         food: "Good",
         drink: "Good",
@@ -165,8 +168,6 @@ const DHC = () => {
         exerciseTime: "",
         exerciseLocation: "in",
         entertainmentTime: "",
-        patientAwarenessDetails: "",
-        caretakerAwarenessDetails: "",
         houseCleanliness: "clean",
         surroundingsCleanliness: "clean",
         bedroomCleanliness: "clean",
@@ -196,9 +197,9 @@ const DHC = () => {
         consultation: "",
         formType: "DHC",
         submittedAt: "",
-        bpUlLl: "",
-        bpRtLt: "",
-        bpSittingLying: "",
+        bp: "",
+        ulLl: "UL", 
+        position: "Null", 
         rr: "",
         rrType: "R",
         pulse: "",
@@ -233,12 +234,8 @@ const DHC = () => {
       <h2 className="DHCAdd-title">DHC Details for Patient ID: {patientId}</h2>
       {patientData ? (
         <div className="DHCAdd-patientInfo">
-          <h3>Patient Information</h3>
-          <p><strong>Name:</strong> {patientData.name}</p>
-          <p><strong>Address:</strong> {patientData.address}</p>
-          <p><strong>Phone Number:</strong> {patientData.phone}</p>
-          <p><strong>Location:</strong> {patientData.location}</p>
-          <p><strong>Age:</strong> {patientData.age}</p>
+          <h3>Patient :  {patientData.name}</h3>
+          <h3>Address :  {patientData.address}</h3>
         </div>
       ) : (
         <p>Loading patient information...</p>
@@ -288,13 +285,28 @@ const DHC = () => {
           <textarea name="extraDetailsAwareness" value={formData.extraDetailsAwareness} onChange={handleChange}></textarea>
         </div>
         <div className="DHCAdd-field">
-          <label>Bad Habit:</label>
-          <select name="badHabit" value={formData.badHabit} onChange={handleChange} required>
-            <option value="No">No</option>
-            <option value="Smoking">Smoking</option>
-            <option value="beer">Beer</option>
-          </select>
-        </div>
+  {/* Bad Habit Dropdown */}
+  <label>Bad Habit:</label>
+  <select name="badHabit" value={formData.badHabit} onChange={handleChange} required>
+    <option value="No">No</option>
+    <option value="Yes">Yes</option>
+  </select>
+
+  {/* Conditionally Render "More About Bad Habits" Field */}
+  {formData.badHabit === "Yes" && (
+    <div className="DHCAdd-field">
+      <label>More About Bad Habits:</label>
+      <input
+        type="text"
+        name="moreAboutBadHabits"
+        value={formData.moreAboutBadHabits}
+        onChange={handleChange}
+        placeholder="Describe the bad habit..."
+        required
+      />
+    </div>
+  )}
+</div>
         <div className="DHCAdd-field">
           <label>Complimentary Rx:</label>
           <select name="complimentaryRx" value={formData.complimentaryRx} onChange={handleChange} required>
@@ -302,24 +314,36 @@ const DHC = () => {
             <option value="ay">AY</option>
             <option value="h">H</option>
             <option value="u">U</option>
-            <option value="sd">SD</option>
+            <option value="sd">Sd</option>
             <option value="n">N</option>
             <option value="o">O</option>
           </select>
         </div>
 
         <h3>Section 2: Basic Matters</h3>
-        {["food", "drink", "pee", "pop", "sleep", "selfHygiene"].map((field) => (
-          <div className="DHCAdd-field" key={field}>
-            <label>{field.charAt(0).toUpperCase() + field.slice(1)}:</label>
-            <select name={field} value={formData[field]} onChange={handleChange} required>
-              <option value="Good">Good</option>
-              <option value="Bad">Bad</option>
-              <option value="Average">Average</option>
-              {field === "food" || field === "drink" ? <option value="Satisfy">Satisfy</option> : null}
-            </select>
-          </div>
-        ))}
+{["food", "drink", "pee", "pop", "sleep", "selfHygiene"].map((field) => (
+  <div className="DHCAdd-field" key={field}>
+    <label>{field.charAt(0).toUpperCase() + field.slice(1)}:</label>
+    <select name={field} value={formData[field]} onChange={handleChange} required>
+      <option value="Good">Good</option>
+      <option value="Bad">Bad</option>
+      <option value="Average">Average</option>
+      <option value="Satisfy">Satisfy</option> {/* Added for all fields */}
+    </select>
+  </div>
+))}
+
+{/* New Text Field for Additional Notes */}
+<div className="DHCAdd-field">
+  <label>Additional Notes:</label>
+  <textarea
+    name="basicMattersNotes"
+    value={formData.basicMattersNotes}
+    onChange={handleChange}
+    placeholder="Enter any additional notes or observations..."
+    rows={4} // Adjust the number of rows as needed
+  />
+</div>
         <div className="DHCAdd-field">
           <label>Sexuality:</label>
           <select name="sexuality" value={formData.sexuality} onChange={handleChange} required>
@@ -358,19 +382,10 @@ const DHC = () => {
 
         <h3>Section 4: Habits</h3>
         <div className="DHCAdd-field">
-          <label>Entertainment Time Spending:</label>
+          <label>Entertainment / Time Spending:</label>
           <input type="text" name="entertainmentTime" value={formData.entertainmentTime} onChange={handleChange} />
         </div>
 
-        <h3>Section 5: Awareness</h3>
-        <div className="DHCAdd-field">
-          <label>Patient Awareness Details:</label>
-          <textarea name="patientAwarenessDetails" value={formData.patientAwarenessDetails} onChange={handleChange}></textarea>
-        </div>
-        <div className="DHCAdd-field">
-          <label>Caretaker Awareness Details:</label>
-          <textarea name="caretakerAwarenessDetails" value={formData.caretakerAwarenessDetails} onChange={handleChange}></textarea>
-        </div>
 
         <h3>Section 6: Surroundings</h3>
         {["house", "surroundings", "bedroom", "bed", "dress"].map((field) => (
@@ -423,32 +438,128 @@ const DHC = () => {
         </div>
 
         <h3>Section 8: Head to Foot Checkup</h3>
-        {["scalp", "hair", "skin", "nails", "mouth", "perineum", "hiddenSpaces", "pressureSpaces", "joints"].map((field) => (
-          <div className="DHCAdd-field" key={field}>
-            <label>{field.charAt(0).toUpperCase() + field.slice(1)}:</label>
-            <select name={field} value={formData[field]} onChange={handleChange} required>
-              <option value="Good">Good</option>
-              <option value="Bad">Bad</option>
-              <option value="Average">Average</option>
-            </select>
-          </div>
-        ))}
+{["scalp", "hair", "skin", "nails", "mouth", "perineum", "hiddenSpaces", "pressureSpaces", "joints"].map((field) => (
+  <div className="DHCAdd-field" key={field}>
+    <label>{field.charAt(0).toUpperCase() + field.slice(1)}:</label>
+    <select name={field} value={formData[field]} onChange={handleChange} required>
+      {field === "skin" && (
+        <>
+          <option value="Dry">Dry</option>
+          <option value="Oily">Oily</option>
+          <option value="Combination">Combination</option>
+          <option value="Sensitive">Sensitive</option>
+          <option value="Normal">Normal</option>
+          <option value="Wrinkled">Wrinkled</option>
+        </>
+      )}
+      {field === "hair" && (
+        <>
+          <option value="Messy Hair">Messy Hair</option>
+          <option value="Well maintain">Well maintain</option>
+          <option value="Clean">Clean</option>
+          <option value="Unclean">Unclean</option>
+          <option value="Normal">Normal</option>
+        </>
+      )}
+      {field === "nails" && (
+        <>
+          <option value="Clean">Clean</option>
+          <option value="Unclean">Unclean</option>
+          <option value="Well maintain">Well maintain</option>
+          <option value="Normal">Normal</option>
+          <option value="Not maintain">Not maintain</option>
+        </>
+      )}
+      {field === "mouth" && (
+        <>
+          <option value="Clean">Clean</option>
+          <option value="Unclean">Unclean</option>
+          <option value="Oral candidiasis">Oral candidiasis</option>
+          <option value="Glotitis">Glotitis</option>
+        </>
+      )}
+      {field === "perineum" && (
+        <>
+          <option value="Clean">Clean</option>
+          <option value="Unclean">Unclean</option>
+          <option value="Normal">Normal</option>
+        </>
+      )}
+      {field === "hiddenSpaces" && (
+        <>
+          <option value="Clean">Clean</option>
+          <option value="Unclean">Unclean</option>
+          <option value="Normal">Normal</option>
+        </>
+      )}
+      {field === "pressureSpaces" && (
+        <>
+          <option value="Clean">Clean</option>
+          <option value="Unclean">Unclean</option>
+          <option value="Normal">Normal</option>
+        </>
+      )}
+      {field === "joints" && (
+        <>
+          <option value="Movable">Movable</option>
+          <option value="Slightly movable">Slightly movable</option>
+          <option value="Fixed">Fixed</option>
+          <option value="Freely movable">Freely movable</option>
+        </>
+      )}
+      {!["skin", "hair", "nails", "mouth", "perineum", "hiddenSpaces", "pressureSpaces", "joints"].includes(field) && (
+        <>
+          <option value="Good">Good</option>
+          <option value="Bad">Bad</option>
+          <option value="Average">Average</option>
+        </>
+      )}
+    </select>
+  </div>
+))}
+
+{/* Extra Text Field for Additional Notes */}
+<div className="DHCAdd-field">
+  <label>Additional Notes:</label>
+  <textarea
+    name="headToFootNotes"
+    value={formData.headToFootNotes}
+    onChange={handleChange}
+    placeholder="Enter any additional notes or observations..."
+    rows={4} // Adjust the number of rows as needed
+  />
+</div>
 
         <h3>Section 9: Vital Signs</h3>
         <div className="DHCAdd-vitalSigns">
-          <div className="DHCAdd-field">
-            <label>BP (UL/LL):</label>
-            <input type="text" name="bpUlLl" value={formData.bpUlLl} onChange={handleChange} />
-          </div>
-          <div className="DHCAdd-field">
-            <label>BP (RT/LT):</label>
-            <input type="text" name="bpRtLt" value={formData.bpRtLt} onChange={handleChange} />
-          </div>
-          <div className="DHCAdd-field">
-            <label>BP (Sitting/Lying):</label>
-            <input type="text" name="bpSittingLying" value={formData.bpSittingLying} onChange={handleChange} />
-          </div>
-        </div>
+  {/* BP Input Field */}
+  <div className="DHCAdd-field">
+    <label>BP:</label>
+    <input type="text" name="bp" value={formData.bp} onChange={handleChange} />
+  </div>
+
+  {/* Select Box for UL/LL */}
+  <div className="DHCAdd-field">
+    <label>UL/LL:</label>
+    <select name="ulLl" value={formData.ulLl} onChange={handleChange}>
+      <option value="UL">Null</option>
+      <option value="UL">UL</option>
+      <option value="LL">LL</option>
+    </select>
+  </div>
+
+  {/* Select Box for Null, RT Sitting, RT Lying, LT Sitting, LT Lying */}
+  <div className="DHCAdd-field">
+    <label>Position:</label>
+    <select name="position" value={formData.position} onChange={handleChange}>
+      <option value="Null">Null</option>
+      <option value="RT Sitting">RT Sitting</option>
+      <option value="RT Lying">RT Lying</option>
+      <option value="LT Sitting">LT Sitting</option>
+      <option value="LT Lying">LT Lying</option>
+    </select>
+  </div>
+</div>
         <div className="DHCAdd-vitalSigns">
           <div className="DHCAdd-field">
             <label>RR:</label>

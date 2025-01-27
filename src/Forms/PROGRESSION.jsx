@@ -16,31 +16,35 @@ const Progression = () => {
     hcSiNo: "",
     dnvsphcNumber: "",
     monthly: "",
-    lastHomeCare: "",
+    lastHomeCare: "NHC",
+    isEmergency: "No",
+    pharmaceuticalService: "O",
     lastHomeCareDate: "",
     consultationHospitalisation: "No",
     mainActivities: "",
     physicalService: "No",
-    primaryOnce: "",
+    primaryOnce: "0",
     patientAwareness: "No",
     familyAwareness: "No",
     financially: "No",
-    emotionalState: "No",
-    caretaker: "No",
-    caretakerType: "ee",
-    communitySupport: "No",
-    palliativeTeamSupport: "No",
-    environmentalHygiene: "No",
-    headToFootCheckup: "No",
+    emotionalState: "COP",
+    caretaker: "",
+    caretakerTypeDomestic: "-1",
+    caretakerTypeExt: "-1",
+    communitySupport: "-1",
+    palliativeTeamSupport: "-1",
+    environmentalHygiene: "-1",
+    headToFootCheckup: "1",
     silentTapes: "",
-    activityMobility: "No",
-    glassglow: "No",
-    generalCondition: "No",
-    careStatus: "No",
-    qualityOfLife: "No",
-    logistic: "No",
-    hcPlan: "",
-    team1: "arun",
+    activityMobility: "1",
+    glassglow: "1",
+    generalCondition: "STABLE",
+    careStatus: "0",
+    qualityOfLife: "1",
+    logistic: "",
+    hcPlan: "1/1",
+    hcType: "NHC",
+    team1: "Null",
     team2: "",
     team3: "",
     team4: "",
@@ -107,31 +111,35 @@ const Progression = () => {
         hcSiNo: "",
         dnvsphcNumber: "",
         monthly: "",
-        lastHomeCare: "",
+        lastHomeCare: "NHC",
+        isEmergency: "No",
+        pharmaceuticalService: "O",
         lastHomeCareDate: "",
         consultationHospitalisation: "No",
         mainActivities: "",
         physicalService: "No",
-        primaryOnce: "",
+        primaryOnce: "0",
         patientAwareness: "No",
         familyAwareness: "No",
         financially: "No",
-        emotionalState: "No",
-        caretaker: "No",
-        caretakerType: "ee",
-        communitySupport: "No",
-        palliativeTeamSupport: "No",
-        environmentalHygiene: "No",
-        headToFootCheckup: "No",
+        emotionalState: "COP",
+        caretaker: "",
+        caretakerTypeDomestic: "-1",
+        caretakerTypeExt: "-1",
+        communitySupport: "-1",
+        palliativeTeamSupport: "-1",
+        environmentalHygiene: "-1",
+        headToFootCheckup: "1",
         silentTapes: "",
-        activityMobility: "No",
-        glassglow: "No",
-        generalCondition: "No",
-        careStatus: "No",
-        qualityOfLife: "No",
-        logistic: "No",
-        hcPlan: "",
-        team1: "arun",
+        activityMobility: "1",
+        glassglow: "1",
+        generalCondition: "STABLE",
+        careStatus: "0",
+        qualityOfLife: "1",
+        logistic: "",
+        hcPlan: "1/1",
+        hcType: "NHC",
+        team1: "Null",
         team2: "",
         team3: "",
         team4: "",
@@ -193,7 +201,35 @@ const Progression = () => {
         </label>
         <label>
           Last Home Care:
-          <input type="text" name="lastHomeCare" value={formData.lastHomeCare} onChange={handleChange} />
+          <select name="lastHomeCare" value={formData.lastHomeCare} onChange={handleChange}>
+            <option value="NHC">NHC</option>
+            <option value="NHC(E)">NHC(E)</option>
+            <option value="DHC">DHC</option>
+            <option value="VHC">VHC</option>
+            <option value="GVHC">GVHC</option>
+            <option value="SPHC">SPHC</option>
+          </select>
+        </label>
+        <label>
+          Is this an Emergency:
+          <select name="isEmergency" value={formData.isEmergency} onChange={handleChange}>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+          </select>
+        </label>
+        <label>
+          Pharmaceutical Service:
+          <select name="pharmaceuticalService" value={formData.pharmaceuticalService} onChange={handleChange}>
+            <option value="O">O</option>
+            <option value="SOS">SOS</option>
+            <option value="IR-P">IR-P</option>
+            <option value="R">R</option>
+            <option value="OTC">OTC</option>
+            <option value="DUPL">DUPL</option>
+            <option value="ADV">ADV</option>
+            <option value="MIXUP">MIXUP</option>
+            <option value="ALT">ALT</option>
+          </select>
         </label>
         <label>
           Last Home Care Date:
@@ -201,10 +237,7 @@ const Progression = () => {
         </label>
         <label>
           Consultation/Hospitalisation:
-          <select name="consultationHospitalisation" value={formData.consultationHospitalisation} onChange={handleChange}>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
-          </select>
+          <input type="text" name="consultationHospitalisation" value={formData.consultationHospitalisation} onChange={handleChange} />
         </label>
         <label>
           Main Activities:
@@ -219,7 +252,12 @@ const Progression = () => {
         </label>
         <label>
           The Primary Once:
-          <input type="text" name="primaryOnce" value={formData.primaryOnce} onChange={handleChange} />
+          <select name="primaryOnce" value={formData.primaryOnce} onChange={handleChange}>
+            <option value="-1">-1</option>
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+          </select>
         </label>
         <label>
           Patient Awareness:
@@ -245,50 +283,72 @@ const Progression = () => {
         <label>
           Emotional State:
           <select name="emotionalState" value={formData.emotionalState} onChange={handleChange}>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
+            <option value="COP">COP</option>
+            <option value="LAB">LAB</option>
+            <option value="D1">D1</option>
+            <option value="D2">D2</option>
+            <option value="D3">D3</option>
+            <option value="E1">E1</option>
+            <option value="E2">E2</option>
           </select>
         </label>
         <label>
           Caretaker:
-          <select name="caretaker" value={formData.caretaker} onChange={handleChange}>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
+          <input type="text" name="caretaker" value={formData.caretaker} onChange={handleChange} />
+        </label>
+        <label>
+          Caretaker Type (Domestic):
+          <select name="caretakerTypeDomestic" value={formData.caretakerTypeDomestic} onChange={handleChange}>
+            <option value="-1">-1</option>
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
           </select>
         </label>
         <label>
-          Caretaker Type:
-          <select name="caretakerType" value={formData.caretakerType} onChange={handleChange}>
-            <option value="ee">EE</option>
-            <option value="rr">RR</option>
+          Caretaker Type (Ext):
+          <select name="caretakerTypeExt" value={formData.caretakerTypeExt} onChange={handleChange}>
+            <option value="-1">-1</option>
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
           </select>
         </label>
         <label>
           Community Support:
           <select name="communitySupport" value={formData.communitySupport} onChange={handleChange}>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
+            <option value="-1">-1</option>
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
           </select>
         </label>
         <label>
           Palliative Team Support:
           <select name="palliativeTeamSupport" value={formData.palliativeTeamSupport} onChange={handleChange}>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
+            <option value="-1">-1</option>
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
           </select>
         </label>
         <label>
           Environmental Hygiene:
           <select name="environmentalHygiene" value={formData.environmentalHygiene} onChange={handleChange}>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
+            <option value="-1">-1</option>
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
           </select>
         </label>
         <label>
           Head to Foot Checkup:
           <select name="headToFootCheckup" value={formData.headToFootCheckup} onChange={handleChange}>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
+            {[...Array(10).keys()].map((i) => (
+              <option key={i + 1} value={i + 1}>
+                {i + 1}
+              </option>
+            ))}
           </select>
         </label>
         <label>
@@ -298,54 +358,81 @@ const Progression = () => {
         <label>
           Activity Mobility:
           <select name="activityMobility" value={formData.activityMobility} onChange={handleChange}>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
+            {[...Array(5).keys()].map((i) => (
+              <option key={i + 1} value={i + 1}>
+                {i + 1}
+              </option>
+            ))}
           </select>
         </label>
         <label>
           Glassglow:
           <select name="glassglow" value={formData.glassglow} onChange={handleChange}>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
+            {[...Array(15).keys()].map((i) => (
+              <option key={i + 1} value={i + 1}>
+                {i + 1}
+              </option>
+            ))}
           </select>
         </label>
         <label>
           General Condition:
           <select name="generalCondition" value={formData.generalCondition} onChange={handleChange}>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
+            <option value="STABLE">STABLE</option>
+            <option value="UNSTABLE">UNSTABLE</option>
           </select>
         </label>
         <label>
           Care Status:
           <select name="careStatus" value={formData.careStatus} onChange={handleChange}>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
+            <option value="0">0</option>
+            <option value="MCC">MCC</option>
+            <option value="-1">-1</option>
+            <option value="-2">-2</option>
+            <option value="-3">-3</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
           </select>
         </label>
         <label>
           Quality of Life:
           <select name="qualityOfLife" value={formData.qualityOfLife} onChange={handleChange}>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
+            {[...Array(10).keys()].map((i) => (
+              <option key={i + 1} value={i + 1}>
+                {i + 1}
+              </option>
+            ))}
           </select>
         </label>
         <label>
           Logistic:
-          <select name="logistic" value={formData.logistic} onChange={handleChange}>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
-          </select>
+          <input type="text" name="logistic" value={formData.logistic} onChange={handleChange} />
         </label>
         <label>
           HC Plan:
-          <input type="text" name="hcPlan" value={formData.hcPlan} onChange={handleChange} />
+          <select name="hcPlan" value={formData.hcPlan} onChange={handleChange}>
+            <option value="1/1">1/1</option>
+            <option value="1/2">1/2</option>
+          </select>
+        </label>
+        <label>
+          HC Type:
+          <select name="hcType" value={formData.hcType} onChange={handleChange}>
+            <option value="NHC">NHC</option>
+            <option value="NHC(E)">NHC(E)</option>
+            <option value="DHC">DHC</option>
+            <option value="VHC">VHC</option>
+            <option value="GVHC">GVHC</option>
+            <option value="SPHC">SPHC</option>
+          </select>
         </label>
         <label>
           Team 1:
           <select name="team1" value={formData.team1} onChange={handleChange}>
-            <option value="arun">Arun</option>
-            <option value="hashir">Hashir</option>
+            <option value="Null">Null</option>
+            <option value="Shemeema">Shemeema</option>
+            <option value="Divya">Divya</option>
+            <option value="Haseena">Haseena</option>
           </select>
         </label>
         <label>

@@ -59,7 +59,6 @@ function App() {
 
   return (
     <>
-    
       {/* Render the install button if the prompt is available */}
       {installPrompt && (
         <div style={{ position: "fixed", top: "10px", right: "10px", zIndex: 1000 }}>
@@ -82,15 +81,15 @@ function App() {
       <Routes>
         {/* Login Page */}
         <Route
-          path="/"
-          element={
-            !isAuthenticated ? (
-              <LoginPage setIsAuthenticated={setIsAuthenticated} setIsNurse={setIsNurse} />
-            ) : (
-              <Navigate to={isNurse ? "/main" : "/users"} />
-            )
-          }
-        />
+  path="/"
+  element={
+    !isAuthenticated ? (
+      <LoginPage setIsAuthenticated={setIsAuthenticated} setIsNurse={setIsNurse} />
+    ) : (
+      <Navigate to={isNurse ? "/main" : `/users/${localStorage.getItem("patientId")}`} />
+    )
+  }
+/>
 
         {/* Main Page (for nurses) */}
         <Route
@@ -106,10 +105,22 @@ function App() {
 
         {/* User Page (for non-nurses) */}
         <Route
-          path="/users"
+          path="/users/:patientId"
           element={
             isAuthenticated && !isNurse ? (
               <User isAuthenticated={isAuthenticated} isNurse={isNurse} />
+            ) : (
+              <Navigate to="/" />
+            )
+          }
+        />
+
+        {/* Fallback for /users without patientId */}
+        <Route
+          path="/users"
+          element={
+            isAuthenticated && !isNurse ? (
+              <Navigate to="/" /> // Redirect to login or another appropriate page
             ) : (
               <Navigate to="/" />
             )
@@ -122,7 +133,7 @@ function App() {
           element={<Logout onLogout={handleLogout} />} // Use the Logout component
         />
       </Routes>
-      </>
+    </>
   );
 }
 
