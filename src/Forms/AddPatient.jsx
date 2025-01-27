@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { db } from "../Firebase/config";
 import { collection, addDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
+
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./AddPatient.css";
@@ -12,13 +14,13 @@ const AddPatient = () => {
     profile: {
       name: "",
       age: "",
-      gender: "",
-      category: "",
+      gender: "NOT SAY", // Default value for gender
+      category: "", // Default value for category
       address: "",
       email: "",
       password: "",
-      dob: "",
-      location: "",
+      dob: "", // Date of Birth field
+      location: "", // Will be a textarea
       panchayat: "",
       ward: "",
       mainCaretaker: "",
@@ -93,27 +95,54 @@ const AddPatient = () => {
     ]);
   };
 
+  const generatePatientId = () => {
+    const min = 100000000000; // Smallest 12-digit number
+    const max = 999999999999; // Largest 12-digit number
+    return (Math.floor(Math.random() * (max - min + 1)) + min).toString(); // Ensure it's a string
+  };
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
+      const patientId = generatePatientId(); // Already a string
       const registerTime = new Date().toISOString();
-      const patientDoc = await addDoc(collection(db, "Patients"), {
+  
+      // Convert any number fields to strings
+      const profileData = {
         ...patientData.profile,
+        age: patientData.profile.age.toString(), // Convert age to string
+        mainCaretakerPhone: patientData.profile.mainCaretakerPhone.toString(), // Convert phone to string
+        relativePhone: patientData.profile.relativePhone.toString(), // Convert phone to string
+        referralPhone: patientData.profile.referralPhone.toString(), // Convert phone to string
+        neighbourPhone: patientData.profile.neighbourPhone.toString(), // Convert phone to string
+        communityVolunteerPhone: patientData.profile.communityVolunteerPhone.toString(), // Convert phone to string
+        wardMemberPhone: patientData.profile.wardMemberPhone.toString(), // Convert phone to string
+      };
+  
+      // Add the patient data to Firestore with the specified patientId as the document ID
+      await setDoc(doc(db, "Patients", patientId), {
+        ...profileData,
         ...patientData.medical,
-        familyDetails, // Add family details to the patient data
+        familyDetails: familyDetails.map((member) => ({
+          ...member,
+          age: member.age.toString(), // Convert family member age to string
+          income: member.income.toString(), // Convert family member income to string
+        })),
         registrationDate,
         registerTime,
+        patientId, // Include the generated patient ID as a string
       });
-
-      const patientId = patientDoc.id;
+  
+      // Add the user data to Firestore
       await addDoc(collection(db, "users"), {
         email: patientData.profile.email,
         password: patientData.profile.password,
-        patientId,
+        patientId, // Already a string
         is_nurse: false,
       });
-
+  
+      // Show success toast
       toast.success("Patient added successfully!", {
         position: "top-center",
         autoClose: 3000,
@@ -122,11 +151,13 @@ const AddPatient = () => {
         pauseOnHover: true,
         draggable: true,
       });
-
+  
+      // Navigate to the patient's page after 3 seconds
       setTimeout(() => {
         navigate(`/main/patient/${patientId}`);
       }, 3000);
     } catch (error) {
+      // Show error toast if something goes wrong
       toast.error(`Failed to add patient: ${error.message}`, {
         position: "top-center",
         autoClose: 5000,
@@ -153,13 +184,63 @@ const AddPatient = () => {
               <label htmlFor={field}>
                 {field.replace(/([A-Z])/g, " $1").replace(/^./, (str) => str.toUpperCase())}:
               </label>
-              <input
-                type={field === "email" ? "email" : field === "password" ? "password" : "text"}
-                id={field}
-                name={field}
-                value={value}
-                onChange={(e) => handleChange(e, "profile")}
-              />
+              {field === "gender" ? (
+                <select
+                  id={field}
+                  name={field}
+                  className="form-control"
+                  value={value}
+                  onChange={(e) => handleChange(e, "profile")}
+                >
+                  <option value="NOT SAY">Not Say</option>
+                  <option value="MALE">Male</option>
+                  <option value="FEMALE">Female</option>
+                  <option value="OTHER">Other</option>
+                </select>
+              ) : field === "category" ? (
+                <select
+                  id={field}
+                  name={field}
+                  className="form-control"
+                  value={value}
+                  onChange={(e) => handleChange(e, "profile")}
+                >
+                  <option value="">Select Category</option>
+                  <option value="CATEGORY_1">Category 1</option>
+                  <option value="CATEGORY_2">Category 2</option>
+                  <option value="CATEGORY_3">Category 3</option>
+                </select>
+              ) : field === "location" ? (
+                <textarea
+                  id={field}
+                  name={field}
+                  value={value}
+                  onChange={(e) => handleChange(e, "profile")}
+                  rows="3"
+                />
+              ) : field === "dob" ? ( // Add DOB as a date input
+                <input
+                  type="date"
+                  id={field}
+                  name={field}
+                  value={value}
+                  onChange={(e) => handleChange(e, "profile")}
+                />
+              ) : (
+                <input
+                  type={
+                    field === "email"
+                      ? "email"
+                      : field === "password"
+                      ? "password"
+                      : "text"
+                  }
+                  id={field}
+                  name={field}
+                  value={value}
+                  onChange={(e) => handleChange(e, "profile")}
+                />
+              )}
             </div>
           ))}
         </div>

@@ -114,7 +114,7 @@ const AllReportsPage = () => {
   };
 
   const handleConfirmDelete = async () => {
-    if (pin === "2005") {
+    if (pin === "2012") {
       try {
         await deleteDoc(doc(db, "Reports", reportToDelete));
         setReports(reports.filter((report) => report.id !== reportToDelete));

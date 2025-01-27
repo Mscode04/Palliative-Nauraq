@@ -45,7 +45,7 @@ const UpdatePatient = () => {
       note: "",
       examinations: "",
     },
-    additionalInfo: "",
+    additionalInfo: "....",
   });
 
   const [registrationDate, setRegistrationDate] = useState("");

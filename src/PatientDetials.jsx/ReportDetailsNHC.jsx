@@ -249,8 +249,8 @@ const ReportDetailsNHC = () => {
         {/* Vital Signs */}
         <h3 className="rnhc-section-title">Vital Signs</h3>
         <div className="rnhc-field">
-          <label>BP (Rt/Lt):</label>
-          <span>{report.bpRtLt || "N/A"}</span>
+          <label>BP :</label>
+          <span>{report.bp || "N/A"}</span>
         </div>
         <div className="rnhc-field">
           <label>BP (Sitting/Lying):</label>
