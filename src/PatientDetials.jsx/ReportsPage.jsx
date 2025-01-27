@@ -1,19 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { db } from "../Firebase/config";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs, doc, deleteDoc } from "firebase/firestore";
 import { useParams, Link, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify"; // Import ToastContainer and toast
+import "react-toastify/dist/ReactToastify.css"; // Import the CSS
 import "./ReportsPage.css";
 
 const ReportsPage = () => {
-  const { patientId } = useParams(); // Get patientId from URL
-  const navigate = useNavigate(); // Use useNavigate for navigation in react-router-dom v6
+  const { patientId } = useParams();
+  const navigate = useNavigate();
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [typeFilter, setTypeFilter] = useState(""); // Form type filter
+  const [typeFilter, setTypeFilter] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [reportToDelete, setReportToDelete] = useState(null);
+  const [pin, setPin] = useState("");
+
   const reportsPerPage = 10;
 
   useEffect(() => {
@@ -22,11 +28,9 @@ const ReportsPage = () => {
         setLoading(true);
         setError(null);
 
-        // Reference to the Reports collection in Firestore
         const reportsRef = collection(db, "Reports");
         let q = query(reportsRef, where("patientId", "==", patientId));
 
-        // Apply filters if present
         if (startDate) {
           q = query(q, where("submittedAt", ">=", new Date(startDate)));
         }
@@ -34,7 +38,7 @@ const ReportsPage = () => {
           q = query(q, where("submittedAt", "<=", new Date(endDate)));
         }
         if (typeFilter) {
-          q = query(q, where("formType", "==", typeFilter)); // Apply formType filter
+          q = query(q, where("formType", "==", typeFilter));
         }
 
         const querySnapshot = await getDocs(q);
@@ -55,7 +59,6 @@ const ReportsPage = () => {
     fetchReports();
   }, [patientId, startDate, endDate, typeFilter, currentPage]);
 
-  // Handle pagination logic
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const totalPages = Math.ceil(reports.length / reportsPerPage);
@@ -64,7 +67,6 @@ const ReportsPage = () => {
     currentPage * reportsPerPage
   );
 
-  // Function to determine the route based on formType
   const getReportDetailsRoute = (formType, reportId) => {
     switch (formType) {
       case "NHC":
@@ -89,8 +91,53 @@ const ReportsPage = () => {
     }
   };
 
+  const handleDeleteClick = (reportId) => {
+    setReportToDelete(reportId);
+    setShowConfirmation(true);
+  };
+
+  const handlePinChange = (e) => {
+    setPin(e.target.value);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (pin === "2005") {
+      try {
+        await deleteDoc(doc(db, "Reports", reportToDelete));
+        setReports(reports.filter((report) => report.id !== reportToDelete));
+        setShowConfirmation(false);
+        setPin("");
+        toast.success("Report deleted successfully!"); // Use toast.success for success messages
+      } catch (error) {
+        console.error("Error deleting report: ", error);
+        toast.error("Failed to delete report."); // Use toast.error for error messages
+      }
+    } else {
+      toast.error("Incorrect PIN."); // Use toast.error for incorrect PIN
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setShowConfirmation(false);
+    setPin("");
+  };
+
   return (
     <div className="reports-page-container">
+      {/* Add ToastContainer here */}
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        toastStyle={{ marginTop: "20px" }}
+      />
+
       <div className="back-button-container">
         <button onClick={() => navigate(-1)} className="back-button">
           Back
@@ -98,7 +145,6 @@ const ReportsPage = () => {
       </div>
       <h2>Reports for Patient ID: {patientId}</h2>
 
-      {/* Filters */}
       <div className="filters-container">
         <input
           type="date"
@@ -160,12 +206,14 @@ const ReportsPage = () => {
                 </p>
                 <p>{report.name || "No Name"}</p>
               </Link>
+              <button onClick={() => handleDeleteClick(report.id)} className="delete-button">
+                Delete
+              </button>
             </div>
           ))}
         </div>
       )}
 
-      {/* Pagination */}
       <div className="pagination">
         <button
           onClick={() => paginate(currentPage - 1)}
@@ -181,6 +229,20 @@ const ReportsPage = () => {
           Next
         </button>
       </div>
+
+      {showConfirmation && (
+        <div className="confirmation-box">
+          <p>Enter PIN to delete the report:</p>
+          <input
+            type="password"
+            value={pin}
+            onChange={handlePinChange}
+            placeholder="Enter PIN"
+          />
+          <button onClick={handleConfirmDelete}>Confirm</button>
+          <button onClick={handleCancelDelete}>Cancel</button>
+        </div>
+      )}
     </div>
   );
 };

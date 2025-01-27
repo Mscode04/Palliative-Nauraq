@@ -17,10 +17,25 @@ const Equipment = () => {
   const [updatingEquipmentId, setUpdatingEquipmentId] = useState(null);
 
   const equipmentOptions = [
-    { label: "Wheelchair", value: "Wheelchair" },
-    { label: "Oxygen Tank", value: "Oxygen Tank" },
+    { label: "Oxygen Concentrator", value: "Oxygen Concentrator" },
+    { label: "Bypap", value: "Bypap" },
+    { label: "Air Bed", value: "Air Bed" },
+    { label: "Water Bed", value: "Water Bed" },
+    { label: "Bed", value: "Bed" },
+    { label: "Cot", value: "Cot" },
+    { label: "Wheel Chair", value: "Wheel Chair" },
     { label: "Walker", value: "Walker" },
-    // Add more equipment options here...
+    { label: "Elbow Crutches", value: "Elbow Crutches" },
+    { label: "Walking Stick", value: "Walking Stick" },
+    { label: "Ampit Crutches", value: "Ampit Crutches" },
+    { label: "Oxygen Cylinder", value: "Oxygen Cylinder" },
+    { label: "Nebulaiser", value: "Nebulaiser" },
+    { label: "Commode Chair", value: "Commode Chair" },
+    { label: "Back Rest", value: "Back Rest" },
+    { label: "Stretcher", value: "Stretcher" },
+    { label: "Drip Stand", value: "Drip Stand" },
+    { label: "Traction", value: "Traction" },
+    { label: "Flow Meter", value: "Flow Meter" },
   ];
 
   useEffect(() => {

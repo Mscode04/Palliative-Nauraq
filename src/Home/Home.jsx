@@ -126,9 +126,8 @@ function Home() {
                 <div className="HomeReportCard">
                   <i className="bi bi-person-circle HomeReportIcon"></i>
                   <div className="HomeReportInfo">
-                    <h5>{report.name}</h5>
-                    <p>{report.formType}</p>
-                    <p>{report.address}</p>
+                    <h5>{report.formType} : {report.name} </h5>
+                    <p></p>
                     <small>{new Date(report.submittedAt).toLocaleString()}</small>
                   </div>
                 </div>

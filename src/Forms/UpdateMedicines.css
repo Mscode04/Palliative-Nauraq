@@ -94,3 +94,6 @@
       min-width: 120px; /* Ensure columns don't collapse too much */
     }
   }
+  .medsel{
+    color: black !important;
+  }

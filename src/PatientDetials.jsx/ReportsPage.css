@@ -151,3 +151,42 @@
       grid-template-columns: 1fr;
     }
   }
+
+
+  
+  .confirmation-box {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+  }
+  
+  .confirmation-box input {
+    margin-bottom: 10px;
+    
+    padding: 5px;
+    width: 100%;
+  }
+  
+  .confirmation-box button {
+    margin-right: 10px;
+    background-color: #288598;
+    border: 0;
+    border-radius: 10px;
+    font-size: 15px;
+    padding: 5px;
+    color: white;
+  }
+  .delete-button{
+    background-color: #c54240;
+    color: #f0f8fa;
+    border:0 ;
+    padding: 5px;
+    border-radius: 5px;
+  }
+  
