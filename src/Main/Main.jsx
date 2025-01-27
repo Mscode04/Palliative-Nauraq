@@ -36,6 +36,9 @@ import ReportDetailsDEATH from "../PatientDetials.jsx/ReportDetailsDEATH";
 import UpdateSOCIAL from "../Forms/UpdateSOCIAL";
 import UpdateDEATH from "../Forms/UpdateDEATH";
 import UpdatePatient from "../Forms/UpdatePatient";
+import UpdateNHCE from "../Forms/UpdateNHCE";
+import ReportDetailsNHCE from "../PatientDetials.jsx/ReportDetailsNHCE";
+
 function Main({ isAuthenticated, isNurse }) {
   if (!isAuthenticated || !isNurse) {
     return <Navigate to="/" />; // Redirect to login if not authenticated or not a nurse
@@ -65,6 +68,7 @@ function Main({ isAuthenticated, isNurse }) {
           <Route path="/update-medicines/:patientId" element={<UpdateMedicines />} />
           <Route path="/reports/:patientId" element={<ReportsPage />} />
           <Route path="/reportsdetailnhc/:reportId" element={<ReportDetailsNHC />} />
+          <Route path="/reportsdetailnhce/:reportId" element={<ReportDetailsNHCE />} />
           <Route path="/report-details-dhc/:reportId" element={<ReportDetailsDHC />} />
           <Route path="/report-details-vhc/:reportId" element={<ReportDetailsVHC />} />
           <Route path="/report-details-investigation/:reportId" element={<ReportDetailsINVESTIGATION />} />
@@ -72,6 +76,7 @@ function Main({ isAuthenticated, isNurse }) {
           <Route path="/report-details-social/:reportId" element={<ReportDetailsSOCIAL />} />
           <Route path="/report-details-death/:reportId" element={<ReportDetailsDEATH />} />
           <Route path="/update-nhc/:reportId" element={<UpdateNHC />} />
+          <Route path="/update-nhce/:reportId" element={<UpdateNHCE />} />
           <Route path="/update-dhc/:reportId" element={<UpdateDHC />} />
           <Route path="/update-vhc/:reportId" element={<UpdateVHC />} />
           <Route path="/update-investigation/:reportId" element={<UpdateINVESTIGATION />} />

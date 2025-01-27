@@ -113,3 +113,66 @@
   color: #288598;
   font-size: 16px;
 }
+
+/* Delete Button */
+.AllRep-delete-button {
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.AllRep-delete-button:hover {
+  background-color: #ff1a1a;
+}
+
+/* Confirmation Box */
+.AllRep-confirmation-box {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  text-align: center;
+}
+
+.AllRep-pin-input {
+  padding: 5px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.AllRep-confirm-button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.AllRep-confirm-button:hover {
+  background-color: #45a049;
+}
+
+.AllRep-cancel-button {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.AllRep-cancel-button:hover {
+  background-color: #e53935;
+}

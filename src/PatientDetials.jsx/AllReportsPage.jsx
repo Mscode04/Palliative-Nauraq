@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { db } from "../Firebase/config";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, query, where, doc, deleteDoc } from "firebase/firestore";
 import { Link, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./AllReportsPage.css";
 
 const AllReportsPage = () => {
@@ -14,8 +16,11 @@ const AllReportsPage = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const reportsPerPage = 10;
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [reportToDelete, setReportToDelete] = useState(null);
+  const [pin, setPin] = useState("");
 
+  const reportsPerPage = 10;
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -77,8 +82,9 @@ const AllReportsPage = () => {
   const getReportDetailsRoute = (formType, reportId) => {
     switch (formType) {
       case "NHC":
-      case "NHC(E)":
         return `/main/reportsdetailnhc/${reportId}`;
+      case "NHC(E)":
+        return `/main/reportsdetailnhce/${reportId}`;
       case "DHC":
         return `/main/report-details-dhc/${reportId}`;
       case "PROGRESSION REPORT":
@@ -98,6 +104,37 @@ const AllReportsPage = () => {
     }
   };
 
+  const handleDeleteClick = (reportId) => {
+    setReportToDelete(reportId);
+    setShowConfirmation(true);
+  };
+
+  const handlePinChange = (e) => {
+    setPin(e.target.value);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (pin === "2005") {
+      try {
+        await deleteDoc(doc(db, "Reports", reportToDelete));
+        setReports(reports.filter((report) => report.id !== reportToDelete));
+        setShowConfirmation(false);
+        setPin("");
+        toast.success("Report deleted successfully!");
+      } catch (error) {
+        console.error("Error deleting report: ", error);
+        toast.error("Failed to delete report.");
+      }
+    } else {
+      toast.error("Incorrect PIN.");
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setShowConfirmation(false);
+    setPin("");
+  };
+
   // Pagination logic
   const indexOfLastReport = currentPage * reportsPerPage;
   const indexOfFirstReport = indexOfLastReport - reportsPerPage;
@@ -107,6 +144,19 @@ const AllReportsPage = () => {
 
   return (
     <div className="AllRep-container">
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        toastStyle={{ marginTop: "20px" }}
+      />
+
       <button onClick={handleBackClick} className="AllRep-back-button">
         &larr; Back
       </button>
@@ -175,7 +225,7 @@ const AllReportsPage = () => {
                   to={getReportDetailsRoute(report.formType, report.id)}
                   className="AllRep-report-link"
                 >
-                  <h3 className="AllRep-report-title">{report.formType || "Report Title"}</h3>
+                  <h3 className="AllRep-report-title">{report.formType || "Report Title"} : {report.name || "No Name"}</h3>
                   <p className="AllRep-report-date">
                     {report.submittedAt
                       ? new Date(report.submittedAt).toLocaleString("en-US", {
@@ -193,6 +243,12 @@ const AllReportsPage = () => {
                   <p className="AllRep-report-name">{report.name || "No Name"}</p>
                   <p className="AllRep-report-address">{report.address || "No Address"}</p>
                 </Link>
+                <button
+                  onClick={() => handleDeleteClick(report.id)}
+                  className="AllRep-delete-button"
+                >
+                  Delete
+                </button>
               </div>
             ))}
           </div>
@@ -215,6 +271,25 @@ const AllReportsPage = () => {
             </button>
           </div>
         </>
+      )}
+
+      {showConfirmation && (
+        <div className="AllRep-confirmation-box">
+          <p>Enter PIN to delete the report:</p>
+          <input
+            type="password"
+            value={pin}
+            onChange={handlePinChange}
+            placeholder="Enter PIN"
+            className="AllRep-pin-input"
+          />
+          <button onClick={handleConfirmDelete} className="AllRep-confirm-button">
+            Confirm
+          </button>
+          <button onClick={handleCancelDelete} className="AllRep-cancel-button">
+            Cancel
+          </button>
+        </div>
       )}
     </div>
   );

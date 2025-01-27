@@ -164,3 +164,6 @@
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   }
 }
+.btn-danger{
+  background-color: brown;
+}

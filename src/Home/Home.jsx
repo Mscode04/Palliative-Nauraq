@@ -52,8 +52,9 @@ function Home() {
   const getReportDetailsRoute = (formType, reportId) => {
     switch (formType) {
       case "NHC":
-      case "NHC(E)":
         return `/main/reportsdetailnhc/${reportId}`;
+      case "NHC(E)":
+        return `/main/reportsdetailnhce/${reportId}`;
       case "DHC":
         return `/main/report-details-dhc/${reportId}`;
       case "PROGRESSION REPORT":

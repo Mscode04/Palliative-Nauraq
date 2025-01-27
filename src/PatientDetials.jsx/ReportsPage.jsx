@@ -70,8 +70,9 @@ const ReportsPage = () => {
   const getReportDetailsRoute = (formType, reportId) => {
     switch (formType) {
       case "NHC":
-      case "NHC(E)":
         return `/main/reportsdetailnhc/${reportId}`;
+      case "NHC(E)":
+        return `/main/reportsdetailnhce/${reportId}`;
       case "DHC":
         return `/main/report-details-dhc/${reportId}`;
       case "PROGRESSION REPORT":
@@ -101,7 +102,7 @@ const ReportsPage = () => {
   };
 
   const handleConfirmDelete = async () => {
-    if (pin === "2005") {
+    if (pin === "2012") {
       try {
         await deleteDoc(doc(db, "Reports", reportToDelete));
         setReports(reports.filter((report) => report.id !== reportToDelete));
