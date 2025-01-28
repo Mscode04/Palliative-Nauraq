@@ -1,7 +1,7 @@
 /* Main Container */
 .PTDetail-container {
   padding: 20px;
-  background-color: #f5f5f5;
+  background-color: #288598;
   min-height: 100vh;
 }
 
@@ -9,7 +9,7 @@
 .PTDetail-backButton {
   background-color: transparent;
   border: none;
-  color: #288598;
+  color: #fff;
   font-size: 16px;
   cursor: pointer;
   margin-bottom: 20px;
