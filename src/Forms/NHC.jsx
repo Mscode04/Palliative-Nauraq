@@ -60,7 +60,6 @@ const NHC = () => {
     medicineChanges: "",
     otherActivities: "",
     homeCarePlan: "def",
-    homeCareType: "nhc",
     consultation: "",
     formType: "NHC",
     submittedAt: "",
@@ -183,8 +182,7 @@ const NHC = () => {
         summaryDiscussion: "",
         medicineChanges: "",
         otherActivities: "",
-        homeCarePlan: "def",
-        homeCareType: "nhc",
+        homeCarePlan: "",
         consultation: "",
         formType: "NHC",
         submittedAt: "",
@@ -223,16 +221,13 @@ const NHC = () => {
         <i className="fa fa-arrow-left"></i> Back
       </button>
 
-      <h2>NHC Details for Patient ID: {patientId}</h2>
+      <h2 className="NHCAdd-title">NHC Details for Patient ID: {patientId}</h2>
       {patientData ? (
-        <>
-          <h3>Patient Information</h3>
-          <p><strong>Name:</strong> {patientData.name}</p>
-          <p><strong>Address:</strong> {patientData.address}</p>
-          <p><strong>Phone Number:</strong> {patientData.phone}</p>
-          <p><strong>Location:</strong> {patientData.location}</p>
-          <p><strong>Age:</strong> {patientData.age}</p>
-        </>
+        <div className="NHCAdd-patientInfo">
+           <h3 style={{color:"black"}}>Patient NHC</h3>
+          <h3><strong>Name:</strong> {patientData.name}</h3>
+          <h3><strong>Address:</strong> {patientData.address}</h3>
+        </div>
       ) : (
         <p>Loading patient information...</p>
       )}
@@ -607,15 +602,18 @@ const NHC = () => {
         <label>
           Home Care Plan:
           <select name="homeCarePlan" value={formData.homeCarePlan} onChange={handleChange}>
-            <option value="def">DEF</option>
-            <option value="jef">JEF</option>
-          </select>
-        </label>
-        <label>
-          Home Care Type:
-          <select name="homeCareType" value={formData.homeCareType} onChange={handleChange}>
-            <option value="nhc">NHC</option>
-            <option value="dhc">DHC</option>
+            
+            <option value="daily_7_1">Daily (7/1)</option>
+            <option value="1_day_1_week_1_1">1 Day 1 Week (1/1)</option>
+            <option value="2_day_1_week_2_1">2 Day 1 Week (2/1)</option>
+            <option value="3_day_1_week_3_1">3 Day 1 Week (3/1)</option>
+            <option value="1_day_2_week_1_2">1 Day 2 Week (1/2)</option>
+            <option value="1_day_1_month_1_4">1 Day 1 Month (1/4)</option>
+            <option value="1_day_1.5_month_1_6">1 Day 1.5 Month (1/6)</option>
+            <option value="1_day_2_month_1_8">1 Day 2 Month (1/8)</option>
+            <option value="1_day_3_month_1_12">1 Day 3 Month (1/12)</option>
+            <option value="sos">SOS</option>
+
           </select>
         </label>
         <label>

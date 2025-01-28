@@ -192,10 +192,11 @@ const Equipment = () => {
       <h2 className="EquAdd-title">Manage Equipments for Patient ID: {patientId}</h2>
       {patientData ? (
         <div className="EquAdd-patientInfo">
-          <h3>Patient Information</h3>
-          <p><strong>Name:</strong> {patientData.name}</p>
-          <p><strong>Address:</strong> {patientData.address}</p>
-          <p><strong>Phone:</strong> {patientData.phone}</p>
+          <h3 style={{color:"black"}}>Patient Equipments</h3>
+          <h3><strong>Name:</strong> {patientData.name}</h3>
+          <h3><strong>Address:</strong> {patientData.address}</h3>
+          
+          
         </div>
       ) : (
         <p>Loading patient information...</p>

@@ -206,9 +206,9 @@ const AddPatient = () => {
                   onChange={(e) => handleChange(e, "profile")}
                 >
                   <option value="">Select Category</option>
-                  <option value="CATEGORY_1">Category 1</option>
-                  <option value="CATEGORY_2">Category 2</option>
-                  <option value="CATEGORY_3">Category 3</option>
+                  <option value="A">A</option>
+                  <option value="B">B</option>
+                  <option value="CA">C</option>
                 </select>
               ) : field === "location" ? (
                 <textarea

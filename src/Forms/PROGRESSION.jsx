@@ -27,7 +27,7 @@ const Progression = () => {
     patientAwareness: "No",
     familyAwareness: "No",
     financially: "No",
-    emotionalState: "COP",
+    emotionalState: "",
     caretaker: "",
     caretakerTypeDomestic: "-1",
     caretakerTypeExt: "-1",
@@ -38,12 +38,12 @@ const Progression = () => {
     silentTapes: "",
     activityMobility: "1",
     glassglow: "1",
-    generalCondition: "STABLE",
+    generalCondition: "",
     careStatus: "0",
     qualityOfLife: "1",
     logistic: "",
     hcPlan: "1/1",
-    hcType: "NHC",
+    hcType: "",
     team1: "Null",
     team2: "",
     team3: "",
@@ -163,22 +163,19 @@ const Progression = () => {
         <i className="fa fa-arrow-left"></i> Back
       </button>
 
-      <h2>Progression Report for Patient ID: {patientId}</h2>
+      <h2 className="NHCAdd-title">PROGRESSION REPORT Details for Patient ID: {patientId}</h2>
       {patientData ? (
-        <>
-          <h3>Patient Information</h3>
-          <p><strong>Name:</strong> {patientData.name}</p>
-          <p><strong>Address:</strong> {patientData.address}</p>
-          <p><strong>Phone Number:</strong> {patientData.phone}</p>
-          <p><strong>Location:</strong> {patientData.location}</p>
-          <p><strong>Age:</strong> {patientData.age}</p>
-        </>
+        <div className="NHCAdd-patientInfo">
+           <h3 style={{color:"black"}}>Patient PROGRESSION REPORT</h3>
+          <h3><strong>Name:</strong> {patientData.name}</h3>
+          <h3><strong>Address:</strong> {patientData.address}</h3>
+        </div>
       ) : (
         <p>Loading patient information...</p>
       )}
 
       <form onSubmit={handleSubmit} className="PROAdd-form">
-        <h3>Section 1: General Details</h3>
+        
         <label>
           Time In:
           <input type="time" name="timeIn" value={formData.timeIn} onChange={handleChange} />
@@ -253,36 +250,59 @@ const Progression = () => {
         <label>
           The Primary Once:
           <select name="primaryOnce" value={formData.primaryOnce} onChange={handleChange}>
-            <option value="-1">-1</option>
             <option value="0">0</option>
             <option value="1">1</option>
             <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
           </select>
         </label>
         <label>
           Patient Awareness:
           <select name="patientAwareness" value={formData.patientAwareness} onChange={handleChange}>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
+          
+  <option value="NA">NA</option>
+  <option value="-1">-1</option>
+  <option value="DNL">DNL</option>
+  <option value="COL">COL</option>
+  <option value="1">1</option>
+  <option value="2">2</option>
           </select>
         </label>
         <label>
           Family Awareness:
           <select name="familyAwareness" value={formData.familyAwareness} onChange={handleChange}>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
+          
+  <option value="NA">NA</option>
+  <option value="-1">-1</option>
+  <option value="0">0</option>
+  <option value="DNL">DNL</option>
+  <option value="COL">COL</option>
+  <option value="1">1</option>
+  <option value="2">2</option>
           </select>
         </label>
         <label>
           Financially:
           <select name="financially" value={formData.financially} onChange={handleChange}>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
+          
+  <option value="NA">NA</option>
+  <option value="-1">-1</option>
+  <option value="0">0</option>
+  <option value="1">1</option>
+  <option value="2">2</option>
           </select>
         </label>
         <label>
           Emotional State:
           <select name="emotionalState" value={formData.emotionalState} onChange={handleChange}>
+            <option value="NA">NA</option>
             <option value="COP">COP</option>
             <option value="LAB">LAB</option>
             <option value="D1">D1</option>
@@ -297,20 +317,20 @@ const Progression = () => {
           <input type="text" name="caretaker" value={formData.caretaker} onChange={handleChange} />
         </label>
         <label>
-          Caretaker Type (Domestic):
+          Caretaker Type (Domestic Support):
           <select name="caretakerTypeDomestic" value={formData.caretakerTypeDomestic} onChange={handleChange}>
+            <option value="1">1</option>
             <option value="-1">-1</option>
             <option value="0">0</option>
-            <option value="1">1</option>
             <option value="2">2</option>
           </select>
         </label>
         <label>
-          Caretaker Type (Ext):
+          Caretaker Type (Ext Family Support):
           <select name="caretakerTypeExt" value={formData.caretakerTypeExt} onChange={handleChange}>
+            <option value="1">1</option>
             <option value="-1">-1</option>
             <option value="0">0</option>
-            <option value="1">1</option>
             <option value="2">2</option>
           </select>
         </label>
@@ -326,18 +346,18 @@ const Progression = () => {
         <label>
           Palliative Team Support:
           <select name="palliativeTeamSupport" value={formData.palliativeTeamSupport} onChange={handleChange}>
+            <option value="1">1</option>
             <option value="-1">-1</option>
             <option value="0">0</option>
-            <option value="1">1</option>
             <option value="2">2</option>
           </select>
         </label>
         <label>
           Environmental Hygiene:
           <select name="environmentalHygiene" value={formData.environmentalHygiene} onChange={handleChange}>
+            <option value="1">1</option>
             <option value="-1">-1</option>
             <option value="0">0</option>
-            <option value="1">1</option>
             <option value="2">2</option>
           </select>
         </label>

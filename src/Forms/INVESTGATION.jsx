@@ -151,12 +151,9 @@ const INVESTIGATION = () => {
       <h2 className="INVAdd-title">INVESTIGATION Details for Patient ID: {patientId}</h2>
       {patientData ? (
         <div className="INVAdd-patientInfo">
-          <h3>Patient Information</h3>
-          <p><strong>Name:</strong> {patientData.name}</p>
-          <p><strong>Address:</strong> {patientData.address}</p>
-          <p><strong>Phone Number:</strong> {patientData.phone}</p>
-          <p><strong>Location:</strong> {patientData.location}</p>
-          <p><strong>Age:</strong> {patientData.age}</p>
+           <h3 style={{color:"black"}}>Patient INVESTIGATION</h3>
+          <h3><strong>Name:</strong> {patientData.name}</h3>
+          <h3><strong>Address:</strong> {patientData.address}</h3>
         </div>
       ) : (
         <p>Loading patient information...</p>

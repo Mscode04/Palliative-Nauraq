@@ -85,16 +85,25 @@ function Home() {
 
       {/* Drawer */}
       <div className={`HomeDrawer ${drawerOpen ? "open" : ""}`}>
-        <button className="HomeDrawerCloseButton" onClick={toggleDrawer}>
-          <i className="bi bi-arrow-left"></i>
-        </button>
-        <div className="drawer-content">
-          <button className="HomeDrawerButton">Contact Us</button>
-          <button className="HomeDrawerButton btn-danger" onClick={handleLogout}>
-            Logout
-          </button>
-        </div>
-      </div>
+  <button className="HomeDrawerCloseButton" onClick={toggleDrawer}>
+    <i className="bi bi-arrow-left"></i>
+  </button>
+  <div className="drawer-content">
+    <a href="https://neuraq.github.io/Palliative-Mkba-App-Contact/" target="_blank" rel="noopener noreferrer" className="HomeDrawerButton">
+      Contact Us
+    </a>
+    <a href="https://neuraq.github.io/Palliative-Mkba-App-About/" target="_blank" rel="noopener noreferrer" className="HomeDrawerButton">
+      About Us
+    </a>
+    
+  </div>
+  <div className="drawer-footer">
+    <button className="HomeDrawerButton btn-danger" onClick={handleLogout}>
+      Logout
+    </button>
+    <div className="powered-by">Powered by nruraq</div>
+  </div>
+</div>
 
       {/* Banner Section */}
       <div className="HomeBanner">

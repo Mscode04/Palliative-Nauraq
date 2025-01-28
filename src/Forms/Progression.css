@@ -1,8 +1,9 @@
 .PROAdd-container {
     max-width: 800px;
     margin: 0 auto;
+    margin: 10px;
     padding: 20px;
-    background-color: #f0f8ff;
+    background-color: #288598;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
@@ -10,7 +11,7 @@
   .PROAdd-back-btn {
     background: none;
     border: none;
-    color: #288598;
+    color: #fff;
     font-size: 16px;
     cursor: pointer;
     margin-bottom: 20px;
@@ -31,7 +32,7 @@
     flex-direction: column;
     gap: 5px;
     font-weight: bold;
-    color: #288598;
+    color: #fff;
   }
   
   .PROAdd-form input,
@@ -50,7 +51,7 @@
   
   .PROAdd-submit-btn {
     padding: 10px 20px;
-    background-color: #288598;
+    background-color: #123137;
     color: white;
     border: none;
     border-radius: 5px;

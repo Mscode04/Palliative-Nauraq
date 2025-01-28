@@ -10,6 +10,7 @@ const PatientDetails = () => {
   const [patient, setPatient] = useState(null);
   const [medicines, setMedicines] = useState([]);
   const [equipments, setEquipments] = useState([]);
+  const [conditions, setConditions] = useState([]);
   const [familyDetails, setFamilyDetails] = useState([]); // State for family details
   const navigate = useNavigate();
 
@@ -64,6 +65,21 @@ const PatientDetails = () => {
     }
   };
 
+  // Fetching conditions related to this patient
+  const fetchConditions = async () => {
+    try {
+      if (patient) {
+        const conditionsRef = collection(db, "Conditions");
+        const q = query(conditionsRef, where("patientId", "==", patient.patientId));
+        const querySnapshot = await getDocs(q);
+        const conditionsData = querySnapshot.docs.map((doc) => doc.data());
+        setConditions(conditionsData);
+      }
+    } catch (error) {
+      console.error("Error fetching conditions: ", error);
+    }
+  };
+
   useEffect(() => {
     fetchPatient(); // Fetch patient details
   }, [patientId]); // Re-run when patientId changes
@@ -72,6 +88,8 @@ const PatientDetails = () => {
     if (patient) {
       fetchMedicines();
       fetchEquipments();
+      fetchConditions();
+      
     }
   }, [patient]); // Re-run when patient data is set
 
@@ -211,6 +229,59 @@ const PatientDetails = () => {
           </table>
         </div>
 
+        <div className="PTDetail-equipmentsContainer">
+          <h3>Medical Condition</h3>
+          {conditions.length > 0 ? (
+            <table>
+              <thead>
+                <tr>
+                  <th> Medical Condition</th>
+                </tr>
+              </thead>
+              <tbody>
+                {conditions.map((condition, index) => (
+                  <tr key={index}>
+                    <td>{condition.conditionName}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <p>No conditions found for this patient.</p>
+          )}
+        </div>
+
+ {/* Medicines Section */}
+ <div className="PTDetail-medicinesContainer">
+          <h3>Medicines</h3>
+          {medicines.length > 0 ? (
+            <table>
+              <thead>
+                <tr>
+                  <th>Medicine Name</th>
+                  <th>Quantity</th>
+                  <th>Time</th>
+                  <th>Show</th>
+                </tr>
+              </thead>
+              <tbody>
+                {medicines.map((medicine, index) => (
+                  <tr key={index}>
+                    <td>{medicine.medicineName}</td>
+                    <td>{medicine.quantity}</td>
+                    <td>{medicine.time}</td>
+                    <td>{medicine.patientsNow ? "Show" : "Hide"}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <p>No medicines found for this patient.</p>
+          )}
+        </div>
+
+
+
         {/* Family Details Section */}
         <div className="PTDetail-familyDetails">
           <h3>Family Details</h3>
@@ -246,35 +317,7 @@ const PatientDetails = () => {
           )}
         </div>
 
-        {/* Medicines Section */}
-        <div className="PTDetail-medicinesContainer">
-          <h3>Medicines</h3>
-          {medicines.length > 0 ? (
-            <table>
-              <thead>
-                <tr>
-                  <th>Medicine Name</th>
-                  <th>Quantity</th>
-                  <th>Time</th>
-                  <th>Show</th>
-                </tr>
-              </thead>
-              <tbody>
-                {medicines.map((medicine, index) => (
-                  <tr key={index}>
-                    <td>{medicine.medicineName}</td>
-                    <td>{medicine.quantity}</td>
-                    <td>{medicine.time}</td>
-                    <td>{medicine.patientsNow ? "Show" : "Hide"}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          ) : (
-            <p>No medicines found for this patient.</p>
-          )}
-        </div>
-
+       
         {/* Equipments Section */}
         <div className="PTDetail-equipmentsContainer">
           <h3>Equipments</h3>
@@ -304,6 +347,8 @@ const PatientDetails = () => {
           )}
         </div>
 
+
+
         {/* Reports Section */}
           <Link to={`/main/reports/${patient.patientId}`} className="PTDetail-reportsLink">
         <div className="PTDetail-reportsContainer">
@@ -325,6 +370,7 @@ const PatientDetails = () => {
           <Link to={`/main/equpment/${patient.patientId}`} className="PTDetail-actionBtn PTDetail-smallBtn">Equipment</Link>
           <Link to={`/main/invest/${patient.patientId}`} className="PTDetail-actionBtn PTDetail-smallBtn">Investigation</Link>
           <Link to={`/main/social/${patient.patientId}`} className="PTDetail-actionBtn PTDetail-smallBtn">Social Support</Link>
+          <Link to={`/main/conditions/${patient.patientId}`} className="PTDetail-actionBtn PTDetail-smallBtn">Medical Conditions</Link>
         </div>
 
         {/* Update Button */}

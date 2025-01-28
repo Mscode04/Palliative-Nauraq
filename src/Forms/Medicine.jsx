@@ -428,10 +428,9 @@ const Medicine = () => {
       <h2 className="MedAdd-title">Manage Medicines for Patient ID: {patientId}</h2>
       {patientData ? (
         <div className="MedAdd-patientInfo">
-          <h3>Patient Information</h3>
-          <p><strong>Name:</strong> {patientData.name}</p>
-          <p><strong>Address:</strong> {patientData.address}</p>
-          <p><strong>Phone:</strong> {patientData.phone}</p>
+           <h3 style={{color:"black"}}>Patient Medicines</h3>
+          <h3><strong>Name:</strong> {patientData.name}</h3>
+          <h3><strong>Address:</strong> {patientData.address}</h3>
         </div>
       ) : (
         <p>Loading patient information...</p>
