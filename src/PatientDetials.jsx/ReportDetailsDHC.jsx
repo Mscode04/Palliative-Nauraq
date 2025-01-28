@@ -253,16 +253,16 @@ const ReportDetailsDHC = () => {
         {/* Vital Signs */}
         <h3 className="rdhc-section-title">Vital Signs</h3>
         <div className="rdhc-field">
-          <label>BP (Rt/Lt):</label>
-          <span>{report.bpRtLt || "N/A"}</span>
+          <label>BP :</label>
+          <span>{report.bp || "N/A"}</span>
         </div>
         <div className="rdhc-field">
-          <label>BP (Sitting/Lying):</label>
-          <span>{report.bpSittingLying || "N/A"}</span>
+          <label>BP UL or LL :</label>
+          <span>{report.ulLl || "N/A"}</span>
         </div>
         <div className="rdhc-field">
-          <label>BP (UL/LL):</label>
-          <span>{report.bpUlLl || "N/A"}</span>
+          <label>BP Position:</label>
+          <span>{report.position || "N/A"}</span>
         </div>
         <div className="rdhc-field">
           <label>Pulse:</label>

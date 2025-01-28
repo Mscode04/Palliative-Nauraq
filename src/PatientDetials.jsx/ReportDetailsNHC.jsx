@@ -253,12 +253,12 @@ const ReportDetailsNHC = () => {
           <span>{report.bp || "N/A"}</span>
         </div>
         <div className="rnhc-field">
-          <label>BP (Sitting/Lying):</label>
-          <span>{report.bpSittingLying || "N/A"}</span>
+          <label>BP UL OR LL:</label>
+          <span>{report.ulLl || "N/A"}</span>
         </div>
         <div className="rnhc-field">
-          <label>BP (UL/LL):</label>
-          <span>{report.bpUlLl || "N/A"}</span>
+          <label>BP Position</label>
+          <span>{report.position || "N/A"}</span>
         </div>
         <div className="rnhc-field">
           <label>Pulse:</label>
