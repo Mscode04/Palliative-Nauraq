@@ -101,13 +101,13 @@ function Home() {
     <button className="HomeDrawerButton btn-danger" onClick={handleLogout}>
       Logout
     </button>
-    <div className="powered-by">Powered by nruraq</div>
+    <div className="powered-by">Powered by neuraq</div>
   </div>
 </div>
 
       {/* Banner Section */}
       <div className="HomeBanner">
-        <h1>NURSES</h1>
+        <h1>NURSES HOME</h1>
         <div className="HomeBannerButtons">
           <Link to="/main/addpt" className="HomeBannerButton">
             Register New Patients

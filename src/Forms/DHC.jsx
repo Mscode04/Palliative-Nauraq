@@ -411,30 +411,51 @@ const DHC = () => {
         <div className="DHCAdd-field">
           <label>Patient Currently:</label>
           <select name="patientCurrently" value={formData.patientCurrently} onChange={handleChange} required>
-            <option value="sitting">Sitting</option>
-            <option value="standing">Standing</option>
+          <option value="lying">Lying</option>
+<option value="standing">Standing</option>
+<option value="sitting">Sitting</option>
+<option value="fully_capable">Fully Capable</option>
+<option value="toss_and_turns_in_bed_self">Toss and Turns in Bed (Self)</option>
+<option value="toss_and_turns_with_help">Toss and Turns with Help</option>
+<option value="sitting_with_help">Sitting with Help</option>
+<option value="standing_with_help">Standing with Help</option>
+<option value="walking_house_self">Walking (House) Self</option>
+<option value="walking_house_with_help">Walking (House) with Help</option>
+<option value="walking_out_with_help">Walking (Out) with Help</option>
+<option value="walking_out_self">Walking (Out) Self</option>
           </select>
         </div>
         <div className="DHCAdd-field">
           <label>Memory Status:</label>
           <select name="memoryStatus" value={formData.memoryStatus} onChange={handleChange} required>
-            <option value="remember">Remember</option>
-            <option value="not remember">Not Remember</option>
+          <option value="remember">Remember</option>
+    <option value="not-remember">Do Not Remember</option>
+    <option value="sometimes">Sometimes</option>
+    <option value="something">Something</option> 
           </select>
         </div>
         <div className="DHCAdd-field">
           <label>Response Status:</label>
           <select name="responseStatus" value={formData.responseStatus} onChange={handleChange} required>
-            <option value="good">Good</option>
-            <option value="bad">Bad</option>
+          <option value="full-respond">Full Respond</option>
+    <option value="slightly-respond">Slightly Respond</option>
+    <option value="not-respond">Not Respond</option>
+    <option value="respond-with-talking">Respond with Talking</option>
+    <option value="respond-with-hands">Respond with Hands</option>
+    <option value="respond-with-fingers">Respond with Fingers</option>
+    <option value="respond-with-eye">Respond with Eye</option>
+    <option value="respond-with-head">Respond with Head</option>
+    <option value="respond-with-sound">Respond with Sound</option>
           </select>
         </div>
         <div className="DHCAdd-field">
           <label>Activity Score:</label>
           <select name="activityScore" value={formData.activityScore} onChange={handleChange} required>
-            <option value="1">1</option>
+          <option value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
           </select>
         </div>
 
@@ -510,9 +531,9 @@ const DHC = () => {
       )}
       {!["skin", "hair", "nails", "mouth", "perineum", "hiddenSpaces", "pressureSpaces", "joints"].includes(field) && (
         <>
-          <option value="Good">Good</option>
-          <option value="Bad">Bad</option>
-          <option value="Average">Average</option>
+                          <option value="Clean">Clean </option>
+                  <option value="Unclean">Unclean</option>
+                  <option value="Average">Average</option>
         </>
       )}
     </select>
