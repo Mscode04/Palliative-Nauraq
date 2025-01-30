@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/Palliative-Nauraq/static/css/main.be44f360.css",
-    "main.js": "/Palliative-Nauraq/static/js/main.63e31a45.js",
+    "main.css": "/Palliative-Nauraq/static/css/main.69325306.css",
+    "main.js": "/Palliative-Nauraq/static/js/main.240af6c0.js",
     "static/media/home-banner-nurse.jpg": "/Palliative-Nauraq/static/media/home-banner-nurse.4187a4847bd8808a8794.jpg",
     "index.html": "/Palliative-Nauraq/index.html",
-    "main.be44f360.css.map": "/Palliative-Nauraq/static/css/main.be44f360.css.map",
-    "main.63e31a45.js.map": "/Palliative-Nauraq/static/js/main.63e31a45.js.map"
+    "main.69325306.css.map": "/Palliative-Nauraq/static/css/main.69325306.css.map",
+    "main.240af6c0.js.map": "/Palliative-Nauraq/static/js/main.240af6c0.js.map"
   },
   "entrypoints": [
-    "static/css/main.be44f360.css",
-    "static/js/main.63e31a45.js"
+    "static/css/main.69325306.css",
+    "static/js/main.240af6c0.js"
   ]
 }
