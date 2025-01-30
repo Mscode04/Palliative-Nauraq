@@ -10,6 +10,7 @@ import "./AddPatient.css";
 
 const AddPatient = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [patientData, setPatientData] = useState({
     profile: {
       name: "",
@@ -103,46 +104,43 @@ const AddPatient = () => {
   
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // Start loading
   
     try {
-      const patientId = generatePatientId(); // Already a string
+      const patientId = generatePatientId();
       const registerTime = new Date().toISOString();
   
-      // Convert any number fields to strings
       const profileData = {
         ...patientData.profile,
-        age: patientData.profile.age.toString(), // Convert age to string
-        mainCaretakerPhone: patientData.profile.mainCaretakerPhone.toString(), // Convert phone to string
-        relativePhone: patientData.profile.relativePhone.toString(), // Convert phone to string
-        referralPhone: patientData.profile.referralPhone.toString(), // Convert phone to string
-        neighbourPhone: patientData.profile.neighbourPhone.toString(), // Convert phone to string
-        communityVolunteerPhone: patientData.profile.communityVolunteerPhone.toString(), // Convert phone to string
-        wardMemberPhone: patientData.profile.wardMemberPhone.toString(), // Convert phone to string
+        age: patientData.profile.age.toString(),
+        mainCaretakerPhone: patientData.profile.mainCaretakerPhone.toString(),
+        relativePhone: patientData.profile.relativePhone.toString(),
+        referralPhone: patientData.profile.referralPhone.toString(),
+        neighbourPhone: patientData.profile.neighbourPhone.toString(),
+        communityVolunteerPhone: patientData.profile.communityVolunteerPhone.toString(),
+        wardMemberPhone: patientData.profile.wardMemberPhone.toString(),
       };
   
-      // Add the patient data to Firestore with the specified patientId as the document ID
       await setDoc(doc(db, "Patients", patientId), {
         ...profileData,
         ...patientData.medical,
         familyDetails: familyDetails.map((member) => ({
           ...member,
-          age: member.age.toString(), // Convert family member age to string
-          income: member.income.toString(), // Convert family member income to string
+          age: member.age.toString(),
+          income: member.income.toString(),
         })),
         registrationDate,
         registerTime,
-        patientId, // Include the generated patient ID as a string
+        patientId,
       });
   
-      // Add the user data to Firestore
       await addDoc(collection(db, "users"), {
         email: patientData.profile.email,
         password: patientData.profile.password,
-        patientId, // Already a string
+        patientId,
         is_nurse: false,
       });
   
-      // Show success toast
       toast.success("Patient added successfully!", {
         position: "top-center",
         autoClose: 3000,
@@ -152,12 +150,10 @@ const AddPatient = () => {
         draggable: true,
       });
   
-      // Navigate to the patient's page after 3 seconds
       setTimeout(() => {
         navigate(`/main/patient/${patientId}`);
       }, 3000);
     } catch (error) {
-      // Show error toast if something goes wrong
       toast.error(`Failed to add patient: ${error.message}`, {
         position: "top-center",
         autoClose: 5000,
@@ -166,11 +162,22 @@ const AddPatient = () => {
         pauseOnHover: true,
         draggable: true,
       });
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 
   return (
     <div className="AddPatient-container">
+          {loading && (
+      <div className="loading-container">
+        <img
+          src="https://media.giphy.com/media/YMM6g7x45coCKdrDoj/giphy.gif"
+          alt="Loading..."
+          className="loading-image"
+        />
+      </div>
+    )}
       <button className="AddPatient-backButton" onClick={() => navigate(-1)}>
         &larr; Back
       </button>
