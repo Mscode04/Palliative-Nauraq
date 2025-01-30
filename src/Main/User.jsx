@@ -57,7 +57,7 @@ function User({ isAuthenticated, isNurse }) {
     />
   </div>
   <h2 className="user-profile-name text-2xl font-semibold mt-4">
-    
+  {patientName || "Bystander"}
   </h2>
 </div>
 </Link>
@@ -66,28 +66,28 @@ function User({ isAuthenticated, isNurse }) {
     {/* Contact section */}
     <div className="user-contact-section bg-white w-11/12 max-w-lg mt-4 p-4 rounded-2xl shadow-lg">
     <div className="about-palliative">
-  {/* <img src="https://media.istockphoto.com/id/1467477321/vector/nurse-avatar-clipart-icon-vector-illustration-medical-service.jpg?s=612x612&w=0&k=20&c=K9MD045OR7YUefUF7ABPOyRsCBSW8Oh8417Jgxd1vEM=" alt="Palliative Care" /> */}
+  <img src="https://health-app-psi.vercel.app/images/aboutus.gif" alt="Palliative Care" />
   <a href="https://neuraq.github.io/Palliative-Mkba-Web/">Palliative Mkakkaraparamba</a>
 </div>
   <h3 className="user-contact-title text-xl font-semibold text-center mb-4">
-    You can contact the Palliative Makkaraparamba
+    You can contact 
   </h3>
   <div className="user-contact-list space-y-2">
     {[
+      { name: "Divya", phone: "8606910902", avatar: "default_avatar_url" },
+      { name: "Haseena", phone: "9946204100", avatar: "default_avatar_url" },
+      { name: "Shameema", phone: "9037646308", avatar: "default_avatar_url" },
       {
         name: "Office",
         phone: "8606910901",
         avatar:
           "https://media.istockphoto.com/id/1344779917/vector/medical-center-hospital-building-vector-design.jpg?s=612x612&w=0&k=20&c=_sZByueZhEZbK2WjQz1jqXy1_Rr5jYkgiVBj-2ls44s=",
       },
-      { name: "Divya", phone: "8606910902", avatar: "default_avatar_url" },
-      { name: "Haseena", phone: "9946204100", avatar: "default_avatar_url" },
       {
         name: "Ambulance",
         phone: "9946205100",
         avatar: "https://media2.giphy.com/media/3oKIPdGRt4YcjFx8be/200w.gif?cid=6c09b9521d38njhisbausfg8aiwe0c10jhf3accp56xzvrp0&ep=v1_gifs_search&rid=200w.gif&ct=g", // Replace with the actual URL for the ambulance profile pic
       },
-      { name: "Shameema", phone: "9037646308", avatar: "default_avatar_url" },
     ].map((contact) => (
       <div
         key={contact.name}
@@ -98,7 +98,7 @@ function User({ isAuthenticated, isNurse }) {
             <img
               src={contact.avatar !== "default_avatar_url"
                 ? contact.avatar
-                : "https://media.istockphoto.com/id/1467477321/vector/nurse-avatar-clipart-icon-vector-illustration-medical-service.jpg?s=612x612&w=0&k=20&c=K9MD045OR7YUefUF7ABPOyRsCBSW8Oh8417Jgxd1vEM="
+                : "https://cl-wpml.careerlink.vn/cam-nang-viec-lam/wp-content/uploads/2023/08/21085609/healthcare-workers-preventing-virus-quarantine-campaign-concept-cheerful-friendly-asian-female-physician-doctor-with-clipboard-during-daily-checkup-standing-white-background-1024x683.jpg"
               }
               alt={contact.name}
               className="user-contact-image w-full h-full object-cover"
