@@ -63,7 +63,13 @@ const UpdateDHC = () => {
   };
 
   if (loading) {
-    return <p>Loading report details...</p>;
+    return <p>         <div className="loading-container">
+    <img
+      src="https://media.giphy.com/media/YMM6g7x45coCKdrDoj/giphy.gif"
+      alt="Loading..."
+      className="loading-image"
+    />
+  </div></p>;
   }
 
   if (error) {

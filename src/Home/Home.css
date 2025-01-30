@@ -197,3 +197,14 @@
 .btn-danger{
   background-color: brown;
 }
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.loading-image {
+  width: 100px;  /* Adjust size if necessary */
+  height: auto;
+}

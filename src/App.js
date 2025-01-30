@@ -3,6 +3,7 @@ import { HashRouter as Router, Routes, Route, Navigate } from "react-router-dom"
 import LoginPage from "./Main/LoginPage";
 import Main from "./Main/Main";
 import User from "./Main/User";
+import PUser from "./Main/PUser"; // Import the new PUser component
 import Logout from "./Main/Logout"; // Import the Logout component
 
 function App() {
@@ -81,15 +82,15 @@ function App() {
       <Routes>
         {/* Login Page */}
         <Route
-  path="/"
-  element={
-    !isAuthenticated ? (
-      <LoginPage setIsAuthenticated={setIsAuthenticated} setIsNurse={setIsNurse} />
-    ) : (
-      <Navigate to={isNurse ? "/main" : `/users/${localStorage.getItem("patientId")}`} />
-    )
-  }
-/>
+          path="/"
+          element={
+            !isAuthenticated ? (
+              <LoginPage setIsAuthenticated={setIsAuthenticated} setIsNurse={setIsNurse} />
+            ) : (
+              <Navigate to={isNurse ? "/main" : `/users/${localStorage.getItem("patientId")}`} />
+            )
+          }
+        />
 
         {/* Main Page (for nurses) */}
         <Route
@@ -105,7 +106,7 @@ function App() {
 
         {/* User Page (for non-nurses) */}
         <Route
-          path="/users/:patientId"
+          path="/users/:patientId/*"
           element={
             isAuthenticated && !isNurse ? (
               <User isAuthenticated={isAuthenticated} isNurse={isNurse} />
@@ -113,6 +114,12 @@ function App() {
               <Navigate to="/" />
             )
           }
+        />
+
+        {/* New Route for PUser */}
+        <Route
+          path="/puser/:patientId"
+          element={<PUser />} // This is the new component for viewing patient details
         />
 
         {/* Fallback for /users without patientId */}

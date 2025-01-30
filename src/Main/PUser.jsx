@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { db } from "../Firebase/config";
 import { doc, getDoc } from "firebase/firestore";
-import { useParams, Link, useNavigate } from "react-router-dom";
-import "./PatientDetails.css";
+import { useParams, useNavigate } from "react-router-dom";
+import "./PUser.css";
 import { collection, query, where, getDocs } from "firebase/firestore";
 
-const PatientDetails = () => {
+const PUser = () => {
   const { patientId } = useParams(); // Getting patientId from the URL
   const [patient, setPatient] = useState(null);
   const [medicines, setMedicines] = useState([]);
@@ -13,6 +13,7 @@ const PatientDetails = () => {
   const [conditions, setConditions] = useState([]);
   const [familyDetails, setFamilyDetails] = useState([]); // State for family details
   const navigate = useNavigate();
+  const componentRef = useRef(); // Ref for printing
 
   // Fetching patient details
   const fetchPatient = async () => {
@@ -89,41 +90,34 @@ const PatientDetails = () => {
       fetchMedicines();
       fetchEquipments();
       fetchConditions();
-      
     }
   }, [patient]); // Re-run when patient data is set
 
+  const handlePrint = () => {
+    window.print(); // Trigger the browser's print dialog
+  };
+
   if (!patient) {
-    return          <div className="loading-container">
-    <img
-      src="https://media.giphy.com/media/YMM6g7x45coCKdrDoj/giphy.gif"
-      alt="Loading..."
-      className="loading-image"
-    />
-  </div>;
+    return <p>Loading patient details...</p>;
   }
 
   return (
-    <div className="PTDetail-container">
-      <button className="PTDetail-backButton" onClick={() => navigate(-1)}>
+    <div ref={componentRef} className="userpt-container">
+      <button className="userpt-backButton hide-back-button" onClick={() => navigate(-1)}>
         &#8592; Back
       </button>
-      <h2>Patient Details</h2>
-      <div className="PTDetail-card">
-        <div className="PTDetail-profileHeader">
-          <img
-            src={patient.profilePic || "https://cdnl.iconscout.com/lottie/premium/thumb/user-profile-animation-download-in-lottie-json-gif-static-svg-file-formats--account-people-person-glassmorphism-ui-pack-interface-animations-4644453.gif"}
-            alt="Profile"
-            className="PTDetail-profileImg"
-          />
+      <h2>Bystander Details</h2>
+      <div className="userpt-card" ref={componentRef}>
+        <div className="userpt-profileHeader">
+      
           <h3>{patient.name || "N/A"}</h3>
         </div>
 
         {/* Patient Information Table */}
-        <div className="PTDetail-infoTable">
+        <div className="userpt-infoTable">
           <table>
             <tbody>
-            <tr>
+              <tr>
                 <td><strong>Address:</strong></td>
                 <td>{patient.address || "N/A"}</td>
               </tr>
@@ -235,7 +229,7 @@ const PatientDetails = () => {
           </table>
         </div>
 
-        <div className="PTDetail-equipmentsContainer">
+        <div className="userpt-equipmentsContainer">
           <h3>Medical Condition</h3>
           {conditions.length > 0 ? (
             <table>
@@ -257,8 +251,8 @@ const PatientDetails = () => {
           )}
         </div>
 
- {/* Medicines Section */}
- <div className="PTDetail-medicinesContainer">
+        {/* Medicines Section */}
+        <div className="userpt-medicinesContainer">
           <h3>Medicines</h3>
           {medicines.length > 0 ? (
             <table>
@@ -286,10 +280,8 @@ const PatientDetails = () => {
           )}
         </div>
 
-
-
         {/* Family Details Section */}
-        <div className="PTDetail-familyDetails">
+        <div className="userpt-familyDetails">
           <h3>Family Details</h3>
           {familyDetails.length > 0 ? (
             <table>
@@ -323,69 +315,38 @@ const PatientDetails = () => {
           )}
         </div>
 
-       
         {/* Equipments Section */}
-        <div className="PTDetail-equipmentsContainer">
+        <div className="userpt-equipmentsContainer">
           <h3>Equipments</h3>
           {equipments.length > 0 ? (
             <table>
               <thead>
                 <tr>
                   <th>Equipment Name</th>
-                  <th>Provided Date</th>
-                  <th>Return Date</th>
-                  <th>Damage</th>
+                  <th>Status</th>
                 </tr>
               </thead>
               <tbody>
                 {equipments.map((equipment, index) => (
                   <tr key={index}>
                     <td>{equipment.equipmentName}</td>
-                    <td>{equipment.providedDate}</td>
-                    <td>{equipment.returnDate}</td>
-                    <td>{equipment.damage ? "Yes" : "No"}</td>
+                    <td>{equipment.status}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           ) : (
-            <p>No equipments found for this patient.</p>
+            <p>No equipment found for this patient.</p>
           )}
         </div>
 
-
-
-        {/* Reports Section */}
-          <Link to={`/main/reports/${patient.patientId}`} className="PTDetail-reportsLink">
-        <div className="PTDetail-reportsContainer">
-            <h3>Reports of the Patient</h3>
-            <p>Click here to view detailed reports for this patient.</p>
-        </div>
-          </Link>
-
-        {/* Action Buttons */}
-        <div className="PTDetail-buttonsContainer">
-          <Link to={`/main/nhc/${patient.patientId}`} className="PTDetail-actionBtn PTDetail-smallBtn">NHC</Link>
-          <Link to={`/main/dhc/${patient.patientId}`} className="PTDetail-actionBtn PTDetail-smallBtn">DHC</Link>
-          <Link to={`/main/nhce/${patient.patientId}`} className="PTDetail-actionBtn PTDetail-smallBtn">NHC(E)</Link>
-          <Link to={`/main/prograssion/${patient.patientId}`} className="PTDetail-actionBtn PTDetail-smallBtn">Progression Report</Link>
-          <Link to={`/main/death/${patient.patientId}`} className="PTDetail-actionBtn PTDetail-smallBtn">Death Report</Link>
-          <Link to={`/main/vhc/${patient.patientId}`} className="PTDetail-actionBtn PTDetail-smallBtn">VHC</Link>
-          <Link to={`/main/gvhc/${patient.patientId}`} className="PTDetail-actionBtn PTDetail-smallBtn">GVHC</Link>
-          <Link to={`/main/medicine/${patient.patientId}`} className="PTDetail-actionBtn PTDetail-smallBtn">Medicine</Link>
-          <Link to={`/main/equpment/${patient.patientId}`} className="PTDetail-actionBtn PTDetail-smallBtn">Equipment</Link>
-          <Link to={`/main/invest/${patient.patientId}`} className="PTDetail-actionBtn PTDetail-smallBtn">Investigation</Link>
-          <Link to={`/main/social/${patient.patientId}`} className="PTDetail-actionBtn PTDetail-smallBtn">Social Support</Link>
-          <Link to={`/main/conditions/${patient.patientId}`} className="PTDetail-actionBtn PTDetail-smallBtn">Medical Conditions</Link>
-        </div>
-
-        {/* Update Button */}
-        <button className="PTDetail-updateButton" onClick={() => navigate(`/main/update-patient/${patientId}`)}>
-          Update Patient Details
+        {/* Print Button */}
+        <button className="userpt-printButton hide-back-button" onClick={handlePrint}>
+          Print
         </button>
       </div>
     </div>
   );
 };
 
-export default PatientDetails;
+export default PUser;

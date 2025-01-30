@@ -66,6 +66,7 @@ const LoginPage = ({ setIsAuthenticated, setIsNurse }) => {
       setLoading(false);
     }
   };
+
   return (
     <div className="login-page-container">
       <h2>Login</h2>
@@ -96,8 +97,15 @@ const LoginPage = ({ setIsAuthenticated, setIsNurse }) => {
         </button>
       </form>
 
- 
-
+      {loading && (
+        <div className="loading-container">
+          <img
+            src="https://media.giphy.com/media/YMM6g7x45coCKdrDoj/giphy.gif"
+            alt="Loading..."
+            className="loading-image"
+          />
+        </div>
+      )}
     </div>
   );
 };

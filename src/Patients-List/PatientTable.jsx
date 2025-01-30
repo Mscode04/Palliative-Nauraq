@@ -9,6 +9,7 @@ const PatientTable = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredPatients, setFilteredPatients] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(true); // New loading state
   const patientsPerPage = 8; // Number of patients per page
   const navigate = useNavigate();
 
@@ -16,6 +17,7 @@ const PatientTable = () => {
   useEffect(() => {
     const fetchPatients = async () => {
       try {
+        setIsLoading(true); // Set loading to true while fetching
         const querySnapshot = await getDocs(collection(db, "Patients"));
         const patientsData = querySnapshot.docs.map((doc) => ({
           id: doc.id,
@@ -23,8 +25,10 @@ const PatientTable = () => {
         }));
         setPatients(patientsData);
         setFilteredPatients(patientsData); // Set initial filtered list
+        setIsLoading(false); // Set loading to false once data is fetched
       } catch (error) {
         console.error("Error fetching patients: ", error);
+        setIsLoading(false); // Ensure loading is false even on error
       }
     };
 
@@ -80,70 +84,85 @@ const PatientTable = () => {
 
   return (
     <div className="PatientTable-container">
-    {/* Back button */}
-    <button className="PatientTable-back-button" onClick={() => navigate(-1)}>
-      <i className="bi bi-arrow-left"></i> Back
-    </button>
-  
-    {/* Search bar */}
-    <div className="PatientTable-search-bar">
-      <input
-        type="text"
-        placeholder="Search by name, phone number, or address..."
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-      />
-    </div>
-  
-    {/* Patient cards */}
-    <div className="PatientTable-patient-cards">
-      {currentPatients.map((patient) => (
-        <div
-          key={patient.id}
-          className="PatientTable-patient-card"
-          onClick={() => handleCardClick(patient.id)}
-        >
-          <div className="PatientTable-profile-pic">
-            <i className="bi bi-person-circle"></i>
-          </div>
-          <div className="PatientTable-patient-info">
-            <h5>{patient.name || "N/A"}</h5>
-            <p>{patient.address || "N/A"}</p>
-            <p>{patient.mainCaretakerPhone || "N/A"}</p>
-          </div>
+      {/* Back button */}
+      <button className="PatientTable-back-button" onClick={() => navigate(-1)}>
+        <i className="bi bi-arrow-left"></i> Back
+      </button>
+
+      {/* Search bar */}
+      <div className="PatientTable-search-bar">
+        <input
+          type="text"
+          placeholder="Search by name, phone number, or address..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+      </div>
+
+      {/* Loading Indicator */}
+      {isLoading ? (
+        <div className="PatientTable-loading-indicator">
+                   <div className="loading-container">
+              <img
+                src="https://media.giphy.com/media/YMM6g7x45coCKdrDoj/giphy.gif"
+                alt="Loading..."
+                className="loading-image"
+              />
+            </div>
         </div>
-      ))}
+      ) : (
+        // Patient cards
+        <div className="PatientTable-patient-cards">
+          {currentPatients.map((patient) => (
+            <div
+              key={patient.id}
+              className="PatientTable-patient-card"
+              onClick={() => handleCardClick(patient.id)}
+            >
+              <div className="PatientTable-profile-pic">
+                <i className="bi bi-person-circle"></i>
+              </div>
+              <div className="PatientTable-patient-info">
+                <h5>{patient.name || "N/A"}</h5>
+                <p>{patient.address || "N/A"}</p>
+                <p>{patient.mainCaretakerPhone || "N/A"}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Pagination */}
+      {!isLoading && (
+        <div className="PatientTable-pagination">
+          <button
+            onClick={handlePreviousPage}
+            disabled={currentPage === 1}
+            className="PatientTable-pagination-btn"
+          >
+            Previous
+          </button>
+          {[...Array(totalPages)].map((_, index) => (
+            <button
+              key={index + 1}
+              onClick={() => handlePageChange(index + 1)}
+              className={`PatientTable-pagination-btn ${
+                currentPage === index + 1 ? "active" : ""
+              }`}
+            >
+              {index + 1}
+            </button>
+          ))}
+          <button
+            onClick={handleNextPage}
+            disabled={currentPage === totalPages}
+            className="PatientTable-pagination-btn"
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
-  
-    {/* Pagination */}
-    <div className="PatientTable-pagination">
-      <button
-        onClick={handlePreviousPage}
-        disabled={currentPage === 1}
-        className="PatientTable-pagination-btn"
-      >
-        Previous
-      </button>
-      {[...Array(totalPages)].map((_, index) => (
-        <button
-          key={index + 1}
-          onClick={() => handlePageChange(index + 1)}
-          className={`PatientTable-pagination-btn ${
-            currentPage === index + 1 ? "active" : ""
-          }`}
-        >
-          {index + 1}
-        </button>
-      ))}
-      <button
-        onClick={handleNextPage}
-        disabled={currentPage === totalPages}
-        className="PatientTable-pagination-btn"
-      >
-        Next
-      </button>
-    </div>
-  </div>
   );
 };
 

@@ -199,7 +199,13 @@ const Equipment = () => {
           
         </div>
       ) : (
-        <p>Loading patient information...</p>
+        <div className="loading-container">
+        <img
+          src="https://media.giphy.com/media/YMM6g7x45coCKdrDoj/giphy.gif"
+          alt="Loading..."
+          className="loading-image"
+        />
+      </div>
       )}
 
       {equipments.length > 0 && (
