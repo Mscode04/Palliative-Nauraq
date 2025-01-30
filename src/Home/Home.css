@@ -179,7 +179,12 @@
 .HomeReportInfo h5 {
   margin: 0;
 }
+.HomeReportCard img{
+  height: 60px;
+  width: 60px;
 
+  border-radius:100%;
+}
 /* Responsive Styles */
 @media (max-width: 768px) {
   .HomeDrawer {

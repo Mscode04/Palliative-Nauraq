@@ -120,7 +120,7 @@ const PatientTable = () => {
               onClick={() => handleCardClick(patient.id)}
             >
               <div className="PatientTable-profile-pic">
-                <i className="bi bi-person-circle"></i>
+                <img src="https://assets-v2.lottiefiles.com/a/c529e71e-1150-11ee-952a-73e31b65ab2d/TiH0Dha3Qs.gif" alt="" />
               </div>
               <div className="PatientTable-patient-info">
                 <h5>{patient.name || "N/A"}</h5>

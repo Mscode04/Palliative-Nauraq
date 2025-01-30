@@ -149,7 +149,7 @@ function Home() {
                 key={report.id}
               >
                 <div className="HomeReportCard">
-                  <i className="bi bi-person-circle HomeReportIcon"></i>
+                  <img src="https://www.csdtitsolution.com/images/blogs/Chapitre_2.gif" alt="" />
                   <div className="HomeReportInfo">
                     <h5>{report.formType} : {report.name} </h5>
                     <p></p>
