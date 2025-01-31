@@ -193,3 +193,14 @@
     max-width: 100%;
   }
 }
+.PTDetail-reportsContainer img{
+  height: 80px;
+  width: 80px;
+}
+.PTDetail-reportsContainer{
+  display: flex;
+  justify-content: center;
+  background-color: #fff;
+  box-shadow: 1px 0px 10px 0px #288598;
+  align-items: center;
+}

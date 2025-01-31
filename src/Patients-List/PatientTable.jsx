@@ -142,7 +142,7 @@ const PatientTable = () => {
           >
             Previous
           </button>
-          {[...Array(totalPages)].map((_, index) => (
+          {/* {[...Array(totalPages)].map((_, index) => (
             <button
               key={index + 1}
               onClick={() => handlePageChange(index + 1)}
@@ -152,7 +152,7 @@ const PatientTable = () => {
             >
               {index + 1}
             </button>
-          ))}
+          ))} */}
           <button
             onClick={handleNextPage}
             disabled={currentPage === totalPages}

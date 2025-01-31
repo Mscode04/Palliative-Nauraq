@@ -112,7 +112,7 @@ const PatientDetails = () => {
       <div className="PTDetail-card">
         <div className="PTDetail-profileHeader">
           <img
-            src={patient.profilePic || "https://cdnl.iconscout.com/lottie/premium/thumb/user-profile-animation-download-in-lottie-json-gif-static-svg-file-formats--account-people-person-glassmorphism-ui-pack-interface-animations-4644453.gif"}
+            src={patient.profilePic || "https://cliply.co/wp-content/uploads/2020/10/442010811_HEADPHONES_AVATAR_3D_400px.gif"}
             alt="Profile"
             className="PTDetail-profileImg"
           />
@@ -358,8 +358,9 @@ const PatientDetails = () => {
         {/* Reports Section */}
           <Link to={`/main/reports/${patient.patientId}`} className="PTDetail-reportsLink">
         <div className="PTDetail-reportsContainer">
-            <h3>Reports of the Patient</h3>
-            <p>Click here to view detailed reports for this patient.</p>
+        <img src="https://cdn.dribbble.com/users/1015854/screenshots/3569620/day270_doctor-and-patient_1_2.gif" alt="" />
+            <h3> Reports of the Patient</h3>
+            
         </div>
           </Link>
 
