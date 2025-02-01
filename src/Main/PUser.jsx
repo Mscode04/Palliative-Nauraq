@@ -287,7 +287,7 @@ const PUser = () => {
         </div>
 
         {/* Family Details Section */}
-        <div className="userpt-familyDetails">
+        {/* <div className="userpt-familyDetails">
           <h3>Family Details</h3>
           {familyDetails.length > 0 ? (
             <table>
@@ -319,7 +319,7 @@ const PUser = () => {
           ) : (
             <p>No family details found for this patient.</p>
           )}
-        </div>
+        </div> */}
 
         {/* Equipments Section */}
         <div className="userpt-equipmentsContainer">
@@ -348,7 +348,7 @@ const PUser = () => {
 
         {/* Print Button */}
         <button className="userpt-printButton hide-back-button" onClick={handlePrint}>
-          Print
+          Download
         </button>
       </div>
     </div>
