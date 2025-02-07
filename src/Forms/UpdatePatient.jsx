@@ -12,6 +12,7 @@ const UpdatePatient = () => {
   const [patientData, setPatientData] = useState({
     profile: {
       name: "",
+      registernumber:"",
       age: "",
       gender: "",
       category: "",

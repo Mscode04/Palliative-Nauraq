@@ -14,6 +14,7 @@ const AddPatient = () => {
   const [patientData, setPatientData] = useState({
     profile: {
       name: "",
+      registernumber:"",
       age: "",
       gender: "NOT SAY", // Default value for gender
       category: "", // Default value for category
