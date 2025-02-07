@@ -127,6 +127,10 @@ const PatientDetails = () => {
                 <td><strong>Address:</strong></td>
                 <td>{patient.address || "N/A"}</td>
               </tr>
+            <tr>
+                <td><strong>Reg No:</strong></td>
+                <td>{patient.registernumber || "N/A"}</td>
+              </tr>
               <tr>
                 <td><strong>Age:</strong></td>
                 <td>{patient.age || "N/A"}</td>
