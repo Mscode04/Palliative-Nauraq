@@ -106,6 +106,16 @@ const AddPatient = () => {
     e.preventDefault();
     setLoading(true); // Start loading
   
+    // Show "wait a moment" toast
+    toast.info("Wait a moment...", {
+      position: "top-center",
+      autoClose: false, // Don't auto-close this toast
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+    });
+  
     try {
       const patientId = generatePatientId();
       const registerTime = new Date().toISOString();
@@ -141,6 +151,10 @@ const AddPatient = () => {
         is_nurse: false,
       });
   
+      // Dismiss the "wait a moment" toast
+      toast.dismiss();
+  
+      // Show success toast
       toast.success("Patient added successfully!", {
         position: "top-center",
         autoClose: 3000,
@@ -154,6 +168,10 @@ const AddPatient = () => {
         navigate(`/main/patient/${patientId}`);
       }, 3000);
     } catch (error) {
+      // Dismiss the "wait a moment" toast
+      toast.dismiss();
+  
+      // Show error toast
       toast.error(`Failed to add patient: ${error.message}`, {
         position: "top-center",
         autoClose: 5000,
@@ -166,7 +184,6 @@ const AddPatient = () => {
       setLoading(false); // Stop loading
     }
   };
-
   return (
     <div className="AddPatient-container">
           {loading && (
@@ -344,9 +361,9 @@ const AddPatient = () => {
         </div>
 
         {/* Submit Button */}
-        <button type="submit" className="AddPatient-submitButton">
-          Add Patient
-        </button>
+        <button type="submit" className="AddPatient-submitButton" disabled={loading}>
+  {loading ? "Submitting..." : "Submit"}
+</button>
       </form>
       <ToastContainer />
     </div>
