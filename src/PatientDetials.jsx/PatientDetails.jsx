@@ -131,6 +131,8 @@ const PatientDetails = () => {
                 <td><strong>Reg No:</strong></td>
                 <td>{patient.registernumber || "N/A"}</td>
               </tr>
+              
+
               <tr>
                 <td><strong>Age:</strong></td>
                 <td>{patient.age || "N/A"}</td>
@@ -235,6 +237,22 @@ const PatientDetails = () => {
                 <td><strong>Ward Member Phone:</strong></td>
                 <td>{patient.wardMemberPhone || "N/A"}</td>
               </tr>
+              <tr>
+  <td><strong>STATUS:</strong></td>
+  <td style={{ display: "flex", alignItems: "center", gap: "8px", color: patient.deactivated ? "red" : "green" }}>
+    <span
+      style={{
+        width: "10px",
+        height: "10px",
+        borderRadius: "50%",
+        backgroundColor: patient.deactivated ? "red" : "green",
+        display: "inline-block",
+      }}
+    ></span>
+    {patient.deactivated ? "INACTIVE" : "ACTIVE"}
+  </td>
+</tr>
+
             </tbody>
           </table>
         </div>
@@ -376,11 +394,11 @@ const PatientDetails = () => {
           <Link to={`/main/prograssion/${patient.patientId}`} className="PTDetail-actionBtn PTDetail-smallBtn">Progression Report</Link>
           <Link to={`/main/death/${patient.patientId}`} className="PTDetail-actionBtn PTDetail-smallBtn">Death Report</Link>
           <Link to={`/main/vhc/${patient.patientId}`} className="PTDetail-actionBtn PTDetail-smallBtn">VHC</Link>
-          <Link to={`/main/gvhc/${patient.patientId}`} className="PTDetail-actionBtn PTDetail-smallBtn">GVHC</Link>
           <Link to={`/main/medicine/${patient.patientId}`} className="PTDetail-actionBtn PTDetail-smallBtn">Medicine</Link>
           <Link to={`/main/equpment/${patient.patientId}`} className="PTDetail-actionBtn PTDetail-smallBtn">Equipment</Link>
           <Link to={`/main/invest/${patient.patientId}`} className="PTDetail-actionBtn PTDetail-smallBtn">Investigation</Link>
           <Link to={`/main/social/${patient.patientId}`} className="PTDetail-actionBtn PTDetail-smallBtn">Social Support</Link>
+          <Link to={`/main/deactive/${patient.patientId}`} className="PTDetail-actionBtn PTDetail-smallBtn">DEACTIVE</Link>
           <Link to={`/main/conditions/${patient.patientId}`} className="PTDetail-actionBtn PTDetail-smallBtn">Medical Conditions</Link>
         </div>
 

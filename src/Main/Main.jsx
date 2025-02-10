@@ -39,6 +39,7 @@ import UpdatePatient from "../Forms/UpdatePatient";
 import UpdateNHCE from "../Forms/UpdateNHCE";
 import ReportDetailsNHCE from "../PatientDetials.jsx/ReportDetailsNHCE";
 import Conditions from "../Forms/Conditions";
+import DeactivatePatient from "../Forms/DeactivatePatient";
 function Main({ isAuthenticated, isNurse }) {
   if (!isAuthenticated || !isNurse) {
     return <Navigate to="/" />; // Redirect to login if not authenticated or not a nurse
@@ -67,6 +68,7 @@ function Main({ isAuthenticated, isNurse }) {
           <Route path="/death/:patientId" element={<DEATH />} />
           <Route path="/update-medicines/:patientId" element={<UpdateMedicines />} />
           <Route path="/conditions/:patientId" element={<Conditions />} />
+          <Route path="/deactive/:patientId" element={<DeactivatePatient />} />
           <Route path="/reports/:patientId" element={<ReportsPage />} />
           <Route path="/reportsdetailnhc/:reportId" element={<ReportDetailsNHC />} />
           <Route path="/reportsdetailnhce/:reportId" element={<ReportDetailsNHCE />} />

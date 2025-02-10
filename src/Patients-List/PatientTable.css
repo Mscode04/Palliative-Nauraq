@@ -125,3 +125,53 @@
 .PatientTable-back-button:hover {
   text-decoration: underline;
 }
+/* Filters container */
+.PatientTable-filters {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Label styling */
+.PatientTable-filters label {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  font-weight: bold;
+  color: #288598;
+}
+
+/* Dropdown select styling */
+.PatientTable-filters select {
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.3s ease-in-out;
+  background-color: #fff;
+}
+
+.PatientTable-filters select:focus {
+  border-color: #288598;
+  box-shadow: 0 0 5px rgba(40, 133, 152, 0.5);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .PatientTable-filters {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .PatientTable-filters label {
+    width: 100%;
+  }
+}

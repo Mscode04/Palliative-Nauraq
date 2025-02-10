@@ -19,6 +19,7 @@ const AllReportsPage = () => {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [reportToDelete, setReportToDelete] = useState(null);
   const [pin, setPin] = useState("");
+  const [sortOrder, setSortOrder] = useState("asc"); // New state for sorting order
 
   const reportsPerPage = 10;
   const navigate = useNavigate();
@@ -63,6 +64,13 @@ const AllReportsPage = () => {
           });
         }
 
+        // Sorting logic
+        reportsData.sort((a, b) => {
+          const dateA = new Date(a.submittedAt);
+          const dateB = new Date(b.submittedAt);
+          return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
+        });
+
         setReports(reportsData);
       } catch (error) {
         console.error("Error fetching reports: ", error);
@@ -73,7 +81,7 @@ const AllReportsPage = () => {
     };
 
     fetchReports();
-  }, [nameFilter, formTypeFilter, addressFilter, startDate, endDate]);
+  }, [nameFilter, formTypeFilter, addressFilter, startDate, endDate, sortOrder]); // Added sortOrder to dependencies
 
   const handleBackClick = () => {
     navigate(-1);
@@ -208,16 +216,25 @@ const AllReportsPage = () => {
           placeholder="End Date"
           className="AllRep-filter-input"
         />
+        {/* Sorting dropdown */}
+        <select
+          value={sortOrder}
+          onChange={(e) => setSortOrder(e.target.value)}
+          className="AllRep-filter-select"
+        >
+          <option value="asc">Ascending</option>
+          <option value="desc">Descending</option>
+        </select>
       </div>
 
       {loading ? (
-              <div className="loading-container">
-              <img
-                src="https://media.giphy.com/media/YMM6g7x45coCKdrDoj/giphy.gif"
-                alt="Loading..."
-                className="loading-image"
-              />
-            </div>
+        <div className="loading-container">
+          <img
+            src="https://media.giphy.com/media/YMM6g7x45coCKdrDoj/giphy.gif"
+            alt="Loading..."
+            className="loading-image"
+          />
+        </div>
       ) : error ? (
         <p className="AllRep-error">{error}</p>
       ) : reports.length === 0 ? (

@@ -76,6 +76,7 @@ const UpdatePatient = () => {
             medical: patientData.medical || {},
             doctor: patientData.doctor || {},
             additionalInfo: patientData.additionalInfo || "",
+            deactivated: patientData.deactivated ?? false,
           });
           setRegistrationDate(patientData.registrationDate || "");
           setFamilyDetails(patientData.familyDetails || []);
@@ -141,6 +142,7 @@ const UpdatePatient = () => {
         ...patientData.medical,
         familyDetails,
         registrationDate,
+        deactivated: false,
       });
 
       toast.success("Patient updated successfully!", {

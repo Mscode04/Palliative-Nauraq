@@ -15,6 +15,7 @@ const AddPatient = () => {
     profile: {
       name: "",
       registernumber:"",
+      deactivated:false,
       age: "",
       gender: "NOT SAY", // Default value for gender
       category: "", // Default value for category
