@@ -78,7 +78,12 @@
   align-items: center;
   margin-top: 20px;
 }
-
+.PatientTable-total-count {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 16px;
+  color: #333;
+}
 .PatientTable-pagination-btn {
   background-color: transparent;
   border: 1px solid #288598;
@@ -110,7 +115,7 @@
 .PatientTable-back-button {
   background-color: transparent;
   border: none;
-  color: #288598;
+  color: #fff;
   font-size: 16px;
   cursor: pointer;
   margin-bottom: 20px;

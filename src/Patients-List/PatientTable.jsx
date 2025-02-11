@@ -14,7 +14,7 @@ const PatientTable = () => {
   const [sortOrder, setSortOrder] = useState("asc"); // Sort order: asc or desc
   const [sortBy, setSortBy] = useState("name"); // Sort by: name or registernumber
   const [selectedStatus, setSelectedStatus] = useState("All"); // Filter by active/inactive
-  const patientsPerPage = 8;
+  const patientsPerPage = 20; // Show 20 cards per page
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -116,11 +116,28 @@ const PatientTable = () => {
     navigate(`/main/patient/${patientId}`);
   };
 
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
   return (
     <div className="PatientTable-container">
       <button className="PatientTable-back-button" onClick={() => navigate(-1)}>
         <i className="bi bi-arrow-left"></i> Back
       </button>
+
+      {/* Display total number of patients */}
+      <div className="PatientTable-total-count">
+        Total Patients: {filteredPatients.length}
+      </div>
 
       <div className="PatientTable-search-bar">
         <input
@@ -181,35 +198,49 @@ const PatientTable = () => {
           </div>
         </div>
       ) : (
-        <div className="PatientTable-patient-cards">
-          {currentPatients.map((patient) => (
-            <div key={patient.id} className="PatientTable-patient-card" onClick={() => handleCardClick(patient.id)}>
-              <div className="PatientTable-profile-pic">
-                <img src="https://assets-v2.lottiefiles.com/a/c529e71e-1150-11ee-952a-73e31b65ab2d/TiH0Dha3Qs.gif" alt="" />
+        <>
+          <div className="PatientTable-patient-cards">
+            {currentPatients.map((patient) => (
+              <div key={patient.id} className="PatientTable-patient-card" onClick={() => handleCardClick(patient.id)}>
+                <div className="PatientTable-profile-pic">
+                  <img src="https://assets-v2.lottiefiles.com/a/c529e71e-1150-11ee-952a-73e31b65ab2d/TiH0Dha3Qs.gif" alt="" />
+                </div>
+                <div className="PatientTable-patient-info">
+                  <h5>{patient.registernumber || "N/A"}</h5>
+                  <h5>{patient.name || "N/A"}</h5>
+                  <p>{patient.address || "N/A"}</p>
+                  <p>{patient.mainCaretakerPhone || "N/A"}</p>
+                  <p>{patient.mainDiagnosis || "N/A"}</p>
+                  <p style={{ display: "flex", alignItems: "center", gap: "8px", color: patient.deactivated ? "red" : "green" }}>
+                    <span
+                      style={{
+                        width: "10px",
+                        height: "10px",
+                        borderRadius: "50%",
+                        backgroundColor: patient.deactivated ? "red" : "green",
+                        display: "inline-block",
+                      }}
+                    ></span>
+                    {patient.deactivated ? "Inactive" : "Active"}
+                  </p>
+                </div>
               </div>
-              <div className="PatientTable-patient-info">
-                <h5>{patient.registernumber || "N/A"}</h5>
-                <h5>{patient.name || "N/A"}</h5>
-                <p>{patient.address || "N/A"}</p>
-                <p>{patient.mainCaretakerPhone || "N/A"}</p>
-                <p>{patient.mainDiagnosis || "N/A"}</p>
-                <p style={{ display: "flex", alignItems: "center", gap: "8px", color: patient.deactivated ? "red" : "green" }}>
-  <span
-    style={{
-      width: "10px",
-      height: "10px",
-      borderRadius: "50%",
-      backgroundColor: patient.deactivated ? "red" : "green",
-      display: "inline-block",
-    }}
-  ></span>
-  {patient.deactivated ? "Inactive" : "Active"}
-</p>
+            ))}
+          </div>
 
-              </div>
-            </div>
-          ))}
-        </div>
+          {/* Pagination */}
+          <div className="PatientTable-pagination">
+            <button onClick={handlePreviousPage} disabled={currentPage === 1} className="PatientTable-pagination-btn">
+              Previous
+            </button>
+            <span>
+              Page {currentPage} of {totalPages}
+            </span>
+            <button onClick={handleNextPage} disabled={currentPage === totalPages}  className="PatientTable-pagination-btn">
+              Next
+            </button>
+          </div>
+        </>
       )}
     </div>
   );
