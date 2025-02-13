@@ -56,8 +56,8 @@ const AddPatient = () => {
   const [familyDetails, setFamilyDetails] = useState([
     {
       name: "",
-      relation: "",
       age: "",
+      relation: "",
       education: "",
       income: "",
       marriageStatus: "",
