@@ -14,7 +14,7 @@ const PatientTable = () => {
   const [sortOrder, setSortOrder] = useState("asc"); // Sort order: asc or desc
   const [sortBy, setSortBy] = useState("name"); // Sort by: name or registernumber
   const [selectedStatus, setSelectedStatus] = useState("All"); // Filter by active/inactive
-  const patientsPerPage = 20; // Show 20 cards per page
+  const patientsPerPage = 100; // Show 20 cards per page
   const navigate = useNavigate();
 
   useEffect(() => {
