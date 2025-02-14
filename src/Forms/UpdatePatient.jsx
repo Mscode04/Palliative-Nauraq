@@ -188,7 +188,7 @@ const UpdatePatient = () => {
         </div>
 
         {/* Section 2: Medical Section */}
-        <h4 className="AddPatient-sectionTitle">Section 2: Medical Section</h4>
+        {/* <h4 className="AddPatient-sectionTitle">Section 2: Medical Section</h4>
         <div className="AddPatient-row">
           {Object.entries(patientData.medical).map(([field, value]) => (
             <div className="AddPatient-field" key={field}>
@@ -204,10 +204,10 @@ const UpdatePatient = () => {
               ></textarea>
             </div>
           ))}
-        </div>
+        </div> */}
 
         {/* Section 3: Doctor */}
-        <h4 className="AddPatient-sectionTitle">Section 3: Doctor</h4>
+        {/* <h4 className="AddPatient-sectionTitle">Section 3: Doctor</h4>
         <div className="AddPatient-row">
           {Object.entries(patientData.doctor).map(([field, value]) => (
             <div className="AddPatient-field" key={field}>
@@ -223,7 +223,7 @@ const UpdatePatient = () => {
               ></textarea>
             </div>
           ))}
-        </div>
+        </div> */}
 
         {/* Section 4: Family Details */}
         <h4 className="AddPatient-sectionTitle">Section 4: Family Details</h4>

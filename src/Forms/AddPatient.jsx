@@ -136,12 +136,14 @@ const AddPatient = () => {
       await setDoc(doc(db, "Patients", patientId), {
         ...profileData,
         ...patientData.medical,
+        ...patientData.doctor,
         familyDetails: familyDetails.map((member) => ({
           ...member,
           age: member.age.toString(),
           income: member.income.toString(),
         })),
         registrationDate,
+        
         registerTime,
         patientId,
       });
