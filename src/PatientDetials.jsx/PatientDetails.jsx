@@ -238,6 +238,18 @@ const PatientDetails = () => {
                 <td>{patient.wardMemberPhone || "N/A"}</td>
               </tr>
               <tr>
+                <td><strong>Docter Advice:</strong></td>
+                <td>{patient.advice || "N/A"}</td>
+              </tr>
+              <tr>
+                <td><strong>Docter Examinations:</strong></td>
+                <td>{patient.examinations || "N/A"}</td>
+              </tr>
+              <tr>
+                <td><strong>Docter Note:</strong></td>
+                <td>{patient.note || "N/A"}</td>
+              </tr>
+              <tr>
   <td><strong>STATUS:</strong></td>
   <td style={{ display: "flex", alignItems: "center", gap: "8px", color: patient.deactivated ? "red" : "green" }}>
     <span
