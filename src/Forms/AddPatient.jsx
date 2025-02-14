@@ -132,7 +132,7 @@ const AddPatient = () => {
         communityVolunteerPhone: patientData.profile.communityVolunteerPhone.toString(),
         wardMemberPhone: patientData.profile.wardMemberPhone.toString(),
       };
-  
+
       await setDoc(doc(db, "Patients", patientId), {
         ...profileData,
         ...patientData.medical,
@@ -234,7 +234,8 @@ const AddPatient = () => {
                   <option value="">Select Category</option>
                   <option value="A">A</option>
                   <option value="B">B</option>
-                  <option value="CA">C</option>
+                  <option value="C">C</option>
+                  <option value="MEDICAL SUPPORT">MEDICAL SUPPORT</option>
                 </select>
               ) : field === "location" ? (
                 <textarea
