@@ -20,7 +20,7 @@ const AddPatient = () => {
       gender: "NOT SAY", // Default value for gender
       category: "", // Default value for category
       address: "",
-      email: "",
+      email: ".mkba@gmail.com",
       password: "",
       dob: "", // Date of Birth field
       location: "", // Will be a textarea
@@ -237,6 +237,7 @@ const AddPatient = () => {
                   <option value="A">A</option>
                   <option value="B">B</option>
                   <option value="C">C</option>
+                  <option value="SOS">SOS</option>
                   <option value="MEDICAL SUPPORT">MEDICAL SUPPORT</option>
                 </select>
               ) : field === "location" ? (
