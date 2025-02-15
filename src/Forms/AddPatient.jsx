@@ -13,36 +13,36 @@ const AddPatient = () => {
   const [loading, setLoading] = useState(false);
   const [patientData, setPatientData] = useState({
     profile: {
-      name: "",
       registernumber:"",
-      deactivated:false,
+      name: "",
       age: "",
-      gender: "NOT SAY", // Default value for gender
-      category: "B", // Default value for category
+      gender: "NOT SAY", 
+      category: "B", 
       address: "",
       email: ".mkba@gmail.com",
       password: "",
-      dob: "", // Date of Birth field
-      location: "", // Will be a textarea
+      mainCaretakerPhone: "",
       panchayat: "",
       ward: "",
+      communityVolunteer: "",
+      communityVolunteerPhone: "",
+      dob: "", // Date of Birth field
+      location: "", 
+      deactivated:false,
       mainCaretaker: "",
-      mainCaretakerPhone: "",
       relativePhone: "",
       referralPerson: "",
       referralPhone: "",
       neighbourName: "",
       neighbourPhone: "",
-      communityVolunteer: "",
-      communityVolunteerPhone: "",
       wardMember: "",
       wardMemberPhone: "",
       ashaWorker: "",
     },
     medical: {
+      mainDiagnosis: "",
       medicalHistory: "",
       currentDifficulties: "",
-      mainDiagnosis: "",
     },
     doctor: {
       advice: "",
