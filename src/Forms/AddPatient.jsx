@@ -248,6 +248,7 @@ const AddPatient = () => {
                   <option value="B">B</option>
                   <option value="A">A</option>
                   <option value="C">C</option>
+                  <option value="NHC">NHC</option>
                   <option value="SOS">SOS</option>
                   <option value="MEDICAL SUPPORT">MEDICAL SUPPORT</option>
                 </select>
@@ -273,7 +274,7 @@ const AddPatient = () => {
                     field === "email"
                       ? "email"
                       : field === "password"
-                      ? "password"
+                      ? "text"
                       : "text"
                   }
                   id={field}
