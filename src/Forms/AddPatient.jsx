@@ -244,9 +244,9 @@ const AddPatient = () => {
                   value={value}
                   onChange={(e) => handleChange(e, "profile")}
                 >
-                  <option value="">Select Category</option>
-                  <option value="A">A</option>
                   <option value="B">B</option>
+                  <option value="">not select</option>
+                  <option value="A">A</option>
                   <option value="C">C</option>
                   <option value="SOS">SOS</option>
                   <option value="MEDICAL SUPPORT">MEDICAL SUPPORT</option>
