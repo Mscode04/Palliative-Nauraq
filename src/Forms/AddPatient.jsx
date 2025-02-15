@@ -206,6 +206,17 @@ const AddPatient = () => {
       <form onSubmit={handleSubmit} className="AddPatient-form">
         {/* Section 1: Profile */}
         <h4 className="AddPatient-sectionTitle">Section 1: Profile</h4>
+        <div className="AddPatient-field">
+          <label htmlFor="registrationDate">Registration Date:</label>
+          <input
+            type="date"
+            id="registrationDate"
+            name="registrationDate"
+            value={registrationDate}
+            onChange={(e) => setRegistrationDate(e.target.value)}
+            required
+          />
+        </div>
         <div className="AddPatient-row">
           {Object.entries(patientData.profile).map(([field, value]) => (
             <div className="AddPatient-field" key={field}>
