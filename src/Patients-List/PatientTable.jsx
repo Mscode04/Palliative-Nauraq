@@ -38,6 +38,11 @@ const PatientTable = () => {
     fetchPatients();
   }, []);
 
+  const normalizeDiagnosis = (diagnosis) => {
+    if (!diagnosis) return [];
+    return diagnosis.split(",").map((d) => d.trim());
+  };
+
   useEffect(() => {
     let filtered = patients.filter((patient) => {
       const name = patient.name || "";
@@ -56,8 +61,9 @@ const PatientTable = () => {
         registernumber.includes(searchQuery);
 
       // Diagnosis filter
+      const normalizedDiagnosis = normalizeDiagnosis(mainDiagnosis);
       const matchesDiagnosis =
-        selectedDiagnosis === "All" || patient.mainDiagnosis === selectedDiagnosis;
+        selectedDiagnosis === "All" || normalizedDiagnosis.includes(selectedDiagnosis);
 
       // Status filter (Active / Inactive)
       const matchesStatus =
@@ -68,7 +74,7 @@ const PatientTable = () => {
       return matchesSearchQuery && matchesDiagnosis && matchesStatus;
     });
 
-    // Sort patients
+    // Sort patients (same as before)
     if (sortBy === "name") {
       filtered.sort((a, b) => {
         const nameA = a.name || "";
@@ -109,7 +115,11 @@ const PatientTable = () => {
 
   const uniqueDiagnoses = [
     "All",
-    ...new Set(patients.map((patient) => patient.mainDiagnosis).filter(Boolean)),
+    ...new Set(
+      patients
+        .flatMap((patient) => normalizeDiagnosis(patient.mainDiagnosis))
+        .filter(Boolean)
+    ),
   ];
 
   const handleCardClick = (patientId) => {
@@ -210,7 +220,9 @@ const PatientTable = () => {
                   <h5>{patient.name || "N/A"}</h5>
                   <p>{patient.address || "N/A"}</p>
                   <p>{patient.mainCaretakerPhone || "N/A"}</p>
-                  <p>{patient.mainDiagnosis || "N/A"}</p>
+                  <p>
+                    {normalizeDiagnosis(patient.mainDiagnosis).join(", ") || "N/A"}
+                  </p>
                   <p style={{ display: "flex", alignItems: "center", gap: "8px", color: patient.deactivated ? "red" : "green" }}>
                     <span
                       style={{
