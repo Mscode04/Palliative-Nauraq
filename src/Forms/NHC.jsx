@@ -226,6 +226,7 @@ const NHC = () => {
         <div className="NHCAdd-patientInfo">
            <h3 style={{color:"black"}}>Patient NHC</h3>
           <h3><strong>Name:</strong> {patientData.name}</h3>
+          <h3><strong>RegisterNo:</strong> {patientData.registernumber}</h3>
           <h3><strong>Address:</strong> {patientData.address}</h3>
         </div>
       ) : (

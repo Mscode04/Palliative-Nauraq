@@ -264,6 +264,7 @@ const AllReportsPage = () => {
                       : "No date available"}
                   </p>
                   <p className="AllRep-report-name">{report.name || "No Name"}</p>
+                  <p className="AllRep-report-name"> {report.registernumber}</p>
                   <p className="AllRep-report-address">{report.address || "No Address"}</p>
                 </Link>
                 <button
