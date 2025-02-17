@@ -16,21 +16,21 @@ const AddPatient = () => {
       registernumber:"",
       name: "",
       age: "",
+      dob: "",
       gender: "NOT SAY", 
       category: "B", 
       address: "",
       email: ".mkba@gmail.com",
       password: "",
+      mainCaretaker: "",
       mainCaretakerPhone: "",
       panchayat: "",
       ward: "",
+      location: "", 
+      relativePhone: "",
       communityVolunteer: "",
       communityVolunteerPhone: "",
-      dob: "", // Date of Birth field
-      location: "", 
       deactivated:false,
-      mainCaretaker: "",
-      relativePhone: "",
       referralPerson: "",
       referralPhone: "",
       neighbourName: "",
@@ -38,6 +38,7 @@ const AddPatient = () => {
       wardMember: "",
       wardMemberPhone: "",
       ashaWorker: "",
+      additionalInfo: "",
     },
     medical: {
       mainDiagnosis: "",
@@ -49,7 +50,6 @@ const AddPatient = () => {
       note: "",
       examinations: "",
     },
-    additionalInfo: "",
   });
 
   const [registrationDate, setRegistrationDate] = useState("");
@@ -61,7 +61,7 @@ const AddPatient = () => {
       education: "",
       income: "",
       marriageStatus: "",
-      remark: "",
+      remark: "NOT",
     },
   ]);
 
@@ -93,7 +93,7 @@ const AddPatient = () => {
         education: "",
         income: "",
         marriageStatus: "",
-        remark: "",
+        remark: "NOT",
       },
     ]);
   };
@@ -207,7 +207,7 @@ const AddPatient = () => {
         {/* Section 1: Profile */}
         <h4 className="AddPatient-sectionTitle">Section 1: Profile</h4>
         <div className="AddPatient-field">
-          <label htmlFor="registrationDate">Registration Date:</label>
+          <label htmlFor="registrationDate">Registration Date: MM-DD-YYYY</label>
           <input
             type="date"
             id="registrationDate"
@@ -218,74 +218,74 @@ const AddPatient = () => {
           />
         </div>
         <div className="AddPatient-row">
-          {Object.entries(patientData.profile).map(([field, value]) => (
-            <div className="AddPatient-field" key={field}>
-              <label htmlFor={field}>
-                {field.replace(/([A-Z])/g, " $1").replace(/^./, (str) => str.toUpperCase())}:
-              </label>
-              {field === "gender" ? (
-                <select
-                  id={field}
-                  name={field}
-                  className="form-control"
-                  value={value}
-                  onChange={(e) => handleChange(e, "profile")}
-                >
-                  <option value="NOT SAY">Not Say</option>
-                  <option value="MALE">Male</option>
-                  <option value="FEMALE">Female</option>
-                  <option value="OTHER">Other</option>
-                </select>
-              ) : field === "category" ? (
-                <select
-                  id={field}
-                  name={field}
-                  className="form-control"
-                  value={value}
-                  onChange={(e) => handleChange(e, "profile")}
-                >
-                  <option value="">Not select</option>
-                  <option value="B">B</option>
-                  <option value="A">A</option>
-                  <option value="C">C</option>
-                  <option value="NHC">NHC</option>
-                  <option value="SOS">SOS</option>
-                  <option value="MEDICAL SUPPORT">MEDICAL SUPPORT</option>
-                </select>
-              ) : field === "location" ? (
-                <textarea
-                  id={field}
-                  name={field}
-                  value={value}
-                  onChange={(e) => handleChange(e, "profile")}
-                  rows="3"
-                />
-              ) : field === "dob" ? ( // Add DOB as a date input
-                <input
-                  type="date"
-                  id={field}
-                  name={field}
-                  value={value}
-                  onChange={(e) => handleChange(e, "profile")}
-                />
-              ) : (
-                <input
-                  type={
-                    field === "email"
-                      ? "email"
-                      : field === "password"
-                      ? "text"
-                      : "text"
-                  }
-                  id={field}
-                  name={field}
-                  value={value}
-                  onChange={(e) => handleChange(e, "profile")}
-                />
-              )}
-            </div>
-          ))}
-        </div>
+  {Object.entries(patientData.profile).map(([field, value]) => (
+    <div className="AddPatient-field" key={field}>
+      <label htmlFor={field}>
+        {field.replace(/([A-Z])/g, " $1").replace(/^./, (str) => str.toUpperCase())}:
+      </label>
+      {field === "gender" ? (
+        <select
+          id={field}
+          name={field}
+          className="form-control"
+          value={value}
+          onChange={(e) => handleChange(e, "profile")}
+        >
+          <option value="NOT SAY">Not Mention</option>
+          <option value="MALE">Male</option>
+          <option value="FEMALE">Female</option>
+          <option value="OTHER">Other</option>
+        </select>
+      ) : field === "category" ? (
+        <select
+          id={field}
+          name={field}
+          className="form-control"
+          value={value}
+          onChange={(e) => handleChange(e, "profile")}
+        >
+          <option value="">Not Mention</option>
+          <option value="B">B</option>
+          <option value="A">A</option>
+          <option value="C">C</option>
+          <option value="NHC">NHC</option>
+          <option value="SOS">SOS</option>
+          <option value="MEDICAL SUPPORT">MEDICAL SUPPORT</option>
+        </select>
+      ) : field === "location" || field === "additionalInfo" ? ( // Add condition for additionalInfo
+        <textarea
+          id={field}
+          name={field}
+          value={value}
+          onChange={(e) => handleChange(e, "profile")}
+          rows="3"
+        />
+      ) : field === "dob" ? (
+        <input
+          type="date"
+          id={field}
+          name={field}
+          value={value}
+          onChange={(e) => handleChange(e, "profile")}
+        />
+      ) : (
+        <input
+          type={
+            field === "email"
+              ? "email"
+              : field === "password"
+              ? "text"
+              : "text"
+          }
+          id={field}
+          name={field}
+          value={value}
+          onChange={(e) => handleChange(e, "profile")}
+        />
+      )}
+    </div>
+  ))}
+</div>
 
         {/* Section 2: Medical Section */}
         <h4 className="AddPatient-sectionTitle">Section 2: Medical Section</h4>
@@ -349,34 +349,8 @@ const AddPatient = () => {
           </div>
         ))}
         <button type="button" className="AddPatient-addFamilyButton" onClick={addFamilyMember}>
-          + Add Family Member
+          + Family Member
         </button>
-
-        {/* Section 5: Additional Info */}
-        <h4 className="AddPatient-sectionTitle">Section 5: Additional Info</h4>
-        <div className="AddPatient-field">
-          <label htmlFor="additionalInfo">Additional Information:</label>
-          <textarea
-            id="additionalInfo"
-            name="additionalInfo"
-            value={patientData.additionalInfo}
-            onChange={(e) => handleChange(e, "additionalInfo")}
-            rows="3"
-          ></textarea>
-        </div>
-
-        {/* Registration Date */}
-        <div className="AddPatient-field">
-          <label htmlFor="registrationDate">Registration Date:</label>
-          <input
-            type="date"
-            id="registrationDate"
-            name="registrationDate"
-            value={registrationDate}
-            onChange={(e) => setRegistrationDate(e.target.value)}
-            required
-          />
-        </div>
 
         {/* Submit Button */}
         <button type="submit" className="AddPatient-submitButton" disabled={loading}>

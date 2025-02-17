@@ -89,18 +89,18 @@ const PatientDetails = () => {
       fetchMedicines();
       fetchEquipments();
       fetchConditions();
-      
+
     }
   }, [patient]); // Re-run when patient data is set
 
   if (!patient) {
-    return          <div className="loading-container">
-    <img
-      src="https://media.giphy.com/media/YMM6g7x45coCKdrDoj/giphy.gif"
-      alt="Loading..."
-      className="loading-image"
-    />
-  </div>;
+    return <div className="loading-container">
+      <img
+        src="https://media.giphy.com/media/YMM6g7x45coCKdrDoj/giphy.gif"
+        alt="Loading..."
+        className="loading-image"
+      />
+    </div>;
   }
 
   return (
@@ -123,55 +123,51 @@ const PatientDetails = () => {
         <div className="PTDetail-infoTable">
           <table>
             <tbody>
-            <tr>
-                <td><strong>Address:</strong></td>
-                <td>{patient.address || "N/A"}</td>
-              </tr>
-            <tr>
+              <tr>
                 <td><strong>Reg No:</strong></td>
                 <td>{patient.registernumber || "N/A"}</td>
               </tr>
-              
-
               <tr>
-                <td><strong>Age:</strong></td>
-                <td>{patient.age || "N/A"}</td>
+                <td><strong>Registration Date:</strong></td>
+                <td>{patient.registrationDate || "N/A"}</td>
+              </tr>
+              <tr>
+                <td><strong>Address:</strong></td>
+                <td>{patient.address || "N/A"}</td>
               </tr>
               <tr>
                 <td><strong>Location:</strong></td>
                 <td>{patient.location || "N/A"}</td>
               </tr>
               <tr>
-                <td><strong>Asha Worker:</strong></td>
-                <td>{patient.ashaWorker || "N/A"}</td>
+                <td><strong>Ward:</strong></td>
+                <td>{patient.ward || "N/A"}</td>
+              </tr>
+              <tr>
+                <td><strong>Age:</strong></td>
+                <td>{patient.age || "N/A"}</td>
+              </tr>
+              <tr>
+                <td><strong>Gender:</strong></td>
+                <td>{patient.gender || "N/A"}</td>
               </tr>
               <tr>
                 <td><strong>Category:</strong></td>
                 <td>{patient.category || "N/A"}</td>
               </tr>
+            
               <tr>
-                <td><strong>Community Volunteer:</strong></td>
-                <td>{patient.communityVolunteer || "N/A"}</td>
+                <td><strong>Date of Birth:</strong></td>
+                <td>{patient.dob || "N/A"}</td>
               </tr>
-              <tr>
-                <td><strong>Community Volunteer Phone:</strong></td>
-                <td>{patient.communityVolunteerPhone || "N/A"}</td>
-              </tr>
+             
               <tr>
                 <td><strong>Current Difficulties:</strong></td>
                 <td>{patient.currentDifficulties || "N/A"}</td>
               </tr>
               <tr>
-                <td><strong>Date of Birth:</strong></td>
-                <td>{patient.dob || "N/A"}</td>
-              </tr>
-              <tr>
                 <td><strong>Email:</strong></td>
                 <td>{patient.email || "N/A"}</td>
-              </tr>
-              <tr>
-                <td><strong>Gender:</strong></td>
-                <td>{patient.gender || "N/A"}</td>
               </tr>
               <tr>
                 <td><strong>Main Caretaker:</strong></td>
@@ -206,36 +202,13 @@ const PatientDetails = () => {
                 <td>{patient.patientId || "N/A"}</td>
               </tr>
               <tr>
-                <td><strong>Referral Person:</strong></td>
-                <td>{patient.referralPerson || "N/A"}</td>
-              </tr>
-              <tr>
-                <td><strong>Referral Phone:</strong></td>
-                <td>{patient.referralPhone || "N/A"}</td>
-              </tr>
-              <tr>
-                <td><strong>Registered Date & Time:</strong></td>
-                <td>{patient.registerTime ? new Date(patient.registerTime).toLocaleString() : "N/A"}</td>
-              </tr>
-              <tr>
-                <td><strong>Registration Date:</strong></td>
-                <td>{patient.registrationDate || "N/A"}</td>
-              </tr>
-              <tr>
                 <td><strong>Relative Phone:</strong></td>
                 <td>{patient.relativePhone || "N/A"}</td>
               </tr>
+            
               <tr>
-                <td><strong>Ward:</strong></td>
-                <td>{patient.ward || "N/A"}</td>
-              </tr>
-              <tr>
-                <td><strong>Ward Member:</strong></td>
-                <td>{patient.wardMember || "N/A"}</td>
-              </tr>
-              <tr>
-                <td><strong>Ward Member Phone:</strong></td>
-                <td>{patient.wardMemberPhone || "N/A"}</td>
+                <td><strong>Nurse Note:</strong></td>
+                <td>{patient.additionalInfo || "N/A"}</td>
               </tr>
               <tr>
                 <td><strong>Docter Advice:</strong></td>
@@ -250,20 +223,52 @@ const PatientDetails = () => {
                 <td>{patient.note || "N/A"}</td>
               </tr>
               <tr>
-  <td><strong>STATUS:</strong></td>
-  <td style={{ display: "flex", alignItems: "center", gap: "8px", color: patient.deactivated ? "red" : "green" }}>
-    <span
-      style={{
-        width: "10px",
-        height: "10px",
-        borderRadius: "50%",
-        backgroundColor: patient.deactivated ? "red" : "green",
-        display: "inline-block",
-      }}
-    ></span>
-    {patient.deactivated ? "INACTIVE" : "ACTIVE"}
-  </td>
-</tr>
+                <td><strong>Submited Date & Time:</strong></td>
+                <td>{patient.registerTime ? new Date(patient.registerTime).toLocaleString() : "N/A"}</td>
+              </tr>
+              <tr>
+                <td><strong>Referral Person:</strong></td>
+                <td>{patient.referralPerson || "N/A"}</td>
+              </tr>
+              <tr>
+                <td><strong>Referral Phone:</strong></td>
+                <td>{patient.referralPhone || "N/A"}</td>
+              </tr>
+              <tr>
+                <td><strong>Community Volunteer:</strong></td>
+                <td>{patient.communityVolunteer || "N/A"}</td>
+              </tr>
+              <tr>
+                <td><strong>Community Volunteer Phone:</strong></td>
+                <td>{patient.communityVolunteerPhone || "N/A"}</td>
+              </tr>
+              <tr>
+                <td><strong>Ward Member:</strong></td>
+                <td>{patient.wardMember || "N/A"}</td>
+              </tr>
+              <tr>
+                <td><strong>Ward Member Phone:</strong></td>
+                <td>{patient.wardMemberPhone || "N/A"}</td>
+              </tr>
+              <tr>
+                <td><strong>Asha Worker:</strong></td>
+                <td>{patient.ashaWorker || "N/A"}</td>
+              </tr>
+              <tr>
+                <td><strong>STATUS:</strong></td>
+                <td style={{ display: "flex", alignItems: "center", gap: "8px", color: patient.deactivated ? "red" : "green" }}>
+                  <span
+                    style={{
+                      width: "10px",
+                      height: "10px",
+                      borderRadius: "50%",
+                      backgroundColor: patient.deactivated ? "red" : "green",
+                      display: "inline-block",
+                    }}
+                  ></span>
+                  {patient.deactivated ? "INACTIVE" : "ACTIVE"}
+                </td>
+              </tr>
 
             </tbody>
           </table>
@@ -291,8 +296,8 @@ const PatientDetails = () => {
           )}
         </div>
 
- {/* Medicines Section */}
- <div className="PTDetail-medicinesContainer">
+        {/* Medicines Section */}
+        <div className="PTDetail-medicinesContainer">
           <h3>Medicines</h3>
           {medicines.length > 0 ? (
             <table>
@@ -357,7 +362,7 @@ const PatientDetails = () => {
           )}
         </div>
 
-       
+
         {/* Equipments Section */}
         <div className="PTDetail-equipmentsContainer">
           <h3>Equipments</h3>
@@ -390,13 +395,13 @@ const PatientDetails = () => {
 
 
         {/* Reports Section */}
-          <Link to={`/main/reports/${patient.patientId}`} className="PTDetail-reportsLink">
-        <div className="PTDetail-reportsContainer">
-        <img src="https://cdn.dribbble.com/users/1015854/screenshots/3569620/day270_doctor-and-patient_1_2.gif" alt="" />
+        <Link to={`/main/reports/${patient.patientId}`} className="PTDetail-reportsLink">
+          <div className="PTDetail-reportsContainer">
+            <img src="https://cdn.dribbble.com/users/1015854/screenshots/3569620/day270_doctor-and-patient_1_2.gif" alt="" />
             <h3> Reports of the Patient</h3>
-            
-        </div>
-          </Link>
+
+          </div>
+        </Link>
 
         {/* Action Buttons */}
         <div className="PTDetail-buttonsContainer">
@@ -413,7 +418,6 @@ const PatientDetails = () => {
           <Link to={`/main/deactive/${patient.patientId}`} className="PTDetail-actionBtn PTDetail-smallBtn">DEACTIVE</Link>
           <Link to={`/main/conditions/${patient.patientId}`} className="PTDetail-actionBtn PTDetail-smallBtn">Medical Conditions</Link>
         </div>
-
         {/* Update Button */}
         <button className="PTDetail-updateButton" onClick={() => navigate(`/main/update-patient/${patientId}`)}>
           Update Patient Details
