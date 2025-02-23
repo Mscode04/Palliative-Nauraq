@@ -50,28 +50,55 @@ const Conditions = () => {
     try {
       const currentDate = new Date().toISOString();
 
-      const conditionData = {
-        patientId,
-        patientDetails: patientData,
-        conditionName: condition,
-        submittedAt: currentDate,
-      };
-      await addDoc(collection(db, "Conditions"), conditionData);
+      if (updatingConditionId) {
+        // Update existing condition
+        const conditionRef = doc(db, "Conditions", updatingConditionId);
+        await updateDoc(conditionRef, {
+          conditionName: condition,
+          submittedAt: currentDate,
+        });
 
-      toast.success("Condition saved successfully!", {
-        position: "top-center",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
+        toast.success("Family Details updated successfully!", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
 
-      setConditions([...conditions, conditionData]);
+        setConditions((prevConditions) =>
+          prevConditions.map((c) =>
+            c.id === updatingConditionId ? { ...c, conditionName: condition, submittedAt: currentDate } : c
+          )
+        );
+      } else {
+        // Add new condition
+        const conditionData = {
+          patientId,
+          patientDetails: patientData,
+          conditionName: condition,
+          submittedAt: currentDate,
+        };
+        const docRef = await addDoc(collection(db, "Conditions"), conditionData);
+
+        toast.success("Family Details saved successfully!", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+
+        setConditions([...conditions, { id: docRef.id, ...conditionData }]);
+      }
+
       setCondition("");
+      setUpdatingConditionId(null);
     } catch (error) {
-      console.error("Error saving condition:", error);
-      toast.error("Error saving condition. Please try again.", {
+      console.error("Error saving/updating condition:", error);
+      toast.error("Error saving/updating Family Details. Please try again.", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -84,12 +111,29 @@ const Conditions = () => {
     }
   };
 
+  const handleEdit = (id) => {
+    const conditionToEdit = conditions.find((c) => c.id === id);
+    if (conditionToEdit) {
+      setCondition(conditionToEdit.conditionName);
+      setUpdatingConditionId(id);
+    }
+  };
+
   const handleDelete = async (id) => {
+    if (!id) {
+      console.error("Error: condition ID is undefined");
+      toast.error("Error deleting Family Details. Please try again.");
+      return;
+    }
+
+    const isConfirmed = window.confirm("Are you sure you want to delete this condition?");
+    if (!isConfirmed) return;
+
     try {
       const conditionRef = doc(db, "Conditions", id);
       await deleteDoc(conditionRef);
 
-      toast.success("Condition deleted successfully!", {
+      toast.success("Family Details deleted successfully!", {
         position: "top-center",
         autoClose: 3000,
         hideProgressBar: false,
@@ -98,17 +142,10 @@ const Conditions = () => {
         draggable: true,
       });
 
-      setConditions(conditions.filter((condition) => condition.id !== id));
+      setConditions((prevConditions) => prevConditions.filter((c) => c.id !== id));
     } catch (error) {
       console.error("Error deleting condition:", error);
-      toast.error("Error deleting condition. Please try again.", {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
+      toast.error("Error deleting condition. Please try again.");
     }
   };
 
@@ -117,31 +154,36 @@ const Conditions = () => {
       <button className="Conditions-backButton" onClick={() => navigate(-1)}>
         &larr; Back
       </button>
-      <h2 className="Conditions-title">Manage Conditions for Patient ID: {patientId}</h2>
+
       {patientData ? (
         <div className="Conditions-patientInfo">
-          <h3 style={{color:'black'}}>Patient Conditions</h3>
-          <h3><strong>Name:</strong> {patientData.name}</h3>
-          <h3><strong>Address:</strong> {patientData.address}</h3>
-          
+          <h3 style={{ color: "black" }}>Patient Family Details</h3>
+          <h3>
+            <strong>Name:</strong> {patientData.name}
+          </h3>
+          <h3>
+            <strong>Address:</strong> {patientData.address}
+          </h3>
         </div>
       ) : (
-        <p>         <div className="loading-container">
-        <img
-          src="https://media.giphy.com/media/YMM6g7x45coCKdrDoj/giphy.gif"
-          alt="Loading..."
-          className="loading-image"
-        />
-      </div></p>
+        <p>
+          <div className="loading-container">
+            <img
+              src="https://media.giphy.com/media/YMM6g7x45coCKdrDoj/giphy.gif"
+              alt="Loading..."
+              className="loading-image"
+            />
+          </div>
+        </p>
       )}
 
       {conditions.length > 0 && (
         <div className="Conditions-existingConditions">
-          <h3>Existing Conditions</h3>
+          <h3>Existing Family Details</h3>
           <table className="Conditions-table">
             <thead>
               <tr>
-                <th>Condition Name</th>
+                <th>Family Details</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -150,6 +192,9 @@ const Conditions = () => {
                 <tr key={index}>
                   <td data-label="Condition Name">{condition.conditionName}</td>
                   <td data-label="Actions">
+                    <button onClick={() => handleEdit(condition.id)} className="Conditions-editButton">
+                      Edit
+                    </button>
                     <button onClick={() => handleDelete(condition.id)} className="Conditions-deleteButton">
                       Delete
                     </button>
@@ -162,18 +207,17 @@ const Conditions = () => {
       )}
 
       <form onSubmit={handleSubmit} className="Conditions-form">
-        <h3>Add Condition</h3>
+        <h3>{updatingConditionId ? "Update Family Details" : "Add Family Details"}</h3>
         <label>
-          
           <textarea
             value={condition}
             onChange={(e) => setCondition(e.target.value)}
-            placeholder="Enter condition"
+            placeholder="Enter Family Details"
             className="form-control-lg w-100 mt-2"
           ></textarea>
         </label>
         <button type="submit" className="Conditions-submitButton" disabled={isSubmitting}>
-          {isSubmitting ? "Submitting..." : "Save Condition"}
+          {isSubmitting ? "Submitting..." : updatingConditionId ? "Update" : "Save"}
         </button>
       </form>
 

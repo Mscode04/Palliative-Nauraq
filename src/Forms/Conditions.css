@@ -285,3 +285,15 @@
         color: #288598;
     }
 }
+.Conditions-editButton {
+    background-color: #4CAF50; /* Green */
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    margin-right: 5px;
+    cursor: pointer;
+  }
+  
+  .Conditions-editButton:hover {
+    background-color: #45a049;
+  }

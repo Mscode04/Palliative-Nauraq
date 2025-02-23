@@ -3,7 +3,9 @@ import { db } from "../Firebase/config";
 import { doc, getDoc } from "firebase/firestore";
 import { useParams, useNavigate } from "react-router-dom";
 import "./ReportDetailsVHC.css"; // Import the CSS file
-
+import { Printer } from "lucide-react";
+import "jspdf-autotable";
+import { Pencil } from "lucide-react";
 const ReportDetailsVHC = () => {
   const { reportId } = useParams(); // Get reportId from URL
   const [report, setReport] = useState(null);
@@ -56,7 +58,93 @@ const ReportDetailsVHC = () => {
     />
   </div>;
   }
-
+  const exportToPrint = (report) => {
+    const printWindow = window.open("", "_blank");
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>VHC Report - ${report.name}</title>
+          <style>
+            body { font-family: Arial, sans-serif; margin: 20px; }
+            h1 { font-size: 18px; color: #283593; margin-bottom: 20px; }
+            .section-header { font-size: 14px; font-weight: bold; background-color: #d3d3d3; padding: 5px; margin-top: 10px; }
+            table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
+            table, th, td { border: 1px solid #ddd; }
+            th, td { padding: 8px; text-align: left; }
+            th { background-color: #f5f5f5; }
+            tr:nth-child(even) { background-color: #f9f9f9; }
+          </style>
+        </head>
+        <body>
+          <h1>VHC Report - ${report.name}</h1>
+    `);
+  
+    const addSectionHeader = (text) => {
+      printWindow.document.write(`<div class="section-header">${text}</div>`);
+    };
+  
+    const addTable = (data) => {
+      printWindow.document.write(`
+        <table>
+          <tbody>
+            ${data.map(row => `<tr>${row.map(cell => `<td>${cell}</td>`).join("")}</tr>`).join("")}
+          </tbody>
+        </table>
+      `);
+    };
+  
+    // Personal Details
+    addSectionHeader("Personal Details");
+    addTable([
+      ["Patient Name", report.name || "N/A"],
+      ["Age", report.age || "N/A"],
+      ["Gender", report.gender || "N/A"],
+      ["Date of Birth", report.dob || "N/A"],
+      ["Address", report.address || "N/A"],
+      ["Email", report.email || "N/A"],
+      ["Patient ID", report.patientId || "N/A"],
+    ]);
+  
+    // Team Details
+    addSectionHeader("Team Details");
+    addTable([
+      ["Team 1", report.team1 || "N/A"],
+      ["Team 2", report.team2 || "N/A"],
+      ["Team 3", report.team3 || "N/A"],
+      ["Team 4", report.team4 || "N/A"],
+      ["Other Team Members", report.otherTeamMembers || "N/A"],
+    ]);
+  
+    // Disease Information
+    addSectionHeader("Disease Information");
+    addTable([["Disease Information", report.diseaseInformation || "N/A"]]);
+  
+    // Patient Condition
+    addSectionHeader("Patient Condition");
+    addTable([["Patient Condition", report.patientCondition || "N/A"]]);
+  
+    // Financial Situation
+    addSectionHeader("Financial Situation");
+    if (report.financialSituation) {
+      addTable(Object.entries(report.financialSituation).map(([key, value]) => [key, value ? "Yes" : "No"]));
+    }
+  
+    // Welfare Schemes
+    addSectionHeader("Welfare Schemes");
+    addTable([
+      ["Ration Card Number", report.welfareSchemes?.rationCardNumber || "N/A"],
+      ["Ration Card Type", report.welfareSchemes?.rationCardType || "N/A"],
+      ["Financial Status", report.welfareSchemes?.financialStatus || "N/A"],
+    ]);
+  
+    // Date
+    addSectionHeader("Date");
+    addTable([["Date", report.date || "N/A"]]);
+  
+    printWindow.document.write(`</body></html>`);
+    printWindow.document.close();
+    printWindow.print();
+  };
   if (error) {
     return <p>{error}</p>;
   }
@@ -71,6 +159,13 @@ const ReportDetailsVHC = () => {
         &larr; Back
       </button>
       <h2 className="rvhc-title">VHC Report Details</h2>
+            <button className="custom-button" onClick={() => exportToPrint(report)}>
+        <Printer size={20} />
+      </button>
+      
+      <button className="custom-button" onClick={goToUpdate}>
+        <Pencil size={20} />
+      </button>
       <div className="rvhc-content">
         {/* Personal Details */}
         <h3 className="rvhc-section-title">Personal Details</h3>

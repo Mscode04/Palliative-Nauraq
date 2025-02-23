@@ -275,12 +275,12 @@ const PatientDetails = () => {
         </div>
 
         <div className="PTDetail-equipmentsContainer">
-          <h3>Medical Condition</h3>
+          <h3>Family Details</h3>
           {conditions.length > 0 ? (
             <table>
               <thead>
                 <tr>
-                  <th> Medical Condition</th>
+                  <th> Family Details</th>
                 </tr>
               </thead>
               <tbody>
@@ -413,10 +413,11 @@ const PatientDetails = () => {
           <Link to={`/main/vhc/${patient.patientId}`} className="PTDetail-actionBtn PTDetail-smallBtn">VHC</Link>
           <Link to={`/main/medicine/${patient.patientId}`} className="PTDetail-actionBtn PTDetail-smallBtn">Medicine</Link>
           <Link to={`/main/equpment/${patient.patientId}`} className="PTDetail-actionBtn PTDetail-smallBtn">Equipment</Link>
+          {/* <Link to={`/main/fmtree/${patient.patientId}`} className="PTDetail-actionBtn PTDetail-smallBtn">FM TREE</Link> */}
           <Link to={`/main/invest/${patient.patientId}`} className="PTDetail-actionBtn PTDetail-smallBtn">Investigation</Link>
           <Link to={`/main/social/${patient.patientId}`} className="PTDetail-actionBtn PTDetail-smallBtn">Social Support</Link>
           <Link to={`/main/deactive/${patient.patientId}`} className="PTDetail-actionBtn PTDetail-smallBtn">DEACTIVE</Link>
-          <Link to={`/main/conditions/${patient.patientId}`} className="PTDetail-actionBtn PTDetail-smallBtn">Medical Conditions</Link>
+          <Link to={`/main/conditions/${patient.patientId}`} className="PTDetail-actionBtn PTDetail-smallBtn">Family Details</Link>
         </div>
         {/* Update Button */}
         <button className="PTDetail-updateButton" onClick={() => navigate(`/main/update-patient/${patientId}`)}>

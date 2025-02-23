@@ -36,10 +36,13 @@ import ReportDetailsDEATH from "../PatientDetials.jsx/ReportDetailsDEATH";
 import UpdateSOCIAL from "../Forms/UpdateSOCIAL";
 import UpdateDEATH from "../Forms/UpdateDEATH";
 import UpdatePatient from "../Forms/UpdatePatient";
+import MedicineList from "../Forms/MedicineList";
 import UpdateNHCE from "../Forms/UpdateNHCE";
+import FamilyTree from "../Forms/FamilyTree";
 import ReportDetailsNHCE from "../PatientDetials.jsx/ReportDetailsNHCE";
 import Conditions from "../Forms/Conditions";
 import DeactivatePatient from "../Forms/DeactivatePatient";
+
 function Main({ isAuthenticated, isNurse }) {
   if (!isAuthenticated || !isNurse) {
     return <Navigate to="/" />; // Redirect to login if not authenticated or not a nurse
@@ -51,7 +54,9 @@ function Main({ isAuthenticated, isNurse }) {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/addpt" element={<AddPatient />} />
+          <Route path="/fmtree/:patientId" element={<FamilyTree />} />
           <Route path="/allrepots" element={<AllReportsPage />} />
+          <Route path="/medicine-list" element={<MedicineList />} />
           <Route path="/ptlist" element={<PatientTable />} />
           <Route path="/patient/:patientId" element={<PatientDetails />} />
           <Route path="/nhc/:patientId" element={<NHC />} />

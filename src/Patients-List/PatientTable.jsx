@@ -3,9 +3,10 @@ import { db } from "../Firebase/config"; // Adjust the path if necessary
 import { collection, getDocs } from "firebase/firestore";
 import "./PatientTable.css";
 import { useNavigate } from "react-router-dom";
-
+import { FaFilter } from "react-icons/fa";
 const PatientTable = () => {
   const [patients, setPatients] = useState([]);
+  const [showFilters, setShowFilters] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredPatients, setFilteredPatients] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -143,60 +144,76 @@ const PatientTable = () => {
       <button className="PatientTable-back-button" onClick={() => navigate(-1)}>
         <i className="bi bi-arrow-left"></i> Back
       </button>
-
+  
       {/* Display total number of patients */}
       <div className="PatientTable-total-count">
         Total Patients: {filteredPatients.length}
       </div>
-
-      <div className="PatientTable-search-bar">
-        <input
-          type="text"
-          placeholder="Search by name, phone number, address, diagnosis, or register number..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-      </div>
-
-      {/* Filters */}
-      <div className="PatientTable-filters">
-        <label>
-          Filter by Diagnosis:
-          <select value={selectedDiagnosis} onChange={(e) => setSelectedDiagnosis(e.target.value)}>
-            {uniqueDiagnoses.map((diagnosis) => (
-              <option key={diagnosis} value={diagnosis}>
-                {diagnosis}
-              </option>
-            ))}
-          </select>
-        </label>
-
-        <label>
-          Filter by Status:
-          <select value={selectedStatus} onChange={(e) => setSelectedStatus(e.target.value)}>
-            <option value="All">All</option>
-            <option value="Active">Active</option>
-            <option value="Inactive">Inactive</option>
-          </select>
-        </label>
-
-        <label>
-          Sort by:
-          <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
-            <option value="name">Name</option>
-            <option value="registernumber">Register Number</option>
-          </select>
-        </label>
-
-        <label>
-          Order:
-          <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)}>
-            <option value="asc">Ascending</option>
-            <option value="desc">Descending</option>
-          </select>
-        </label>
-      </div>
-
+  
+      {/* Filter toggle button */}
+     
+  
+      {/* Filter box */}
+      {showFilters && (
+        <div className="PatientTable-filters-box">
+          <div className="PatientTable-filters">
+            <label>
+              Filter by Diagnosis:
+              <select value={selectedDiagnosis} onChange={(e) => setSelectedDiagnosis(e.target.value)}>
+                {uniqueDiagnoses.map((diagnosis) => (
+                  <option key={diagnosis} value={diagnosis}>
+                    {diagnosis}
+                  </option>
+                ))}
+              </select>
+            </label>
+  
+            <label>
+              Filter by Status:
+              <select value={selectedStatus} onChange={(e) => setSelectedStatus(e.target.value)}>
+                <option value="All">All</option>
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+              </select>
+            </label>
+  
+            <label>
+              Sort by:
+              <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+                <option value="name">Name</option>
+                <option value="registernumber">Register Number</option>
+              </select>
+            </label>
+  
+            <label>
+              Order:
+              <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)}>
+                <option value="asc">Ascending</option>
+                <option value="desc">Descending</option>
+              </select>
+            </label>
+          </div>
+        </div>
+      )}
+  
+  <div className="PatientTable-search-filter-container">
+  <div className="PatientTable-search-bar">
+    <input
+      type="text"
+      placeholder="Search by name, phone number, address, diagnosis, or register number..."
+      value={searchQuery}
+      onChange={(e) => setSearchQuery(e.target.value)}
+    />
+  </div>
+  <button
+    className="PatientTable-filter-toggle mb-4"
+    onClick={() => setShowFilters(!showFilters)}
+    title={showFilters ? "Hide Filters" : "Show Filters"} // Tooltip
+  >
+    <FaFilter /> {/* Filter icon */}
+  </button>
+</div>
+     
       {isLoading ? (
         <div className="PatientTable-loading-indicator">
           <div className="loading-container">
@@ -239,7 +256,7 @@ const PatientTable = () => {
               </div>
             ))}
           </div>
-
+  
           {/* Pagination */}
           <div className="PatientTable-pagination">
             <button onClick={handlePreviousPage} disabled={currentPage === 1} className="PatientTable-pagination-btn">
@@ -248,7 +265,7 @@ const PatientTable = () => {
             <span>
               Page {currentPage} of {totalPages}
             </span>
-            <button onClick={handleNextPage} disabled={currentPage === totalPages}  className="PatientTable-pagination-btn">
+            <button onClick={handleNextPage} disabled={currentPage === totalPages} className="PatientTable-pagination-btn">
               Next
             </button>
           </div>

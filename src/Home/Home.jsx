@@ -97,14 +97,17 @@ function Home() {
           >
             Contact Us
           </a>
-          <a
+          {/* <a
             href="https://neuraq.github.io/Palliative-Mkba-App-About/"
             target="_blank"
             rel="noopener noreferrer"
             className="HomeDrawerButton"
           >
             About Us
-          </a>
+          </a> */}
+ <Link to="/main/medicine-list" className="HomeDrawerButton">
+  Medicine List
+</Link>
         </div>
         <div className="drawer-footer">
           <button className="HomeDrawerButton btn-danger" onClick={handleLogout}>
