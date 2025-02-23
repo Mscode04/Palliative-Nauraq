@@ -453,7 +453,7 @@ const UpdatePatient = () => {
     name="medicalHistory"
     value={patientData.profile.medicalHistory}
     onChange={(e) => handleChange(e, "profile")}
-    rows={4} // You can adjust the number of rows as needed
+    rows={5} // You can adjust the number of rows as needed
     style={{ resize: "vertical" }} // Allows vertical resizing
   />
 </div>

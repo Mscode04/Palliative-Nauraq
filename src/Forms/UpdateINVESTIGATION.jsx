@@ -100,7 +100,7 @@ const UpdateINVESTIGATION = () => {
       >
         ← Back
       </button>
-      <h2 className="UpdateINVESTIGATION-title">Update INVESTIGATION Report</h2>
+      <h2 className="UpdateINVESTIGATION-title">Update INVESTIGATION REPORT</h2>
       <form onSubmit={handleSubmit} className="UpdateINVESTIGATION-form">
         {/* Date */}
         <h3 className="UpdateINVESTIGATION-section-title">Date</h3>
@@ -131,16 +131,18 @@ const UpdateINVESTIGATION = () => {
         {/* Reports From */}
         <h3 className="UpdateINVESTIGATION-section-title">Reports From</h3>
         {Object.keys(report.REPORTS_FROM || {}).map((field) => (
-          <div className="UpdateINVESTIGATION-field" key={field}>
-            <label>{field}:</label>
-            <input
-              type="text"
-              name={`REPORTS_FROM_${field}`}
-              value={report.REPORTS_FROM[field] || ""}
-              onChange={handleChange}
-            />
-          </div>
-        ))}
+  <div className="UpdateINVESTIGATION-field" key={field}>
+    <label>{field}:</label>
+    <textarea
+      name={`REPORTS_FROM_${field}`}
+      value={report.REPORTS_FROM[field] || ""}
+      onChange={handleChange}
+      rows={3} // Adjust row size as needed
+      className="textarea-field form-control" // Optional class for styling
+    />
+  </div>
+))}
+
 
         <button type="submit" className="UpdateINVESTIGATION-update-button">
           Update Report

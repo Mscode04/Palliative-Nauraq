@@ -23,6 +23,7 @@ const NHCE = () => {
     badHabit: "No",
     complimentaryRx: "nill",
     food: "Good",
+    breath:"Normal",
     drink: "Good",
     pee: "Good",
     pop: "Good",
@@ -32,19 +33,20 @@ const NHCE = () => {
     sexuality: "nill",
     exercise: "No",
     exerciseFrequency: "daily",
-    exerciseTime: "",
-    exerciseLocation: "in",
+    exercisenotes: "",
     entertainmentTime: "",
     houseCleanliness: "clean",
     surroundingsCleanliness: "clean",
     bedroomCleanliness: "clean",
     bedCleanliness: "clean",
     dressCleanliness: "clean",
+    addmoresurroundings:"",
     generalStatus: "stable",
     patientCurrently: "sitting",
     memoryStatus: "remember",
     responseStatus: "good",
     activityScore: "1",
+    addmoregeneral:"",
     scalp: "Good",
     hair: "Good",
     skin: "Good",
@@ -147,6 +149,7 @@ const NHCE = () => {
         badHabit: "No",
         complimentaryRx: "nill",
         food: "Good",
+        breath:"Normal",
         drink: "Good",
         pee: "Good",
         pop: "Good",
@@ -156,19 +159,20 @@ const NHCE = () => {
         sexuality: "nill",
         exercise: "No",
         exerciseFrequency: "daily",
-        exerciseTime: "",
-        exerciseLocation: "in",
+        exercisenotes: "",
         entertainmentTime: "",
         houseCleanliness: "clean",
         surroundingsCleanliness: "clean",
         bedroomCleanliness: "clean",
         bedCleanliness: "clean",
         dressCleanliness: "clean",
+        addmoresurroundings:"",
         generalStatus: "stable",
         patientCurrently: "sitting",
         memoryStatus: "remember",
         responseStatus: "good",
         activityScore: "1",
+        addmoregeneral:"",
         scalp: "Good",
         hair: "Good",
         skin: "Good",
@@ -222,12 +226,12 @@ const NHCE = () => {
       <button className="NHCAdd-back-btn" onClick={() => navigate(-1)}>
         <i className="fa fa-arrow-left"></i> Back
       </button>
-      <h2 className="NHCAdd-title">NHC(E) Details for Patient ID: {patientId}</h2>
+      <h2 className="NHCAdd-title">NHC(E) REPORT</h2>
       {patientData ? (
         <div className="NHCAdd-patientInfo">
-           <h3 style={{color:"black"}}>Patient NHC(E)</h3>
+           <h3><strong>Reg:</strong> {patientData.registernumber}</h3>
           <h3><strong>Name:</strong> {patientData.name}</h3>
-          <h3><strong>Address:</strong> {patientData.address}</h3>
+          <h3 className="mb-5"><strong>Address:</strong> {patientData.address}</h3>
         </div>
       ) : (
         <div className="loading-container">
@@ -247,7 +251,7 @@ const NHCE = () => {
           <input type="date" name="date" value={formData.date} onChange={handleChange} />
         </label>
         <label>
-          Team 1:
+          Team Member 1:
           <select name="team1" value={formData.team1} onChange={handleChange}>
             <option value="Shameema">Shameema</option>
             <option value="Divya">Divya</option>
@@ -257,14 +261,20 @@ const NHCE = () => {
         </label>
         {[2, 3, 4].map((num) => (
           <label key={num}>
-            Team {num}:
+            Team Member {num}:
             <input type="text" name={`team${num}`} value={formData[`team${num}`]} onChange={handleChange} />
           </label>
         ))}
         <label>
-          First Impression:
-          <input type="text" name="firstImpression" value={formData.firstImpression} onChange={handleChange} />
-        </label>
+  First Impression:
+  <textarea
+    name="firstImpression"
+    value={formData.firstImpression}
+    onChange={handleChange}
+    rows="5"
+  />
+</label>
+
         <label>
           Patient Awareness:
           <select name="patientAwareness" value={formData.patientAwareness} onChange={handleChange}>
@@ -310,19 +320,31 @@ const NHCE = () => {
         </label>
 
         <h3>Section 2: Basic Matters</h3>
-        {["food", "drink", "pee", "pop", "sleep", "selfHygiene"].map((field) => (
-          <label key={field}>
-            {field.charAt(0).toUpperCase() + field.slice(1)}:
-            <select name={field} value={formData[field]} onChange={handleChange}>
-              <option value="Good">Good</option>
-              <option value="Bad">Bad</option>
-              <option value="Average">Average</option>
-              <option value="Satisfy">Satisfy</option>
-            </select>
-          </label>
-        ))}
+        {["food", "drink", "pee", "pop", "sleep", "selfHygiene", "breath"].map((field) => (
+  <label key={field}>
+    {field === "pee" ? "Pee (Urine)" : field === "pop" ? "Pop (ശോധന)" : field.charAt(0).toUpperCase() + field.slice(1)}:
+    <select name={field} value={formData[field]} onChange={handleChange}>
+      {field === "breath" ? (
+        <>
+          <option value="Normal">Normal</option>
+          <option value="High">High</option>
+          <option value="Low">Low</option>
+          <option value="Varying">Varying</option>
+        </>
+      ) : (
+        <>
+          <option value="Good">Good</option>
+          <option value="Bad">Bad</option>
+          <option value="Average">Average</option>
+          <option value="Satisfy">Satisfy</option>
+        </>
+      )}
+    </select>
+  </label>
+))}
+
         <label>
-          Additional Notes:
+          Additional Notes  for Basic Matters:
           <textarea name="basicMattersNotes" value={formData.basicMattersNotes} onChange={handleChange}></textarea>
         </label>
         <label>
@@ -350,26 +372,32 @@ const NHCE = () => {
           </select>
         </label>
         <label>
-          Time of Exercise:
-          <input type="text" name="exerciseTime" value={formData.exerciseTime} onChange={handleChange} />
-        </label>
-        <label>
-          Location:
-          <select name="exerciseLocation" value={formData.exerciseLocation} onChange={handleChange}>
-            <option value="in">In</option>
-            <option value="out">Out</option>
-          </select>
-        </label>
+        Additional Notes About Exercise:
+  <textarea
+    name="exercisenotes"
+    value={formData.exercisenotes}
+    onChange={handleChange}
+    rows="3"
+  />
+</label>
+
+  
 
         <h3>Section 4: Habits</h3>
         <label>
-          Entertainment Time Spending:
-          <input type="text" name="entertainmentTime" value={formData.entertainmentTime} onChange={handleChange} />
-        </label>
+  Entertainment Time Spending:
+  <textarea
+    name="entertainmentTime"
+    value={formData.entertainmentTime}
+    onChange={handleChange}
+    rows="3"
+  />
+</label>
 
 
 
-        <h3>Section 6: Surroundings</h3>
+
+        <h3>Section 5: Surroundings</h3>
         {["house", "surroundings", "bedroom", "bed", "dress"].map((field) => (
           <label key={field}>
             {field.charAt(0).toUpperCase() + field.slice(1)} Cleanliness:
@@ -380,8 +408,16 @@ const NHCE = () => {
             </select>
           </label>
         ))}
-
-        <h3>Section 7: General Matters</h3>
+                <label>
+                Additional Notes About Surroundings:
+  <textarea
+    name="addmoresurroundings"
+    value={formData.addmoresurroundings}
+    onChange={handleChange}
+    rows="3"
+  />
+</label>
+        <h3>Section 6: General Matters</h3>
         <label>
           General Status:
           <select name="generalStatus" value={formData.generalStatus} onChange={handleChange}>
@@ -441,8 +477,16 @@ const NHCE = () => {
             <option value="5">5</option>
           </select>
         </label>
-
-        <h3>Section 8: Head to Foot Checkup</h3>
+        <label>
+                Additional Notes About General Matters:
+  <textarea
+    name="addmoregeneral"
+    value={formData.addmoregeneral}
+    onChange={handleChange}
+    rows="3"
+  />
+</label>
+        <h3>Section 7: Head to Foot Checkup</h3>
         {["scalp", "hair", "skin", "nails", "mouth", "perineum", "hiddenSpaces", "pressureSpaces", "joints"].map((field) => (
           <label key={field}>
             {field.charAt(0).toUpperCase() + field.slice(1)}:
@@ -481,6 +525,7 @@ const NHCE = () => {
                   <option value="Unclean">Unclean</option>
                   <option value="Oral candidiasis">Oral candidiasis</option>
                   <option value="Glotitis">Glotitis</option>
+                  <option value="Stomatitis">Stomatitis</option>
                 </>
               )}
               {field === "perineum" && (
@@ -523,7 +568,7 @@ const NHCE = () => {
           </label>
         ))}
         <label>
-          Additional Notes:
+          Additional Notes For Head to Foot Checkup:
           <textarea name="headToFootNotes" value={formData.headToFootNotes} onChange={handleChange}></textarea>
         </label>
 
@@ -554,7 +599,7 @@ const NHCE = () => {
         </div>
         <div className="vital-signs-row">
           <label>
-            RR:
+            RR (Mt):
             <input type="text" name="rr" value={formData.rr} onChange={handleChange} placeholder="Mt" />
           </label>
           <label>
@@ -567,7 +612,7 @@ const NHCE = () => {
         </div>
         <div className="vital-signs-row">
           <label>
-            Pulse:
+            Pulse: (Mt)
             <input type="text" name="pulse" value={formData.pulse} onChange={handleChange} placeholder="Mt" />
           </label>
           <label>
@@ -580,7 +625,7 @@ const NHCE = () => {
         </div>
         <div className="vital-signs-row">
           <label>
-            Temperature:
+            Temperature (°F):
             <input type="text" name="temperature" value={formData.temperature} onChange={handleChange} placeholder="Fahrenheit" />
           </label>
           <label>
@@ -594,19 +639,19 @@ const NHCE = () => {
         </div>
         <div className="vital-signs-row">
           <label>
-            SpO2:
+            SpO2 (%):
             <input type="text" name="spo2" value={formData.spo2} onChange={handleChange} placeholder="%" />
           </label>
         </div>
         <div className="vital-signs-row">
           <label>
-            GCS:
+            GCS (/15):
             <input type="text" name="gcs" value={formData.gcs} onChange={handleChange} placeholder="/15" />
           </label>
         </div>
         <div className="vital-signs-row">
           <label>
-            GRBS:
+            GRBS (mg/dl):
             <input type="text" name="grbs" value={formData.grbs} onChange={handleChange} placeholder="mg/dl" />
           </label>
         </div>
@@ -646,7 +691,7 @@ const NHCE = () => {
         </label>
    
         <label>
-          Consultation:
+          Docter Consultation:
           <textarea name="consultation" value={formData.consultation} onChange={handleChange}></textarea>
         </label>
 

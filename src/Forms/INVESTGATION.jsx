@@ -182,16 +182,18 @@ const INVESTIGATION = () => {
 
         <h3>Section 3: Reports From</h3>
         {["ECG", "X_RAY", "ECHO", "SCAN"].map((field) => (
-          <div className="INVAdd-field" key={field}>
-            <label>{field}:</label>
-            <input
-              type="text"
-              name={`REPORTS_FROM_${field}`}
-              value={formData.REPORTS_FROM[field]}
-              onChange={handleChange}
-            />
-          </div>
-        ))}
+  <div className="INVAdd-field" key={field}>
+    <label>{field}:</label>
+    <textarea
+      name={`REPORTS_FROM_${field}`}
+      value={formData.REPORTS_FROM[field]}
+      onChange={handleChange}
+      rows={3} // Adjust row size as needed
+      className="textarea-field form-control" // Optional: Add a class for styling
+    />
+  </div>
+))}
+
 
         <button type="submit" className="INVAdd-submitButton" disabled={isSubmitting}>
           {isSubmitting ? "Submitting..." : "Submit"}

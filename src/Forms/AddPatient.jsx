@@ -220,7 +220,10 @@ const AddPatient = () => {
         <div className="AddPatient-row">
   {Object.entries(patientData.profile).map(([field, value]) => (
     <div className="AddPatient-field" key={field}>
-      <label htmlFor={field}>
+      <label
+        htmlFor={field}
+        className={field === "deactivated" ? "d-none" : ""}
+      >
         {field.replace(/([A-Z])/g, " $1").replace(/^./, (str) => str.toUpperCase())}:
       </label>
       {field === "gender" ? (
@@ -228,7 +231,7 @@ const AddPatient = () => {
           id={field}
           name={field}
           className="form-control"
-          value={value}
+          value={value || ""}
           onChange={(e) => handleChange(e, "profile")}
         >
           <option value="NOT SAY">Not Mention</option>
@@ -241,7 +244,7 @@ const AddPatient = () => {
           id={field}
           name={field}
           className="form-control"
-          value={value}
+          value={value || ""}
           onChange={(e) => handleChange(e, "profile")}
         >
           <option value="">Not Mention</option>
@@ -252,11 +255,11 @@ const AddPatient = () => {
           <option value="SOS">SOS</option>
           <option value="MEDICAL SUPPORT">MEDICAL SUPPORT</option>
         </select>
-      ) : field === "location" || field === "additionalInfo" ? ( // Add condition for additionalInfo
+      ) : field === "location" || field === "additionalInfo" ? (
         <textarea
           id={field}
           name={field}
-          value={value}
+          value={value || ""}
           onChange={(e) => handleChange(e, "profile")}
           rows="3"
         />
@@ -265,27 +268,31 @@ const AddPatient = () => {
           type="date"
           id={field}
           name={field}
-          value={value}
+          value={value || ""}
+          onChange={(e) => handleChange(e, "profile")}
+        />
+      ) : field === "deactivated" ? (
+        <input
+          type="text"
+          id={field}
+          className="d-none"
+          name={field}
+          value={value || ""}
           onChange={(e) => handleChange(e, "profile")}
         />
       ) : (
         <input
-          type={
-            field === "email"
-              ? "email"
-              : field === "password"
-              ? "text"
-              : "text"
-          }
+          type={field === "email" ? "email" : field === "password" ? "password" : "text"}
           id={field}
           name={field}
-          value={value}
+          value={value || ""}
           onChange={(e) => handleChange(e, "profile")}
         />
       )}
     </div>
   ))}
 </div>
+
 
         {/* Section 2: Medical Section */}
         <h4 className="AddPatient-sectionTitle">Section 2: Medical Section</h4>
@@ -300,7 +307,7 @@ const AddPatient = () => {
                 name={field}
                 value={value}
                 onChange={(e) => handleChange(e, "medical")}
-                rows="3"
+                rows="4"
               ></textarea>
             </div>
           ))}

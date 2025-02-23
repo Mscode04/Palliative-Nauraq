@@ -4,7 +4,7 @@ import { db } from "../Firebase/config";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import "./UpdateNHC.css";
+import './UpdateNHC.css'
 const UpdateNHCE = () => {
   const { reportId } = useParams();
   const navigate = useNavigate();
@@ -22,6 +22,7 @@ const UpdateNHCE = () => {
     badHabit: "No",
     complimentaryRx: "nill",
     food: "Good",
+    breath:"Normal",
     drink: "Good",
     pee: "Good",
     pop: "Good",
@@ -31,19 +32,20 @@ const UpdateNHCE = () => {
     sexuality: "nill",
     exercise: "No",
     exerciseFrequency: "daily",
-    exerciseTime: "",
-    exerciseLocation: "in",
+    exercisenotes: "",
     entertainmentTime: "",
     houseCleanliness: "clean",
     surroundingsCleanliness: "clean",
     bedroomCleanliness: "clean",
     bedCleanliness: "clean",
     dressCleanliness: "clean",
+    addmoresurroundings:"",
     generalStatus: "stable",
     patientCurrently: "sitting",
     memoryStatus: "remember",
     responseStatus: "good",
     activityScore: "1",
+    addmoregeneral:"",
     scalp: "Good",
     hair: "Good",
     skin: "Good",
@@ -58,8 +60,8 @@ const UpdateNHCE = () => {
     summaryDiscussion: "",
     medicineChanges: "",
     otherActivities: "",
-    homeCarePlan: "def",
-    homeCareType: "nhc",
+    homeCarePlan: "",
+    
     consultation: "",
     formType: "NHC(E)",
     submittedAt: "",
@@ -71,7 +73,7 @@ const UpdateNHCE = () => {
     pulse: "",
     pulseType: "R",
     temperature: "",
-    temperatureType: "O",
+    temperatureType: "NILL",
     spo2: "",
     gcs: "",
     grbs: "",
@@ -143,22 +145,15 @@ const UpdateNHCE = () => {
         &larr; Back
       </button>
 
-      <h2 className="UpdateNHC-title">
-        Update NHC(E) Report for Patient ID: {report.patientId}
-      </h2>
+      <h2 className="UpdateNHC-title">Update NHC(E) </h2>
       <form onSubmit={handleSubmit} className="UpdateNHC-form">
-        <h3>Section 1: General Details</h3>
+      <h3>Section 1: General Details</h3>
         <label>
           Date:
-          <input
-            type="date"
-            name="date"
-            value={formData.date}
-            onChange={handleChange}
-          />
+          <input type="date" name="date" value={formData.date} onChange={handleChange} />
         </label>
         <label>
-          Team 1:
+          Team Member 1:
           <select name="team1" value={formData.team1} onChange={handleChange}>
             <option value="Shameema">Shameema</option>
             <option value="Divya">Divya</option>
@@ -168,61 +163,41 @@ const UpdateNHCE = () => {
         </label>
         {[2, 3, 4].map((num) => (
           <label key={num}>
-            Team {num}:
-            <input
-              type="text"
-              name={`team${num}`}
-              value={formData[`team${num}`]}
-              onChange={handleChange}
-            />
+            Team Member {num}:
+            <input type="text" name={`team${num}`} value={formData[`team${num}`]} onChange={handleChange} />
           </label>
         ))}
-        <label>
-          First Impression:
-          <input
-            type="text"
-            name="firstImpression"
-            value={formData.firstImpression}
-            onChange={handleChange}
-          />
-        </label>
+       <label>
+  First Impression:
+  <textarea
+    name="firstImpression"
+    value={formData.firstImpression}
+    onChange={handleChange}
+    rows="4"
+  />
+</label>
+
         <label>
           Patient Awareness:
-          <select
-            name="patientAwareness"
-            value={formData.patientAwareness}
-            onChange={handleChange}
-          >
+          <select name="patientAwareness" value={formData.patientAwareness} onChange={handleChange}>
             <option value="Yes">Yes</option>
             <option value="No">No</option>
           </select>
         </label>
         <label>
           Caretaker Awareness:
-          <select
-            name="caretakerAwareness"
-            value={formData.caretakerAwareness}
-            onChange={handleChange}
-          >
+          <select name="caretakerAwareness" value={formData.caretakerAwareness} onChange={handleChange}>
             <option value="Yes">Yes</option>
             <option value="No">No</option>
           </select>
         </label>
         <label>
           Extra Details about Awareness:
-          <textarea
-            name="extraDetailsAwareness"
-            value={formData.extraDetailsAwareness}
-            onChange={handleChange}
-          ></textarea>
+          <textarea name="extraDetailsAwareness" value={formData.extraDetailsAwareness} onChange={handleChange}></textarea>
         </label>
         <label>
           Bad Habit:
-          <select
-            name="badHabit"
-            value={formData.badHabit}
-            onChange={handleChange}
-          >
+          <select name="badHabit" value={formData.badHabit} onChange={handleChange}>
             <option value="No">No</option>
             <option value="Yes">Yes</option>
           </select>
@@ -230,21 +205,12 @@ const UpdateNHCE = () => {
         {formData.badHabit === "Yes" && (
           <label>
             More About Bad Habits:
-            <input
-              type="text"
-              name="moreAboutBadHabits"
-              value={formData.moreAboutBadHabits}
-              onChange={handleChange}
-            />
+            <input type="text" name="moreAboutBadHabits" value={formData.moreAboutBadHabits} onChange={handleChange} />
           </label>
         )}
         <label>
           Complimentary Rx:
-          <select
-            name="complimentaryRx"
-            value={formData.complimentaryRx}
-            onChange={handleChange}
-          >
+          <select name="complimentaryRx" value={formData.complimentaryRx} onChange={handleChange}>
             <option value="nill">Nill</option>
             <option value="ay">AY</option>
             <option value="h">H</option>
@@ -256,38 +222,37 @@ const UpdateNHCE = () => {
         </label>
 
         <h3>Section 2: Basic Matters</h3>
-        {["food", "drink", "pee", "pop", "sleep", "selfHygiene"].map(
-          (field) => (
-            <label key={field}>
-              {field.charAt(0).toUpperCase() + field.slice(1)}:
-              <select
-                name={field}
-                value={formData[field]}
-                onChange={handleChange}
-              >
-                <option value="Good">Good</option>
-                <option value="Bad">Bad</option>
-                <option value="Average">Average</option>
-                <option value="Satisfy">Satisfy</option>
-              </select>
-            </label>
-          )
-        )}
+        {["food", "drink", "pee", "pop", "sleep", "selfHygiene", "breath"].map((field) => (
+  <label key={field}>
+    {field === "pee" ? "Pee (Urine)" : field === "pop" ? "Pop (ശോധന)" : field.charAt(0).toUpperCase() + field.slice(1)}:
+    <select name={field} value={formData[field]} onChange={handleChange}>
+      {field === "breath" ? (
+        <>
+          <option value="Normal">Normal</option>
+          <option value="High">High</option>
+          <option value="Low">Low</option>
+          <option value="Varying">Varying</option>
+        </>
+      ) : (
+        <>
+          <option value="Good">Good</option>
+          <option value="Bad">Bad</option>
+          <option value="Average">Average</option>
+          <option value="Satisfy">Satisfy</option>
+        </>
+      )}
+    </select>
+  </label>
+))}
+
+
         <label>
           Additional Notes:
-          <textarea
-            name="basicMattersNotes"
-            value={formData.basicMattersNotes}
-            onChange={handleChange}
-          ></textarea>
+          <textarea name="basicMattersNotes" value={formData.basicMattersNotes} onChange={handleChange}></textarea>
         </label>
         <label>
           Sexuality:
-          <select
-            name="sexuality"
-            value={formData.sexuality}
-            onChange={handleChange}
-          >
+          <select name="sexuality" value={formData.sexuality} onChange={handleChange}>
             <option value="nill">Nill</option>
             <option value="yes">Yes</option>
           </select>
@@ -296,181 +261,134 @@ const UpdateNHCE = () => {
         <h3>Section 3: Exercise</h3>
         <label>
           Exercise:
-          <select
-            name="exercise"
-            value={formData.exercise}
-            onChange={handleChange}
-          >
+          <select name="exercise" value={formData.exercise} onChange={handleChange}>
             <option value="No">No</option>
             <option value="Yes">Yes</option>
           </select>
         </label>
         <label>
           Frequency:
-          <select
-            name="exerciseFrequency"
-            value={formData.exerciseFrequency}
-            onChange={handleChange}
-          >
+          <select name="exerciseFrequency" value={formData.exerciseFrequency} onChange={handleChange}>
             <option value="daily">Daily</option>
             <option value="weekly once">Weekly Once</option>
             <option value="sometimes">Sometimes</option>
           </select>
         </label>
         <label>
-          Time of Exercise:
-          <input
-            type="text"
-            name="exerciseTime"
-            value={formData.exerciseTime}
-            onChange={handleChange}
-          />
-        </label>
-        <label>
-          Location:
-          <select
-            name="exerciseLocation"
-            value={formData.exerciseLocation}
-            onChange={handleChange}
-          >
-            <option value="in">In</option>
-            <option value="out">Out</option>
-          </select>
-        </label>
+        Additional Notes About Exercise:
+  <textarea
+    name="exercisenotes"
+    value={formData.exercisenotes}
+    onChange={handleChange}
+    rows="3"
+  />
+</label>
 
         <h3>Section 4: Habits</h3>
         <label>
-          Entertainment Time Spending:
-          <input
-            type="text"
-            name="entertainmentTime"
-            value={formData.entertainmentTime}
-            onChange={handleChange}
-          />
-        </label>
+  Entertainment Time Spending:
+  <textarea
+    name="entertainmentTime"
+    value={formData.entertainmentTime}
+    onChange={handleChange}
+    rows="3"
+  />
+</label>
 
-        <h3>Section 6: Surroundings</h3>
+
+
+        <h3>Section 5: Surroundings</h3>
         {["house", "surroundings", "bedroom", "bed", "dress"].map((field) => (
           <label key={field}>
             {field.charAt(0).toUpperCase() + field.slice(1)} Cleanliness:
-            <select
-              name={`${field}Cleanliness`}
-              value={formData[`${field}Cleanliness`]}
-              onChange={handleChange}
-            >
+            <select name={`${field}Cleanliness`} value={formData[`${field}Cleanliness`]} onChange={handleChange}>
               <option value="clean">Clean</option>
               <option value="unclean">Unclean</option>
               <option value="average">Average</option>
             </select>
           </label>
         ))}
-
-        <h3>Section 7: General Matters</h3>
+                <label>
+                Additional Notes About Surroundings:
+  <textarea
+    name="addmoresurroundings"
+    value={formData.addmoresurroundings}
+    onChange={handleChange}
+    rows="3"
+  />
+</label>
+        <h3>Section 6: General Matters</h3>
         <label>
           General Status:
-          <select
-            name="generalStatus"
-            value={formData.generalStatus}
-            onChange={handleChange}
-          >
+          <select name="generalStatus" value={formData.generalStatus} onChange={handleChange}>
             <option value="stable">Stable</option>
             <option value="unstable">Unstable</option>
           </select>
         </label>
         <label>
           Patient Currently:
-          <select
-            name="patientCurrently"
-            value={formData.patientCurrently}
-            onChange={handleChange}
-          >
-            <option value="lying">Lying</option>
-            <option value="standing">Standing</option>
-            <option value="sitting">Sitting</option>
-            <option value="fully_capable">Fully Capable</option>
-            <option value="toss_and_turns_in_bed_self">
-              Toss and Turns in Bed (Self)
-            </option>
-            <option value="toss_and_turns_with_help">
-              Toss and Turns with Help
-            </option>
-            <option value="sitting_with_help">Sitting with Help</option>
-            <option value="standing_with_help">Standing with Help</option>
-            <option value="walking_house_self">Walking (House) Self</option>
-            <option value="walking_house_with_help">
-              Walking (House) with Help
-            </option>
-            <option value="walking_out_with_help">
-              Walking (Out) with Help
-            </option>
-            <option value="walking_out_self">Walking (Out) Self</option>
+          <select name="patientCurrently" value={formData.patientCurrently} onChange={handleChange}>
+          <option value="lying">Lying</option>
+<option value="standing">Standing</option>
+<option value="sitting">Sitting</option>
+<option value="fully_capable">Fully Capable</option>
+<option value="toss_and_turns_in_bed_self">Toss and Turns in Bed (Self)</option>
+<option value="toss_and_turns_with_help">Toss and Turns with Help</option>
+<option value="sitting_with_help">Sitting with Help</option>
+<option value="standing_with_help">Standing with Help</option>
+<option value="walking_house_self">Walking (House) Self</option>
+<option value="walking_house_with_help">Walking (House) with Help</option>
+<option value="walking_out_with_help">Walking (Out) with Help</option>
+<option value="walking_out_self">Walking (Out) Self</option>
           </select>
         </label>
         <label>
           Memory Status:
-          <select
-            name="memoryStatus"
-            value={formData.memoryStatus}
-            onChange={handleChange}
-          >
-            <option value="remember">Remember</option>
-            <option value="not-remember">Do Not Remember</option>
-            <option value="sometimes">Sometimes</option>
-            <option value="something">Something</option>
+          <select name="memoryStatus" value={formData.memoryStatus} onChange={handleChange}>
+          <option value="remember">Remember</option>
+    <option value="not-remember">Do Not Remember</option>
+    <option value="sometimes">Sometimes</option>
+    <option value="something">Something</option> 
           </select>
         </label>
         <label>
           Response Status:
-          <select
-            name="responseStatus"
-            value={formData.responseStatus}
-            onChange={handleChange}
-          >
-            <option value="full-respond">Full Respond</option>
-            <option value="slightly-respond">Slightly Respond</option>
-            <option value="not-respond">Not Respond</option>
-            <option value="respond-with-talking">Respond with Talking</option>
-            <option value="respond-with-hands">Respond with Hands</option>
-            <option value="respond-with-fingers">Respond with Fingers</option>
-            <option value="respond-with-eye">Respond with Eye</option>
-            <option value="respond-with-head">Respond with Head</option>
-            <option value="respond-with-sound">Respond with Sound</option>
+          <select name="responseStatus" value={formData.responseStatus} onChange={handleChange}>
+                      <option value="full-respond">Full Respond</option>
+    <option value="slightly-respond">Slightly Respond</option>
+    <option value="not-respond">Not Respond</option>
+    <option value="respond-with-talking">Respond with Talking</option>
+    <option value="respond-with-hands">Respond with Hands</option>
+    <option value="respond-with-fingers">Respond with Fingers</option>
+    <option value="respond-with-eye">Respond with Eye</option>
+    <option value="respond-with-head">Respond with Head</option>
+    <option value="respond-with-sound">Respond with Sound</option>
           </select>
         </label>
         <label>
           Activity Score:
-          <select
-            name="activityScore"
-            value={formData.activityScore}
-            onChange={handleChange}
-          >
-            <option value="1">1</option>
+          <select name="activityScore" value={formData.activityScore} onChange={handleChange}>
+          <option value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>
             <option value="4">4</option>
             <option value="5">5</option>
           </select>
         </label>
-
-        <h3>Section 8: Head to Foot Checkup</h3>
-        {[
-          "scalp",
-          "hair",
-          "skin",
-          "nails",
-          "mouth",
-          "perineum",
-          "hiddenSpaces",
-          "pressureSpaces",
-          "joints",
-        ].map((field) => (
+        <label>
+                Additional Notes About General Matters:
+  <textarea
+    name="addmoregeneral"
+    value={formData.addmoregeneral}
+    onChange={handleChange}
+    rows="3"
+  />
+</label>
+        <h3>Section 7: Head to Foot Checkup</h3>
+        {["scalp", "hair", "skin", "nails", "mouth", "perineum", "hiddenSpaces", "pressureSpaces", "joints"].map((field) => (
           <label key={field}>
             {field.charAt(0).toUpperCase() + field.slice(1)}:
-            <select
-              name={field}
-              value={formData[field]}
-              onChange={handleChange}
-            >
+            <select name={field} value={formData[field]} onChange={handleChange}>
               {field === "skin" && (
                 <>
                   <option value="Dry">Dry</option>
@@ -505,6 +423,7 @@ const UpdateNHCE = () => {
                   <option value="Unclean">Unclean</option>
                   <option value="Oral candidiasis">Oral candidiasis</option>
                   <option value="Glotitis">Glotitis</option>
+                  <option value="Stomatitis">Stomatitis</option>
                 </>
               )}
               {field === "perineum" && (
@@ -536,18 +455,9 @@ const UpdateNHCE = () => {
                   <option value="Freely movable">Freely movable</option>
                 </>
               )}
-              {![
-                "skin",
-                "hair",
-                "nails",
-                "mouth",
-                "perineum",
-                "hiddenSpaces",
-                "pressureSpaces",
-                "joints",
-              ].includes(field) && (
+              {!["skin", "hair", "nails", "mouth", "perineum", "hiddenSpaces", "pressureSpaces", "joints"].includes(field) && (
                 <>
-                  <option value="Clean">Clean </option>
+                         <option value="Clean">Clean </option>
                   <option value="Unclean">Unclean</option>
                   <option value="Average">Average</option>
                 </>
@@ -556,24 +466,15 @@ const UpdateNHCE = () => {
           </label>
         ))}
         <label>
-          Additional Notes:
-          <textarea
-            name="headToFootNotes"
-            value={formData.headToFootNotes}
-            onChange={handleChange}
-          ></textarea>
+        Additional Notes For Head to Foot Checkup:
+          <textarea name="headToFootNotes" value={formData.headToFootNotes} onChange={handleChange}></textarea>
         </label>
 
         <h3>Section 9: Vital Signs</h3>
         <div className="vital-signs-row">
           <label>
             BP:
-            <input
-              type="text"
-              name="bp"
-              value={formData.bp}
-              onChange={handleChange}
-            />
+            <input type="text" name="bp" value={formData.bp} onChange={handleChange} />
           </label>
           <label>
             UL/LL:
@@ -585,11 +486,7 @@ const UpdateNHCE = () => {
           </label>
           <label>
             Position:
-            <select
-              name="position"
-              value={formData.position}
-              onChange={handleChange}
-            >
+            <select name="position" value={formData.position} onChange={handleChange}>
               <option value="Null">Null</option>
               <option value="RT Sitting">RT Sitting</option>
               <option value="RT Lying">RT Lying</option>
@@ -600,22 +497,12 @@ const UpdateNHCE = () => {
         </div>
         <div className="vital-signs-row">
           <label>
-            RR:
-            <input
-              type="text"
-              name="rr"
-              value={formData.rr}
-              onChange={handleChange}
-              placeholder="Mt"
-            />
+            RR (Mt):
+            <input type="text" name="rr" value={formData.rr} onChange={handleChange} placeholder="Mt" />
           </label>
           <label>
             RR Type:
-            <select
-              name="rrType"
-              value={formData.rrType}
-              onChange={handleChange}
-            >
+            <select name="rrType" value={formData.rrType} onChange={handleChange}>
               <option value="R">R</option>
               <option value="IR">IR</option>
             </select>
@@ -623,22 +510,12 @@ const UpdateNHCE = () => {
         </div>
         <div className="vital-signs-row">
           <label>
-            Pulse:
-            <input
-              type="text"
-              name="pulse"
-              value={formData.pulse}
-              onChange={handleChange}
-              placeholder="Mt"
-            />
+            Pulse (Mt):
+            <input type="text" name="pulse" value={formData.pulse} onChange={handleChange} placeholder="Mt" />
           </label>
           <label>
             Pulse Type:
-            <select
-              name="pulseType"
-              value={formData.pulseType}
-              onChange={handleChange}
-            >
+            <select name="pulseType" value={formData.pulseType} onChange={handleChange}>
               <option value="R">R</option>
               <option value="IR">IR</option>
             </select>
@@ -646,22 +523,12 @@ const UpdateNHCE = () => {
         </div>
         <div className="vital-signs-row">
           <label>
-            Temperature:
-            <input
-              type="text"
-              name="temperature"
-              value={formData.temperature}
-              onChange={handleChange}
-              placeholder="Fahrenheit"
-            />
+            Temperature (°F):
+            <input type="text" name="temperature" value={formData.temperature} onChange={handleChange} placeholder="Fahrenheit" />
           </label>
           <label>
             Temperature Type:
-            <select
-              name="temperatureType"
-              value={formData.temperatureType}
-              onChange={handleChange}
-            >
+            <select name="temperatureType" value={formData.temperatureType} onChange={handleChange}>
               <option value="O">O</option>
               <option value="A">A</option>
               <option value="R">R</option>
@@ -670,82 +537,44 @@ const UpdateNHCE = () => {
         </div>
         <div className="vital-signs-row">
           <label>
-            SpO2:
-            <input
-              type="text"
-              name="spo2"
-              value={formData.spo2}
-              onChange={handleChange}
-              placeholder="%"
-            />
+            SpO2 (%):
+            <input type="text" name="spo2" value={formData.spo2} onChange={handleChange} placeholder="%" />
           </label>
         </div>
         <div className="vital-signs-row">
           <label>
-            GCS:
-            <input
-              type="text"
-              name="gcs"
-              value={formData.gcs}
-              onChange={handleChange}
-              placeholder="/15"
-            />
+            GCS (/15):
+            <input type="text" name="gcs" value={formData.gcs} onChange={handleChange} placeholder="/15" />
           </label>
         </div>
         <div className="vital-signs-row">
           <label>
-            GRBS:
-            <input
-              type="text"
-              name="grbs"
-              value={formData.grbs}
-              onChange={handleChange}
-              placeholder="mg/dl"
-            />
+            GRBS (mg/dl):
+            <input type="text" name="grbs" value={formData.grbs} onChange={handleChange} placeholder="mg/dl" />
           </label>
         </div>
 
         <h3>Section 10: Summary Discussion</h3>
         <label>
           Special Care Areas:
-          <textarea
-            name="specialCareAreas"
-            value={formData.specialCareAreas}
-            onChange={handleChange}
-          ></textarea>
+          <textarea name="specialCareAreas" value={formData.specialCareAreas} onChange={handleChange}></textarea>
         </label>
         <label>
           Summary Discussion:
-          <textarea
-            name="summaryDiscussion"
-            value={formData.summaryDiscussion}
-            onChange={handleChange}
-          ></textarea>
+          <textarea name="summaryDiscussion" value={formData.summaryDiscussion} onChange={handleChange}></textarea>
         </label>
         <label>
           Medicine Changes:
-          <textarea
-            name="medicineChanges"
-            value={formData.medicineChanges}
-            onChange={handleChange}
-          ></textarea>
+          <textarea name="medicineChanges" value={formData.medicineChanges} onChange={handleChange}></textarea>
         </label>
         <label>
           Other Activities:
-          <textarea
-            name="otherActivities"
-            value={formData.otherActivities}
-            onChange={handleChange}
-          ></textarea>
+          <textarea name="otherActivities" value={formData.otherActivities} onChange={handleChange}></textarea>
         </label>
         <label>
           Home Care Plan:
-          <select
-            name="homeCarePlan"
-            value={formData.homeCarePlan}
-            onChange={handleChange}
-          >
-            <option value="def">DEF</option>
+          <select name="homeCarePlan" value={formData.homeCarePlan} onChange={handleChange}>
+          <option value="NILL">NILL</option>
             <option value="daily_7_1">Daily (7/1)</option>
             <option value="1_day_1_week_1_1">1 Day 1 Week (1/1)</option>
             <option value="2_day_1_week_2_1">2 Day 1 Week (2/1)</option>
@@ -760,28 +589,17 @@ const UpdateNHCE = () => {
         </label>
         <label>
           Home Care Type:
-          <select
-            name="homeCareType"
-            value={formData.homeCareType}
-            onChange={handleChange}
-          >
-            <option value="nhc">NHC</option>
-            <option value="dhc">DHC</option>
-          </select>
+     
         </label>
         <label>
           Consultation:
-          <textarea
-            name="consultation"
-            value={formData.consultation}
-            onChange={handleChange}
-          ></textarea>
+          <textarea name="consultation" value={formData.consultation} onChange={handleChange}></textarea>
         </label>
-        <button
-          type="submit"
-          className="UpdateNHC-submit-btn"
-          disabled={isSubmitting}
-        >
+        <label>
+            FORM TYPE:
+            <input type="text" name="formType" value={formData.formType} onChange={handleChange} placeholder="mg/dl" />
+          </label>
+        <button type="submit" className="UpdateNHC-submit-btn" disabled={isSubmitting}>
           {isSubmitting ? "Updating..." : "Update Report"}
         </button>
       </form>

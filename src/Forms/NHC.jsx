@@ -4,7 +4,7 @@ import { db } from "../Firebase/config";
 import { collection, query, where, getDocs, addDoc } from "firebase/firestore";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import "./NHC.css"; // New CSS file for styling
+import "./NHCE.css"; // New CSS file for styling
 
 const NHC = () => {
   const { patientId } = useParams();
@@ -24,6 +24,7 @@ const NHC = () => {
     complimentaryRx: "nill",
     food: "Good",
     drink: "Good",
+    breath:"Normal",
     pee: "Good",
     pop: "Good",
     sleep: "Good",
@@ -32,19 +33,20 @@ const NHC = () => {
     sexuality: "nill",
     exercise: "No",
     exerciseFrequency: "daily",
-    exerciseTime: "",
-    exerciseLocation: "in",
+    exercisenotes: "",
     entertainmentTime: "",
     houseCleanliness: "clean",
     surroundingsCleanliness: "clean",
     bedroomCleanliness: "clean",
     bedCleanliness: "clean",
     dressCleanliness: "clean",
+    addmoresurroundings:"",
     generalStatus: "stable",
     patientCurrently: "sitting",
     memoryStatus: "remember",
     responseStatus: "good",
     activityScore: "1",
+    addmoregeneral:"",
     scalp: "Good",
     hair: "Good",
     skin: "Good",
@@ -59,7 +61,8 @@ const NHC = () => {
     summaryDiscussion: "",
     medicineChanges: "",
     otherActivities: "",
-    homeCarePlan: "def",
+    homeCarePlan: "",
+    
     consultation: "",
     formType: "NHC",
     submittedAt: "",
@@ -71,7 +74,7 @@ const NHC = () => {
     pulse: "",
     pulseType: "R",
     temperature: "",
-    temperatureType: "O",
+    temperatureType: "NILL",
     spo2: "",
     gcs: "",
     grbs: "",
@@ -146,6 +149,7 @@ const NHC = () => {
         badHabit: "No",
         complimentaryRx: "nill",
         food: "Good",
+        breath:"Normal",
         drink: "Good",
         pee: "Good",
         pop: "Good",
@@ -155,19 +159,20 @@ const NHC = () => {
         sexuality: "nill",
         exercise: "No",
         exerciseFrequency: "daily",
-        exerciseTime: "",
-        exerciseLocation: "in",
+        exercisenotes: "",
         entertainmentTime: "",
         houseCleanliness: "clean",
         surroundingsCleanliness: "clean",
         bedroomCleanliness: "clean",
         bedCleanliness: "clean",
         dressCleanliness: "clean",
+        addmoresurroundings:"",
         generalStatus: "stable",
         patientCurrently: "sitting",
         memoryStatus: "remember",
         responseStatus: "good",
         activityScore: "1",
+        addmoregeneral:"",
         scalp: "Good",
         hair: "Good",
         skin: "Good",
@@ -183,6 +188,7 @@ const NHC = () => {
         medicineChanges: "",
         otherActivities: "",
         homeCarePlan: "",
+        
         consultation: "",
         formType: "NHC",
         submittedAt: "",
@@ -220,14 +226,13 @@ const NHC = () => {
       <button className="NHCAdd-back-btn" onClick={() => navigate(-1)}>
         <i className="fa fa-arrow-left"></i> Back
       </button>
-
-      <h2 className="NHCAdd-title">NHC Details for Patient ID: {patientId}</h2>
+      <h2 className="NHCAdd-title">NHC REPORT</h2>
       {patientData ? (
         <div className="NHCAdd-patientInfo">
-           <h3 style={{color:"black"}}>Patient NHC</h3>
+          
+          <h3><strong>Reg:</strong> {patientData.registernumber}</h3>
           <h3><strong>Name:</strong> {patientData.name}</h3>
-          <h3><strong>RegisterNo:</strong> {patientData.registernumber}</h3>
-          <h3><strong>Address:</strong> {patientData.address}</h3>
+          <h3 className="mb-5"><strong>Address:</strong> {patientData.address}</h3>
         </div>
       ) : (
         <div className="loading-container">
@@ -238,7 +243,6 @@ const NHC = () => {
         />
       </div>
       )}
-
       <form onSubmit={handleSubmit} className="NHCAdd-form">
         {/* Form sections go here */}
         {/* Example for one section */}
@@ -248,7 +252,7 @@ const NHC = () => {
           <input type="date" name="date" value={formData.date} onChange={handleChange} />
         </label>
         <label>
-          Team 1:
+          Team Member 1:
           <select name="team1" value={formData.team1} onChange={handleChange}>
             <option value="Shameema">Shameema</option>
             <option value="Divya">Divya</option>
@@ -258,14 +262,20 @@ const NHC = () => {
         </label>
         {[2, 3, 4].map((num) => (
           <label key={num}>
-            Team {num}:
+            Team Member {num}:
             <input type="text" name={`team${num}`} value={formData[`team${num}`]} onChange={handleChange} />
           </label>
         ))}
         <label>
-          First Impression:
-          <input type="text" name="firstImpression" value={formData.firstImpression} onChange={handleChange} />
-        </label>
+  First Impression:
+  <textarea
+    name="firstImpression"
+    value={formData.firstImpression}
+    onChange={handleChange}
+    rows="5"
+  />
+</label>
+
         <label>
           Patient Awareness:
           <select name="patientAwareness" value={formData.patientAwareness} onChange={handleChange}>
@@ -311,19 +321,33 @@ const NHC = () => {
         </label>
 
         <h3>Section 2: Basic Matters</h3>
-        {["food", "drink", "pee", "pop", "sleep", "selfHygiene"].map((field) => (
-          <label key={field}>
-            {field.charAt(0).toUpperCase() + field.slice(1)}:
-            <select name={field} value={formData[field]} onChange={handleChange}>
-              <option value="Good">Good</option>
-              <option value="Bad">Bad</option>
-              <option value="Average">Average</option>
-              <option value="Satisfy">Satisfy</option>
-            </select>
-          </label>
-        ))}
+        {["food", "drink", "pee", "pop", "sleep", "selfHygiene", "breath"].map((field) => (
+  <label key={field}>
+    {field === "pee" ? "Pee (Urine)" : field === "pop" ? "Pop (ശോധന)" : field.charAt(0).toUpperCase() + field.slice(1)}:
+    <select name={field} value={formData[field]} onChange={handleChange}>
+      {field === "breath" ? (
+        <>
+          <option value="Normal">Normal</option>
+          <option value="High">High</option>
+          <option value="Low">Low</option>
+          <option value="Varying">Varying</option>
+        </>
+      ) : (
+        <>
+          <option value="Good">Good</option>
+          <option value="Bad">Bad</option>
+          <option value="Average">Average</option>
+          <option value="Satisfy">Satisfy</option>
+        </>
+      )}
+    </select>
+  </label>
+))}
+
+
+
         <label>
-          Additional Notes:
+          Additional Notes  for Basic Matters:
           <textarea name="basicMattersNotes" value={formData.basicMattersNotes} onChange={handleChange}></textarea>
         </label>
         <label>
@@ -351,26 +375,32 @@ const NHC = () => {
           </select>
         </label>
         <label>
-          Time of Exercise:
-          <input type="text" name="exerciseTime" value={formData.exerciseTime} onChange={handleChange} />
-        </label>
-        <label>
-          Location:
-          <select name="exerciseLocation" value={formData.exerciseLocation} onChange={handleChange}>
-            <option value="in">In</option>
-            <option value="out">Out</option>
-          </select>
-        </label>
+        Additional Notes About Exercise:
+  <textarea
+    name="exercisenotes"
+    value={formData.exercisenotes}
+    onChange={handleChange}
+    rows="3"
+  />
+</label>
+
+  
 
         <h3>Section 4: Habits</h3>
         <label>
-          Entertainment Time Spending:
-          <input type="text" name="entertainmentTime" value={formData.entertainmentTime} onChange={handleChange} />
-        </label>
+  Entertainment Time Spending:
+  <textarea
+    name="entertainmentTime"
+    value={formData.entertainmentTime}
+    onChange={handleChange}
+    rows="3"
+  />
+</label>
 
 
 
-        <h3>Section 6: Surroundings</h3>
+
+        <h3>Section 5: Surroundings</h3>
         {["house", "surroundings", "bedroom", "bed", "dress"].map((field) => (
           <label key={field}>
             {field.charAt(0).toUpperCase() + field.slice(1)} Cleanliness:
@@ -381,8 +411,16 @@ const NHC = () => {
             </select>
           </label>
         ))}
-
-        <h3>Section 7: General Matters</h3>
+                <label>
+                Additional Notes About Surroundings:
+  <textarea
+    name="addmoresurroundings"
+    value={formData.addmoresurroundings}
+    onChange={handleChange}
+    rows="3"
+  />
+</label>
+        <h3>Section 6: General Matters</h3>
         <label>
           General Status:
           <select name="generalStatus" value={formData.generalStatus} onChange={handleChange}>
@@ -405,6 +443,7 @@ const NHC = () => {
 <option value="walking_house_with_help">Walking (House) with Help</option>
 <option value="walking_out_with_help">Walking (Out) with Help</option>
 <option value="walking_out_self">Walking (Out) Self</option>
+            
           </select>
         </label>
         <label>
@@ -413,7 +452,8 @@ const NHC = () => {
           <option value="remember">Remember</option>
     <option value="not-remember">Do Not Remember</option>
     <option value="sometimes">Sometimes</option>
-    <option value="something">Something</option> 
+    <option value="something">Something</option>  
+             
           </select>
         </label>
         <label>
@@ -428,21 +468,28 @@ const NHC = () => {
     <option value="respond-with-eye">Respond with Eye</option>
     <option value="respond-with-head">Respond with Head</option>
     <option value="respond-with-sound">Respond with Sound</option>
- 
           </select>
         </label>
         <label>
           Activity Score:
           <select name="activityScore" value={formData.activityScore} onChange={handleChange}>
-          <option value="1">1</option>
+            <option value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>
             <option value="4">4</option>
             <option value="5">5</option>
           </select>
         </label>
-
-        <h3>Section 8: Head to Foot Checkup</h3>
+        <label>
+                Additional Notes About General Matters:
+  <textarea
+    name="addmoregeneral"
+    value={formData.addmoregeneral}
+    onChange={handleChange}
+    rows="3"
+  />
+</label>
+        <h3>Section 7: Head to Foot Checkup</h3>
         {["scalp", "hair", "skin", "nails", "mouth", "perineum", "hiddenSpaces", "pressureSpaces", "joints"].map((field) => (
           <label key={field}>
             {field.charAt(0).toUpperCase() + field.slice(1)}:
@@ -481,6 +528,7 @@ const NHC = () => {
                   <option value="Unclean">Unclean</option>
                   <option value="Oral candidiasis">Oral candidiasis</option>
                   <option value="Glotitis">Glotitis</option>
+                  <option value="Stomatitis">Stomatitis</option>
                 </>
               )}
               {field === "perineum" && (
@@ -523,7 +571,7 @@ const NHC = () => {
           </label>
         ))}
         <label>
-          Additional Notes:
+          Additional Notes For Head to Foot Checkup:
           <textarea name="headToFootNotes" value={formData.headToFootNotes} onChange={handleChange}></textarea>
         </label>
 
@@ -554,7 +602,7 @@ const NHC = () => {
         </div>
         <div className="vital-signs-row">
           <label>
-            RR:
+            RR (Mt):
             <input type="text" name="rr" value={formData.rr} onChange={handleChange} placeholder="Mt" />
           </label>
           <label>
@@ -567,7 +615,7 @@ const NHC = () => {
         </div>
         <div className="vital-signs-row">
           <label>
-            Pulse:
+            Pulse: (Mt)
             <input type="text" name="pulse" value={formData.pulse} onChange={handleChange} placeholder="Mt" />
           </label>
           <label>
@@ -580,7 +628,7 @@ const NHC = () => {
         </div>
         <div className="vital-signs-row">
           <label>
-            Temperature:
+            Temperature (°F):
             <input type="text" name="temperature" value={formData.temperature} onChange={handleChange} placeholder="Fahrenheit" />
           </label>
           <label>
@@ -594,19 +642,19 @@ const NHC = () => {
         </div>
         <div className="vital-signs-row">
           <label>
-            SpO2:
+            SpO2 (%):
             <input type="text" name="spo2" value={formData.spo2} onChange={handleChange} placeholder="%" />
           </label>
         </div>
         <div className="vital-signs-row">
           <label>
-            GCS:
+            GCS (/15):
             <input type="text" name="gcs" value={formData.gcs} onChange={handleChange} placeholder="/15" />
           </label>
         </div>
         <div className="vital-signs-row">
           <label>
-            GRBS:
+            GRBS (mg/dl):
             <input type="text" name="grbs" value={formData.grbs} onChange={handleChange} placeholder="mg/dl" />
           </label>
         </div>
@@ -631,7 +679,7 @@ const NHC = () => {
         <label>
           Home Care Plan:
           <select name="homeCarePlan" value={formData.homeCarePlan} onChange={handleChange}>
-            
+         
             <option value="daily_7_1">Daily (7/1)</option>
             <option value="1_day_1_week_1_1">1 Day 1 Week (1/1)</option>
             <option value="2_day_1_week_2_1">2 Day 1 Week (2/1)</option>
@@ -642,11 +690,11 @@ const NHC = () => {
             <option value="1_day_2_month_1_8">1 Day 2 Month (1/8)</option>
             <option value="1_day_3_month_1_12">1 Day 3 Month (1/12)</option>
             <option value="sos">SOS</option>
-
           </select>
         </label>
+   
         <label>
-          Consultation:
+          Docter Consultation:
           <textarea name="consultation" value={formData.consultation} onChange={handleChange}></textarea>
         </label>
 

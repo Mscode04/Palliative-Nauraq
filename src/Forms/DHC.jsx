@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { db } from "../Firebase/config";
 import { collection, query, where, getDocs, addDoc } from "firebase/firestore";
-import { ToastContainer, toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import "./DHCAdd.css";
+import "./NHCE.css"; // New CSS file for styling
 
 const DHC = () => {
   const { patientId } = useParams();
@@ -23,6 +23,7 @@ const DHC = () => {
     badHabit: "No",
     complimentaryRx: "nill",
     food: "Good",
+    breath:"Normal",
     drink: "Good",
     pee: "Good",
     pop: "Good",
@@ -32,21 +33,20 @@ const DHC = () => {
     sexuality: "nill",
     exercise: "No",
     exerciseFrequency: "daily",
-    exerciseTime: "",
-    exerciseLocation: "in",
+    exercisenotes: "",
     entertainmentTime: "",
-    patientAwarenessDetails: "",
-    caretakerAwarenessDetails: "",
     houseCleanliness: "clean",
     surroundingsCleanliness: "clean",
     bedroomCleanliness: "clean",
     bedCleanliness: "clean",
     dressCleanliness: "clean",
+    addmoresurroundings:"",
     generalStatus: "stable",
     patientCurrently: "sitting",
     memoryStatus: "remember",
     responseStatus: "good",
     activityScore: "1",
+    addmoregeneral:"",
     scalp: "Good",
     hair: "Good",
     skin: "Good",
@@ -59,23 +59,22 @@ const DHC = () => {
     headToFootNotes: "",
     specialCareAreas: "",
     summaryDiscussion: "",
-    medicalExamination: "",
     medicineChanges: "",
     otherActivities: "",
-    homeCarePlan: "def",
-    homeCareType: "dhc",
+    homeCarePlan: "",
+    
     consultation: "",
     formType: "DHC",
     submittedAt: "",
     bp: "",
-    ulLl: "NUll", 
-    position: "Null", 
+    ulLl: "Null",
+    position: "Null",
     rr: "",
     rrType: "R",
     pulse: "",
     pulseType: "R",
     temperature: "",
-    temperatureType: "O",
+    temperatureType: "NILL",
     spo2: "",
     gcs: "",
     grbs: "",
@@ -91,7 +90,6 @@ const DHC = () => {
         if (!querySnapshot.empty) {
           const data = querySnapshot.docs[0].data();
           setPatientData(data);
-          console.log("Patient data fetched:", data);
         } else {
           console.error("No patient document found with patientId:", patientId);
         }
@@ -126,22 +124,17 @@ const DHC = () => {
         submittedAt: timestamp,
       };
 
-      const docRef = await addDoc(collection(db, "Reports"), reportData);
+      await addDoc(collection(db, "Reports"), reportData);
 
-      console.log("Document written with ID: ", docRef.id);
-      toast.success("DHC report submitted successfully!", {
+      toast.success("Report submitted successfully!", {
         position: "top-center",
-        autoClose: 3000,
+        autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
+        onClose: () => navigate(-1),
       });
-
-      // Redirect to /patient/:patientId after 3 seconds
-      setTimeout(() => {
-        navigate(`/main/patient/${patientId}`);
-      }, 3000);
 
       setFormData({
         date: "",
@@ -153,31 +146,33 @@ const DHC = () => {
         patientAwareness: "Yes",
         caretakerAwareness: "Yes",
         extraDetailsAwareness: "",
-        badHabit: "No", 
-        moreAboutBadHabits: "",
+        badHabit: "No",
         complimentaryRx: "nill",
         food: "Good",
+        breath:"Normal",
         drink: "Good",
         pee: "Good",
         pop: "Good",
         sleep: "Good",
         selfHygiene: "Good",
+        basicMattersNotes: "",
         sexuality: "nill",
         exercise: "No",
         exerciseFrequency: "daily",
-        exerciseTime: "",
-        exerciseLocation: "in",
+        exercisenotes: "",
         entertainmentTime: "",
         houseCleanliness: "clean",
         surroundingsCleanliness: "clean",
         bedroomCleanliness: "clean",
         bedCleanliness: "clean",
         dressCleanliness: "clean",
+        addmoresurroundings:"",
         generalStatus: "stable",
         patientCurrently: "sitting",
         memoryStatus: "remember",
         responseStatus: "good",
         activityScore: "1",
+        addmoregeneral:"",
         scalp: "Good",
         hair: "Good",
         skin: "Good",
@@ -187,9 +182,9 @@ const DHC = () => {
         hiddenSpaces: "Good",
         pressureSpaces: "Good",
         joints: "Good",
+        headToFootNotes: "",
         specialCareAreas: "",
         summaryDiscussion: "",
-        medicalExamination: "",
         medicineChanges: "",
         otherActivities: "",
         homeCarePlan: "",
@@ -198,8 +193,8 @@ const DHC = () => {
         formType: "DHC",
         submittedAt: "",
         bp: "",
-        ulLl: "UL", 
-        position: "Null", 
+        ulLl: "Null",
+        position: "Null",
         rr: "",
         rrType: "R",
         pulse: "",
@@ -226,17 +221,18 @@ const DHC = () => {
   };
 
   return (
-    <div className="DHCAdd-container">
-      <button className="DHCAdd-backButton" onClick={() => navigate(-1)}>
-        &larr; Back
+    <div className="NHCAdd-container">
+      <ToastContainer />
+      <button className="NHCAdd-back-btn" onClick={() => navigate(-1)}>
+        <i className="fa fa-arrow-left"></i> Back
       </button>
-
-      <h2 className="DHCAdd-title">DHC Details for Patient ID: {patientId}</h2>
+      <h2 className="NHCAdd-title">DHC REPORT</h2>
       {patientData ? (
-        <div className="DHCAdd-patientInfo">
-           <h3 style={{color:"black"}}>Patient DHC</h3>
+        <div className="NHCAdd-patientInfo">
+          
+          <h3><strong>Reg:</strong> {patientData.registernumber}</h3>
           <h3><strong>Name:</strong> {patientData.name}</h3>
-          <h3><strong>Address:</strong> {patientData.address}</h3>
+          <h3 className="mb-5"><strong>Address:</strong> {patientData.address}</h3>
         </div>
       ) : (
         <div className="loading-container">
@@ -247,176 +243,192 @@ const DHC = () => {
         />
       </div>
       )}
-
-      <form onSubmit={handleSubmit} className="DHCAdd-form">
+      <form onSubmit={handleSubmit} className="NHCAdd-form">
+        {/* Form sections go here */}
+        {/* Example for one section */}
         <h3>Section 1: General Details</h3>
-        <div className="DHCAdd-field">
-          <label>Date:</label>
-          <input type="date" name="date" value={formData.date} onChange={handleChange} required />
-        </div>
-        <div className="DHCAdd-field">
-          <label>Team 1:</label>
-          <select name="team1" value={formData.team1} onChange={handleChange} required>
+        <label>
+          Date:
+          <input type="date" name="date" value={formData.date} onChange={handleChange} />
+        </label>
+        <label>
+          Team Member 1:
+          <select name="team1" value={formData.team1} onChange={handleChange}>
             <option value="Shameema">Shameema</option>
             <option value="Divya">Divya</option>
             <option value="Haseen">Haseen</option>
             <option value="Null">Null</option>
           </select>
-        </div>
+        </label>
         {[2, 3, 4].map((num) => (
-          <div className="DHCAdd-field" key={num}>
-            <label>Team {num}:</label>
+          <label key={num}>
+            Team Member {num}:
             <input type="text" name={`team${num}`} value={formData[`team${num}`]} onChange={handleChange} />
-          </div>
+          </label>
         ))}
-        <div className="DHCAdd-field">
-          <label>First Impression:</label>
-          <input type="text" name="firstImpression" value={formData.firstImpression} onChange={handleChange} />
-        </div>
-        <div className="DHCAdd-field">
-          <label>Patient Awareness:</label>
-          <select name="patientAwareness" value={formData.patientAwareness} onChange={handleChange} required>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
-          </select>
-        </div>
-        <div className="DHCAdd-field">
-          <label>Caretaker Awareness:</label>
-          <select name="caretakerAwareness" value={formData.caretakerAwareness} onChange={handleChange} required>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
-          </select>
-        </div>
-        <div className="DHCAdd-field">
-          <label>Extra Details about Awareness:</label>
-          <textarea name="extraDetailsAwareness" value={formData.extraDetailsAwareness} onChange={handleChange}></textarea>
-        </div>
-        <div className="DHCAdd-field">
-  {/* Bad Habit Dropdown */}
-  <label>Bad Habit:</label>
-  <select name="badHabit" value={formData.badHabit} onChange={handleChange} required>
-    <option value="No">No</option>
-    <option value="Yes">Yes</option>
-  </select>
+        <label>
+  First Impression:
+  <textarea
+    name="firstImpression"
+    value={formData.firstImpression}
+    onChange={handleChange}
+    rows="5"
+  />
+</label>
 
-  {/* Conditionally Render "More About Bad Habits" Field */}
-  {formData.badHabit === "Yes" && (
-    <div className="DHCAdd-field">
-      <label>More About Bad Habits:</label>
-      <input
-        type="text"
-        name="moreAboutBadHabits"
-        value={formData.moreAboutBadHabits}
-        onChange={handleChange}
-        placeholder="Describe the bad habit..."
-        required
-      />
-    </div>
-  )}
-</div>
-        <div className="DHCAdd-field">
-          <label>Complimentary Rx:</label>
-          <select name="complimentaryRx" value={formData.complimentaryRx} onChange={handleChange} required>
+        <label>
+          Patient Awareness:
+          <select name="patientAwareness" value={formData.patientAwareness} onChange={handleChange}>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+          </select>
+        </label>
+        <label>
+          Caretaker Awareness:
+          <select name="caretakerAwareness" value={formData.caretakerAwareness} onChange={handleChange}>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+          </select>
+        </label>
+        <label>
+          Extra Details about Awareness:
+          <textarea name="extraDetailsAwareness" value={formData.extraDetailsAwareness} onChange={handleChange}></textarea>
+        </label>
+        <label>
+          Bad Habit:
+          <select name="badHabit" value={formData.badHabit} onChange={handleChange}>
+            <option value="No">No</option>
+            <option value="Yes">Yes</option>
+          </select>
+        </label>
+        {formData.badHabit === "Yes" && (
+          <label>
+            More About Bad Habits:
+            <input type="text" name="moreAboutBadHabits" value={formData.moreAboutBadHabits} onChange={handleChange} />
+          </label>
+        )}
+        <label>
+          Complimentary Rx:
+          <select name="complimentaryRx" value={formData.complimentaryRx} onChange={handleChange}>
             <option value="nill">Nill</option>
             <option value="ay">AY</option>
             <option value="h">H</option>
             <option value="u">U</option>
-            <option value="sd">Sd</option>
+            <option value="sd">SD</option>
             <option value="n">N</option>
             <option value="o">O</option>
           </select>
-        </div>
+        </label>
 
         <h3>Section 2: Basic Matters</h3>
-{["food", "drink", "pee", "pop", "sleep", "selfHygiene"].map((field) => (
-  <div className="DHCAdd-field" key={field}>
-    <label>{field.charAt(0).toUpperCase() + field.slice(1)}:</label>
-    <select name={field} value={formData[field]} onChange={handleChange} required>
-      <option value="Good">Good</option>
-      <option value="Bad">Bad</option>
-      <option value="Average">Average</option>
-      <option value="Satisfy">Satisfy</option> {/* Added for all fields */}
+        {["food", "drink", "pee", "pop", "sleep", "selfHygiene", "breath"].map((field) => (
+  <label key={field}>
+    {field === "pee" ? "Pee (Urine)" : field === "pop" ? "Pop (ശോധന)" : field.charAt(0).toUpperCase() + field.slice(1)}:
+    <select name={field} value={formData[field]} onChange={handleChange}>
+      {field === "breath" ? (
+        <>
+          <option value="Normal">Normal</option>
+          <option value="High">High</option>
+          <option value="Low">Low</option>
+          <option value="Varying">Varying</option>
+        </>
+      ) : (
+        <>
+          <option value="Good">Good</option>
+          <option value="Bad">Bad</option>
+          <option value="Average">Average</option>
+          <option value="Satisfy">Satisfy</option>
+        </>
+      )}
     </select>
-  </div>
+  </label>
 ))}
 
-{/* New Text Field for Additional Notes */}
-<div className="DHCAdd-field">
-  <label>Additional Notes:</label>
-  <textarea
-    name="basicMattersNotes"
-    value={formData.basicMattersNotes}
-    onChange={handleChange}
-    placeholder="Enter any additional notes or observations..."
-    rows={4} // Adjust the number of rows as needed
-  />
-</div>
-        <div className="DHCAdd-field">
-          <label>Sexuality:</label>
-          <select name="sexuality" value={formData.sexuality} onChange={handleChange} required>
+        <label>
+          Additional Notes  for Basic Matters:
+          <textarea name="basicMattersNotes" value={formData.basicMattersNotes} onChange={handleChange}></textarea>
+        </label>
+        <label>
+          Sexuality:
+          <select name="sexuality" value={formData.sexuality} onChange={handleChange}>
             <option value="nill">Nill</option>
             <option value="yes">Yes</option>
           </select>
-        </div>
+        </label>
 
         <h3>Section 3: Exercise</h3>
-        <div className="DHCAdd-field">
-          <label>Exercise:</label>
-          <select name="exercise" value={formData.exercise} onChange={handleChange} required>
+        <label>
+          Exercise:
+          <select name="exercise" value={formData.exercise} onChange={handleChange}>
             <option value="No">No</option>
             <option value="Yes">Yes</option>
           </select>
-        </div>
-        <div className="DHCAdd-field">
-          <label>Frequency:</label>
-          <select name="exerciseFrequency" value={formData.exerciseFrequency} onChange={handleChange} required>
+        </label>
+        <label>
+          Frequency:
+          <select name="exerciseFrequency" value={formData.exerciseFrequency} onChange={handleChange}>
             <option value="daily">Daily</option>
             <option value="weekly once">Weekly Once</option>
             <option value="sometimes">Sometimes</option>
           </select>
-        </div>
-        <div className="DHCAdd-field">
-          <label>Time of Exercise:</label>
-          <input type="text" name="exerciseTime" value={formData.exerciseTime} onChange={handleChange} />
-        </div>
-        <div className="DHCAdd-field">
-          <label>Location:</label>
-          <select name="exerciseLocation" value={formData.exerciseLocation} onChange={handleChange} required>
-            <option value="in">In</option>
-            <option value="out">Out</option>
-          </select>
-        </div>
+        </label>
+        <label>
+        Additional Notes About Exercise:
+  <textarea
+    name="exercisenotes"
+    value={formData.exercisenotes}
+    onChange={handleChange}
+    rows="3"
+  />
+</label>
+
+  
 
         <h3>Section 4: Habits</h3>
-        <div className="DHCAdd-field">
-          <label>Entertainment / Time Spending:</label>
-          <input type="text" name="entertainmentTime" value={formData.entertainmentTime} onChange={handleChange} />
-        </div>
+        <label>
+  Entertainment Time Spending:
+  <textarea
+    name="entertainmentTime"
+    value={formData.entertainmentTime}
+    onChange={handleChange}
+    rows="3"
+  />
+</label>
 
 
-        <h3>Section 6: Surroundings</h3>
+
+
+        <h3>Section 5: Surroundings</h3>
         {["house", "surroundings", "bedroom", "bed", "dress"].map((field) => (
-          <div className="DHCAdd-field" key={field}>
-            <label>{field.charAt(0).toUpperCase() + field.slice(1)} Cleanliness:</label>
-            <select name={`${field}Cleanliness`} value={formData[`${field}Cleanliness`]} onChange={handleChange} required>
+          <label key={field}>
+            {field.charAt(0).toUpperCase() + field.slice(1)} Cleanliness:
+            <select name={`${field}Cleanliness`} value={formData[`${field}Cleanliness`]} onChange={handleChange}>
               <option value="clean">Clean</option>
               <option value="unclean">Unclean</option>
               <option value="average">Average</option>
             </select>
-          </div>
+          </label>
         ))}
-
-        <h3>Section 7: General Matters</h3>
-        <div className="DHCAdd-field">
-          <label>General Status:</label>
-          <select name="generalStatus" value={formData.generalStatus} onChange={handleChange} required>
+                <label>
+                Additional Notes About Surroundings:
+  <textarea
+    name="addmoresurroundings"
+    value={formData.addmoresurroundings}
+    onChange={handleChange}
+    rows="3"
+  />
+</label>
+        <h3>Section 6: General Matters</h3>
+        <label>
+          General Status:
+          <select name="generalStatus" value={formData.generalStatus} onChange={handleChange}>
             <option value="stable">Stable</option>
             <option value="unstable">Unstable</option>
           </select>
-        </div>
-        <div className="DHCAdd-field">
-          <label>Patient Currently:</label>
-          <select name="patientCurrently" value={formData.patientCurrently} onChange={handleChange} required>
+        </label>
+        <label>
+          Patient Currently:
+          <select name="patientCurrently" value={formData.patientCurrently} onChange={handleChange}>
           <option value="lying">Lying</option>
 <option value="standing">Standing</option>
 <option value="sitting">Sitting</option>
@@ -429,20 +441,22 @@ const DHC = () => {
 <option value="walking_house_with_help">Walking (House) with Help</option>
 <option value="walking_out_with_help">Walking (Out) with Help</option>
 <option value="walking_out_self">Walking (Out) Self</option>
+            
           </select>
-        </div>
-        <div className="DHCAdd-field">
-          <label>Memory Status:</label>
-          <select name="memoryStatus" value={formData.memoryStatus} onChange={handleChange} required>
+        </label>
+        <label>
+          Memory Status:
+          <select name="memoryStatus" value={formData.memoryStatus} onChange={handleChange}>
           <option value="remember">Remember</option>
     <option value="not-remember">Do Not Remember</option>
     <option value="sometimes">Sometimes</option>
-    <option value="something">Something</option> 
+    <option value="something">Something</option>  
+             
           </select>
-        </div>
-        <div className="DHCAdd-field">
-          <label>Response Status:</label>
-          <select name="responseStatus" value={formData.responseStatus} onChange={handleChange} required>
+        </label>
+        <label>
+          Response Status:
+          <select name="responseStatus" value={formData.responseStatus} onChange={handleChange}>
           <option value="full-respond">Full Respond</option>
     <option value="slightly-respond">Slightly Respond</option>
     <option value="not-respond">Not Respond</option>
@@ -453,225 +467,217 @@ const DHC = () => {
     <option value="respond-with-head">Respond with Head</option>
     <option value="respond-with-sound">Respond with Sound</option>
           </select>
-        </div>
-        <div className="DHCAdd-field">
-          <label>Activity Score:</label>
-          <select name="activityScore" value={formData.activityScore} onChange={handleChange} required>
-          <option value="1">1</option>
+        </label>
+        <label>
+          Activity Score:
+          <select name="activityScore" value={formData.activityScore} onChange={handleChange}>
+            <option value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>
             <option value="4">4</option>
             <option value="5">5</option>
           </select>
-        </div>
-
-        <h3>Section 8: Head to Foot Checkup</h3>
-{["scalp", "hair", "skin", "nails", "mouth", "perineum", "hiddenSpaces", "pressureSpaces", "joints"].map((field) => (
-  <div className="DHCAdd-field" key={field}>
-    <label>{field.charAt(0).toUpperCase() + field.slice(1)}:</label>
-    <select name={field} value={formData[field]} onChange={handleChange} required>
-      {field === "skin" && (
-        <>
-          <option value="Dry">Dry</option>
-          <option value="Oily">Oily</option>
-          <option value="Combination">Combination</option>
-          <option value="Sensitive">Sensitive</option>
-          <option value="Normal">Normal</option>
-          <option value="Wrinkled">Wrinkled</option>
-        </>
-      )}
-      {field === "hair" && (
-        <>
-          <option value="Messy Hair">Messy Hair</option>
-          <option value="Well maintain">Well maintain</option>
-          <option value="Clean">Clean</option>
-          <option value="Unclean">Unclean</option>
-          <option value="Normal">Normal</option>
-        </>
-      )}
-      {field === "nails" && (
-        <>
-          <option value="Clean">Clean</option>
-          <option value="Unclean">Unclean</option>
-          <option value="Well maintain">Well maintain</option>
-          <option value="Normal">Normal</option>
-          <option value="Not maintain">Not maintain</option>
-        </>
-      )}
-      {field === "mouth" && (
-        <>
-          <option value="Clean">Clean</option>
-          <option value="Unclean">Unclean</option>
-          <option value="Oral candidiasis">Oral candidiasis</option>
-          <option value="Glotitis">Glotitis</option>
-        </>
-      )}
-      {field === "perineum" && (
-        <>
-          <option value="Clean">Clean</option>
-          <option value="Unclean">Unclean</option>
-          <option value="Normal">Normal</option>
-        </>
-      )}
-      {field === "hiddenSpaces" && (
-        <>
-          <option value="Clean">Clean</option>
-          <option value="Unclean">Unclean</option>
-          <option value="Normal">Normal</option>
-        </>
-      )}
-      {field === "pressureSpaces" && (
-        <>
-          <option value="Clean">Clean</option>
-          <option value="Unclean">Unclean</option>
-          <option value="Normal">Normal</option>
-        </>
-      )}
-      {field === "joints" && (
-        <>
-          <option value="Movable">Movable</option>
-          <option value="Slightly movable">Slightly movable</option>
-          <option value="Fixed">Fixed</option>
-          <option value="Freely movable">Freely movable</option>
-        </>
-      )}
-      {!["skin", "hair", "nails", "mouth", "perineum", "hiddenSpaces", "pressureSpaces", "joints"].includes(field) && (
-        <>
-                          <option value="Clean">Clean </option>
+        </label>
+        <label>
+                Additional Notes About General Matters:
+  <textarea
+    name="addmoregeneral"
+    value={formData.addmoregeneral}
+    onChange={handleChange}
+    rows="3"
+  />
+</label>
+        <h3>Section 7: Head to Foot Checkup</h3>
+        {["scalp", "hair", "skin", "nails", "mouth", "perineum", "hiddenSpaces", "pressureSpaces", "joints"].map((field) => (
+          <label key={field}>
+            {field.charAt(0).toUpperCase() + field.slice(1)}:
+            <select name={field} value={formData[field]} onChange={handleChange}>
+              {field === "skin" && (
+                <>
+                  <option value="Dry">Dry</option>
+                  <option value="Oily">Oily</option>
+                  <option value="Combination">Combination</option>
+                  <option value="Sensitive">Sensitive</option>
+                  <option value="Normal">Normal</option>
+                  <option value="Wrinkled">Wrinkled</option>
+                </>
+              )}
+              {field === "hair" && (
+                <>
+                  <option value="Messy Hair">Messy Hair</option>
+                  <option value="Well maintain">Well maintain</option>
+                  <option value="Clean">Clean</option>
+                  <option value="Unclean">Unclean</option>
+                  <option value="Normal">Normal</option>
+                </>
+              )}
+              {field === "nails" && (
+                <>
+                  <option value="Clean">Clean</option>
+                  <option value="Unclean">Unclean</option>
+                  <option value="Well maintain">Well maintain</option>
+                  <option value="Normal">Normal</option>
+                  <option value="Not maintain">Not maintain</option>
+                </>
+              )}
+              {field === "mouth" && (
+                <>
+                  <option value="Clean">Clean</option>
+                  <option value="Unclean">Unclean</option>
+                  <option value="Oral candidiasis">Oral candidiasis</option>
+                  <option value="Glotitis">Glotitis</option>
+                  <option value="Stomatitis">Stomatitis</option>
+                </>
+              )}
+              {field === "perineum" && (
+                <>
+                  <option value="Clean">Clean</option>
+                  <option value="Unclean">Unclean</option>
+                  <option value="Normal">Normal</option>
+                </>
+              )}
+              {field === "hiddenSpaces" && (
+                <>
+                  <option value="Clean">Clean</option>
+                  <option value="Unclean">Unclean</option>
+                  <option value="Normal">Normal</option>
+                </>
+              )}
+              {field === "pressureSpaces" && (
+                <>
+                  <option value="Clean">Clean</option>
+                  <option value="Unclean">Unclean</option>
+                  <option value="Normal">Normal</option>
+                </>
+              )}
+              {field === "joints" && (
+                <>
+                  <option value="Movable">Movable</option>
+                  <option value="Slightly movable">Slightly movable</option>
+                  <option value="Fixed">Fixed</option>
+                  <option value="Freely movable">Freely movable</option>
+                </>
+              )}
+              {!["skin", "hair", "nails", "mouth", "perineum", "hiddenSpaces", "pressureSpaces", "joints"].includes(field) && (
+                <>
+                  <option value="Clean">Clean </option>
                   <option value="Unclean">Unclean</option>
                   <option value="Average">Average</option>
-        </>
-      )}
-    </select>
-  </div>
-))}
-
-{/* Extra Text Field for Additional Notes */}
-<div className="DHCAdd-field">
-  <label>Additional Notes:</label>
-  <textarea
-    name="headToFootNotes"
-    value={formData.headToFootNotes}
-    onChange={handleChange}
-    placeholder="Enter any additional notes or observations..."
-    rows={4} // Adjust the number of rows as needed
-  />
-</div>
+                </>
+              )}
+            </select>
+          </label>
+        ))}
+        <label>
+          Additional Notes For Head to Foot Checkup:
+          <textarea name="headToFootNotes" value={formData.headToFootNotes} onChange={handleChange}></textarea>
+        </label>
 
         <h3>Section 9: Vital Signs</h3>
-        <div className="DHCAdd-vitalSigns">
-  {/* BP Input Field */}
-  <div className="DHCAdd-field">
-    <label>BP:</label>
-    <input type="text" name="bp" value={formData.bp} onChange={handleChange} />
-  </div>
-
-  {/* Select Box for UL/LL */}
-  <div className="DHCAdd-field">
-    <label>UL/LL:</label>
-    <select name="ulLl" value={formData.ulLl} onChange={handleChange}>
-      <option value="UL">Null</option>
-      <option value="UL">UL</option>
-      <option value="LL">LL</option>
-    </select>
-  </div>
-
-  {/* Select Box for Null, RT Sitting, RT Lying, LT Sitting, LT Lying */}
-  <div className="DHCAdd-field">
-    <label>Position:</label>
-    <select name="position" value={formData.position} onChange={handleChange}>
-      <option value="Null">Null</option>
-      <option value="RT Sitting">RT Sitting</option>
-      <option value="RT Lying">RT Lying</option>
-      <option value="LT Sitting">LT Sitting</option>
-      <option value="LT Lying">LT Lying</option>
-    </select>
-  </div>
-</div>
-        <div className="DHCAdd-vitalSigns">
-          <div className="DHCAdd-field">
-            <label>RR:</label>
+        <div className="vital-signs-row">
+          <label>
+            BP:
+            <input type="text" name="bp" value={formData.bp} onChange={handleChange} />
+          </label>
+          <label>
+            UL/LL:
+            <select name="ulLl" value={formData.ulLl} onChange={handleChange}>
+              <option value="Null">Null</option>
+              <option value="UL">UL</option>
+              <option value="LL">LL</option>
+            </select>
+          </label>
+          <label>
+            Position:
+            <select name="position" value={formData.position} onChange={handleChange}>
+              <option value="Null">Null</option>
+              <option value="RT Sitting">RT Sitting</option>
+              <option value="RT Lying">RT Lying</option>
+              <option value="LT Sitting">LT Sitting</option>
+              <option value="LT Lying">LT Lying</option>
+            </select>
+          </label>
+        </div>
+        <div className="vital-signs-row">
+          <label>
+            RR (Mt):
             <input type="text" name="rr" value={formData.rr} onChange={handleChange} placeholder="Mt" />
-          </div>
-          <div className="DHCAdd-field">
-            <label>RR Type:</label>
-            <select name="rrType" value={formData.rrType} onChange={handleChange} required>
+          </label>
+          <label>
+            RR Type:
+            <select name="rrType" value={formData.rrType} onChange={handleChange}>
               <option value="R">R</option>
               <option value="IR">IR</option>
             </select>
-          </div>
+          </label>
         </div>
-        <div className="DHCAdd-vitalSigns">
-          <div className="DHCAdd-field">
-            <label>Pulse:</label>
+        <div className="vital-signs-row">
+          <label>
+            Pulse: (Mt)
             <input type="text" name="pulse" value={formData.pulse} onChange={handleChange} placeholder="Mt" />
-          </div>
-          <div className="DHCAdd-field">
-            <label>Pulse Type:</label>
-            <select name="pulseType" value={formData.pulseType} onChange={handleChange} required>
+          </label>
+          <label>
+            Pulse Type:
+            <select name="pulseType" value={formData.pulseType} onChange={handleChange}>
               <option value="R">R</option>
               <option value="IR">IR</option>
             </select>
-          </div>
+          </label>
         </div>
-        <div className="DHCAdd-vitalSigns">
-          <div className="DHCAdd-field">
-            <label>Temperature:</label>
+        <div className="vital-signs-row">
+          <label>
+            Temperature (°F):
             <input type="text" name="temperature" value={formData.temperature} onChange={handleChange} placeholder="Fahrenheit" />
-          </div>
-          <div className="DHCAdd-field">
-            <label>Temperature Type:</label>
-            <select name="temperatureType" value={formData.temperatureType} onChange={handleChange} required>
+          </label>
+          <label>
+            Temperature Type:
+            <select name="temperatureType" value={formData.temperatureType} onChange={handleChange}>
               <option value="O">O</option>
               <option value="A">A</option>
               <option value="R">R</option>
             </select>
-          </div>
+          </label>
         </div>
-        <div className="DHCAdd-vitalSigns">
-          <div className="DHCAdd-field">
-            <label>SpO2:</label>
+        <div className="vital-signs-row">
+          <label>
+            SpO2 (%):
             <input type="text" name="spo2" value={formData.spo2} onChange={handleChange} placeholder="%" />
-          </div>
+          </label>
         </div>
-        <div className="DHCAdd-vitalSigns">
-          <div className="DHCAdd-field">
-            <label>GCS:</label>
+        <div className="vital-signs-row">
+          <label>
+            GCS (/15):
             <input type="text" name="gcs" value={formData.gcs} onChange={handleChange} placeholder="/15" />
-          </div>
+          </label>
         </div>
-        <div className="DHCAdd-vitalSigns">
-          <div className="DHCAdd-field">
-            <label>GRBS:</label>
+        <div className="vital-signs-row">
+          <label>
+            GRBS (mg/dl):
             <input type="text" name="grbs" value={formData.grbs} onChange={handleChange} placeholder="mg/dl" />
-          </div>
+          </label>
         </div>
 
         <h3>Section 10: Summary Discussion</h3>
-        <div className="DHCAdd-field">
-          <label>Special Care Areas:</label>
+        <label>
+          Special Care Areas:
           <textarea name="specialCareAreas" value={formData.specialCareAreas} onChange={handleChange}></textarea>
-        </div>
-        <div className="DHCAdd-field">
-          <label>Medical Examination:</label>
-          <textarea name="medicalExamination" value={formData.medicalExamination} onChange={handleChange}></textarea>
-        </div>
-        <div className="DHCAdd-field">
-          <label>Summary Discussion:</label>
+        </label>
+        <label>
+          Summary Discussion:
           <textarea name="summaryDiscussion" value={formData.summaryDiscussion} onChange={handleChange}></textarea>
-        </div>
-        <div className="DHCAdd-field">
-          <label>Medicine Changes:</label>
+        </label>
+        <label>
+          Medicine Changes:
           <textarea name="medicineChanges" value={formData.medicineChanges} onChange={handleChange}></textarea>
-        </div>
-        <div className="DHCAdd-field">
-          <label>Other Activities:</label>
+        </label>
+        <label>
+          Other Activities:
           <textarea name="otherActivities" value={formData.otherActivities} onChange={handleChange}></textarea>
-        </div>
-        <div className="DHCAdd-field">
-          <label>Home Care Plan:</label>
-          <select name="homeCarePlan" value={formData.homeCarePlan} onChange={handleChange} required>
-          
+        </label>
+        <label>
+          Home Care Plan:
+          <select name="homeCarePlan" value={formData.homeCarePlan} onChange={handleChange}>
+         
             <option value="daily_7_1">Daily (7/1)</option>
             <option value="1_day_1_week_1_1">1 Day 1 Week (1/1)</option>
             <option value="2_day_1_week_2_1">2 Day 1 Week (2/1)</option>
@@ -683,30 +689,17 @@ const DHC = () => {
             <option value="1_day_3_month_1_12">1 Day 3 Month (1/12)</option>
             <option value="sos">SOS</option>
           </select>
-        </div>
-
-        <div className="DHCAdd-field">
-          <label>Consultation:</label>
+        </label>
+   
+        <label>
+          Extra Examination :
           <textarea name="consultation" value={formData.consultation} onChange={handleChange}></textarea>
-        </div>
+        </label>
 
-        <button type="submit" className="DHCAdd-submitButton" disabled={isSubmitting}>
+        <button type="submit" className="NHCAdd-submit-btn mb-5" disabled={isSubmitting}>
           {isSubmitting ? "Submitting..." : "Submit"}
         </button>
       </form>
-
-      <ToastContainer
-        position="top-center"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={true}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        toastStyle={{ marginTop: "20px" }}
-      />
     </div>
   );
 };

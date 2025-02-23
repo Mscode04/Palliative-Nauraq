@@ -77,3 +77,20 @@
   .rdhc-update-button:hover {
     background-color: #1f6a7a; /* Darker variant of #288598 */
   }
+  .custom-button {
+    background-color: rgb(235, 235, 235);
+    color: #288598;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    gap: 8px;
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s;
+    margin-left: 10px;
+  }
+  
+  .custom-button:hover {
+    background-color: #288598;
+    color: white;
+  }
+  
