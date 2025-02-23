@@ -3,7 +3,7 @@ import { db } from "../Firebase/config";
 import { doc, getDoc } from "firebase/firestore";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import "./PatientDetails.css";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs,deleteDoc } from "firebase/firestore";
 
 const PatientDetails = () => {
   const { patientId } = useParams(); // Getting patientId from the URL
@@ -102,7 +102,21 @@ const PatientDetails = () => {
       />
     </div>;
   }
-
+  const deletePatient = async () => {
+    const confirmationCode = prompt("Please enter the confirmation code to delete this patient:");
+    if (confirmationCode === "2012") {
+      try {
+        await deleteDoc(doc(db, "Patients", patientId));
+        alert("Patient deleted successfully!");
+        navigate("/main"); // Redirect to the main page after deletion
+      } catch (error) {
+        console.error("Error deleting patient: ", error);
+        alert("Failed to delete patient.");
+      }
+    } else {
+      alert("Incorrect confirmation code. Deletion canceled.");
+    }
+  };
   return (
     <div className="PTDetail-container">
       <button className="PTDetail-backButton" onClick={() => navigate(-1)}>
@@ -420,9 +434,22 @@ const PatientDetails = () => {
           <Link to={`/main/conditions/${patient.patientId}`} className="PTDetail-actionBtn PTDetail-smallBtn">Family Details</Link>
         </div>
         {/* Update Button */}
-        <button className="PTDetail-updateButton" onClick={() => navigate(`/main/update-patient/${patientId}`)}>
-          Update Patient Details
-        </button>
+        <div style={{ display: "flex", gap: "10px", marginTop: "20px" }}>
+  <button 
+    className="PTDetail-updateButton" 
+    style={{ flex: 5 }} // 3 parts for Update button
+    onClick={() => navigate(`/main/update-patient/${patientId}`)}
+  >
+    Update Patient Details
+  </button>
+  <button 
+    className="PTDetail-deleteButton" 
+    style={{ flex: 1 }} // 1 part for Delete button
+    onClick={deletePatient}
+  >
+    Delete 
+  </button>
+</div>
       </div>
     </div>
   );

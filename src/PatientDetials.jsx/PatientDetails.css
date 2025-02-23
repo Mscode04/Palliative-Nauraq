@@ -204,3 +204,17 @@
   box-shadow: 1px 0px 10px 0px #288598;
   align-items: center;
 }
+.PTDetail-deleteButton {
+  background-color: #ff4d4d; 
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.PTDetail-deleteButton:hover {
+  background-color: #cc0000;
+}
