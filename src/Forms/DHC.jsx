@@ -663,12 +663,16 @@ const DHC = () => {
           <textarea name="specialCareAreas" value={formData.specialCareAreas} onChange={handleChange}></textarea>
         </label>
         <label>
-          Summary Discussion:
-          <textarea name="summaryDiscussion" value={formData.summaryDiscussion} onChange={handleChange}></textarea>
+          Discussion and Management :
+          <textarea name="summaryDiscussion" value={formData.summaryDiscussion} rows={5}  onChange={handleChange} placeholder="Management Stratergy: Current Diagnosis,Medication,Interventions & Future Plans"></textarea>
+        </label>
+        <label>
+          Medical Examination :
+          <textarea name="consultation" value={formData.consultation} rows={5} onChange={handleChange} placeholder="Built,PICCLET,CNS,CVS,RS,GIT,GUT(External Genitalia),Intergument,Locomotor and "></textarea>
         </label>
         <label>
           Medicine Changes:
-          <textarea name="medicineChanges" value={formData.medicineChanges} onChange={handleChange}></textarea>
+          <textarea name="medicineChanges" value={formData.medicineChanges} onChange={handleChange} ></textarea>
         </label>
         <label>
           Other Activities:
@@ -691,10 +695,7 @@ const DHC = () => {
           </select>
         </label>
    
-        <label>
-          Extra Examination :
-          <textarea name="consultation" value={formData.consultation} onChange={handleChange}></textarea>
-        </label>
+        
 
         <button type="submit" className="NHCAdd-submit-btn mb-5" disabled={isSubmitting}>
           {isSubmitting ? "Submitting..." : "Submit"}

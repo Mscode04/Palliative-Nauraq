@@ -89,6 +89,15 @@ function Home() {
           <i className="bi bi-arrow-left"></i>
         </button>
         <div className="drawer-content">
+        <Link to="/main/divya-list" className="HomeDrawerButton">
+  DIVYA
+</Link>
+ <Link to="/main/haseena-list" className="HomeDrawerButton">
+  HASEENA
+</Link>
+ <Link to="/main/shameema-list" className="HomeDrawerButton">
+  SHAMEEMA
+</Link>
           <a
             href="https://neuraq.github.io/Palliative-Mkba-App-Contact/"
             target="_blank"
@@ -108,6 +117,7 @@ function Home() {
  <Link to="/main/medicine-list" className="HomeDrawerButton">
   Medicine List
 </Link>
+
         </div>
         <div className="drawer-footer">
           <button className="HomeDrawerButton btn-danger" onClick={handleLogout}>

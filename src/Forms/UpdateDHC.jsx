@@ -560,8 +560,12 @@ const UpdateDHC = () => {
           <textarea name="specialCareAreas" value={formData.specialCareAreas} onChange={handleChange}></textarea>
         </label>
         <label>
-          Summary Discussion:
+        Discussion and Management :
           <textarea name="summaryDiscussion" value={formData.summaryDiscussion} onChange={handleChange}></textarea>
+        </label>
+        <label>
+        Medical Examination :
+          <textarea name="consultation" value={formData.consultation} onChange={handleChange}></textarea>
         </label>
         <label>
           Medicine Changes:
@@ -591,10 +595,7 @@ const UpdateDHC = () => {
           Home Care Type:
      
         </label>
-        <label>
-          Consultation:
-          <textarea name="consultation" value={formData.consultation} onChange={handleChange}></textarea>
-        </label>
+       
         <label>
             FORM TYPE:
             <input type="text" name="formType" value={formData.formType} onChange={handleChange} placeholder="mg/dl" />

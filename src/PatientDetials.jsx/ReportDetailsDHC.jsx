@@ -247,13 +247,13 @@ const ReportDetailsDHC = () => {
     // Summary Discussion Section
     addSectionHeader("Summary Discussion");
     addTable([
-      ["Summary Discussion", report.summaryDiscussion || "N/A"],
+      ["Discussion and Management :", report.summaryDiscussion || "N/A"],
       ["Special Care Areas", report.specialCareAreas || "N/A"],
       ["ComplimentaryRx", report.complimentaryRx || "N/A"],
       ["Medicine Changes", report.medicineChanges || "N/A"],
       ["Other Activities", report.otherActivities || "N/A"],
       ["Home Care Plan", report.homeCarePlan || "N/A"],
-      ["Doctor Consultation / DHC", report.consultation || "N/A"],
+      ["Medical Examination :", report.consultation || "N/A"],
     ]);
   
     // Miscellaneous Section
@@ -568,7 +568,7 @@ const ReportDetailsDHC = () => {
 
         <h3 className="rnhc-section-title">Summary Discussion</h3>
         <div className="rnhc-field">
-          <label>Summary Discussion:</label>
+          <label>Discussion and Management :</label>
           <span>{report.summaryDiscussion || "N/A"}</span>
         </div>
      
@@ -601,7 +601,7 @@ const ReportDetailsDHC = () => {
           <span>{report.homeCarePlan || "N/A"}</span>
         </div>
         <div className="rnhc-field">
-          <label>Docter Consultation / DHC:</label>
+          <label>Medical Examination :</label>
           <span>{report.consultation || "N/A"}</span>
         </div>
      

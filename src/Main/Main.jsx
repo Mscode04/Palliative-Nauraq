@@ -42,7 +42,9 @@ import FamilyTree from "../Forms/FamilyTree";
 import ReportDetailsNHCE from "../PatientDetials.jsx/ReportDetailsNHCE";
 import Conditions from "../Forms/Conditions";
 import DeactivatePatient from "../Forms/DeactivatePatient";
-
+import Divya from "../PatientDetials.jsx/Divya";
+import Shemeema from "../PatientDetials.jsx/Shemeema";
+import Haseena from "../PatientDetials.jsx/Haseena";
 function Main({ isAuthenticated, isNurse }) {
   if (!isAuthenticated || !isNurse) {
     return <Navigate to="/" />; // Redirect to login if not authenticated or not a nurse
@@ -57,6 +59,9 @@ function Main({ isAuthenticated, isNurse }) {
           <Route path="/fmtree/:patientId" element={<FamilyTree />} />
           <Route path="/allrepots" element={<AllReportsPage />} />
           <Route path="/medicine-list" element={<MedicineList />} />
+          <Route path="/divya-list" element={<Divya />} />
+          <Route path="/shameema-list" element={<Shemeema />} />
+          <Route path="/haseena-list" element={<Haseena />} />
           <Route path="/ptlist" element={<PatientTable />} />
           <Route path="/patient/:patientId" element={<PatientDetails />} />
           <Route path="/nhc/:patientId" element={<NHC />} />
