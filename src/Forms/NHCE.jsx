@@ -696,7 +696,7 @@ const NHCE = () => {
         </label>
 
         <button type="submit" className="NHCAdd-submit-btn mb-5" disabled={isSubmitting}>
-          {isSubmitting ? "Submitting..." : "Submit"}
+          {isSubmitting ? "Waiting..." : "Save"}
         </button>
       </form>
     </div>
