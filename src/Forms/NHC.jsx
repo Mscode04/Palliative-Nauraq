@@ -12,7 +12,7 @@ const NHC = () => {
   const [patientData, setPatientData] = useState(null);
   const [formData, setFormData] = useState({
     date: "",
-    team1: "Null",
+    team1: "NOT MENTION",
     team2: "",
     team3: "",
     team4: "",
@@ -32,7 +32,7 @@ const NHC = () => {
     basicMattersNotes: "",
     sexuality: "nill",
     exercise: "No",
-    exerciseFrequency: "daily",
+    exerciseFrequency: "NOT MENTION",
     exercisenotes: "",
     entertainmentTime: "",
     houseCleanliness: "clean",
@@ -67,14 +67,14 @@ const NHC = () => {
     formType: "NHC",
     submittedAt: "",
     bp: "",
-    ulLl: "Null",
-    position: "Null",
+    ulLl: "NOT MENTION",
+    position: "NOT MENTION",
     rr: "",
-    rrType: "R",
+    rrType: "NOT MENTION",
     pulse: "",
-    pulseType: "R",
+    pulseType: "NOT MENTION",
     temperature: "",
-    temperatureType: "NILL",
+    temperatureType: "NOT MENTION",
     spo2: "",
     gcs: "",
     grbs: "",
@@ -254,10 +254,10 @@ const NHC = () => {
         <label>
           Team Member 1:
           <select name="team1" value={formData.team1} onChange={handleChange}>
+            <option value="Null">Select Nurse</option>
             <option value="Shameema">Shameema</option>
             <option value="Divya">Divya</option>
             <option value="Haseen">Haseen</option>
-            <option value="Null">Null</option>
           </select>
         </label>
         {[2, 3, 4].map((num) => (
@@ -331,6 +331,7 @@ const NHC = () => {
           <option value="High">High</option>
           <option value="Low">Low</option>
           <option value="Varying">Varying</option>
+          <option value="NOT CHECKED">NOT CHECKED</option>
         </>
       ) : (
         <>
@@ -338,6 +339,7 @@ const NHC = () => {
           <option value="Bad">Bad</option>
           <option value="Average">Average</option>
           <option value="Satisfy">Satisfy</option>
+          <option value="NOT CHECKED">NOT CHECKED</option>
         </>
       )}
     </select>
@@ -369,6 +371,7 @@ const NHC = () => {
         <label>
           Frequency:
           <select name="exerciseFrequency" value={formData.exerciseFrequency} onChange={handleChange}>
+          <option value="NOT MENTION">NOT MENTION</option>
             <option value="daily">Daily</option>
             <option value="weekly once">Weekly Once</option>
             <option value="sometimes">Sometimes</option>
@@ -408,6 +411,7 @@ const NHC = () => {
               <option value="clean">Clean</option>
               <option value="unclean">Unclean</option>
               <option value="average">Average</option>
+              <option value="NOT CHECKED">NOT CHECKED</option>
             </select>
           </label>
         ))}
@@ -502,6 +506,7 @@ const NHC = () => {
                   <option value="Sensitive">Sensitive</option>
                   <option value="Normal">Normal</option>
                   <option value="Wrinkled">Wrinkled</option>
+                  <option value="NOT CHECKED">NOT CHECKED</option>
                 </>
               )}
               {field === "hair" && (
@@ -511,6 +516,7 @@ const NHC = () => {
                   <option value="Clean">Clean</option>
                   <option value="Unclean">Unclean</option>
                   <option value="Normal">Normal</option>
+                  <option value="NOT CHECKED">NOT CHECKED</option>
                 </>
               )}
               {field === "nails" && (
@@ -520,6 +526,7 @@ const NHC = () => {
                   <option value="Well maintain">Well maintain</option>
                   <option value="Normal">Normal</option>
                   <option value="Not maintain">Not maintain</option>
+                  <option value="NOT CHECKED">NOT CHECKED</option>
                 </>
               )}
               {field === "mouth" && (
@@ -529,6 +536,7 @@ const NHC = () => {
                   <option value="Oral candidiasis">Oral candidiasis</option>
                   <option value="Glotitis">Glotitis</option>
                   <option value="Stomatitis">Stomatitis</option>
+                  <option value="NOT CHECKED">NOT CHECKED</option>
                 </>
               )}
               {field === "perineum" && (
@@ -536,6 +544,7 @@ const NHC = () => {
                   <option value="Clean">Clean</option>
                   <option value="Unclean">Unclean</option>
                   <option value="Normal">Normal</option>
+                  <option value="NOT CHECKED">NOT CHECKED</option>
                 </>
               )}
               {field === "hiddenSpaces" && (
@@ -543,6 +552,7 @@ const NHC = () => {
                   <option value="Clean">Clean</option>
                   <option value="Unclean">Unclean</option>
                   <option value="Normal">Normal</option>
+                  <option value="NOT CHECKED">NOT CHECKED</option>
                 </>
               )}
               {field === "pressureSpaces" && (
@@ -550,11 +560,13 @@ const NHC = () => {
                   <option value="Clean">Clean</option>
                   <option value="Unclean">Unclean</option>
                   <option value="Normal">Normal</option>
+                  <option value="NOT CHECKED">NOT CHECKED</option>
                 </>
               )}
               {field === "joints" && (
                 <>
                   <option value="Movable">Movable</option>
+                  <option value="NOT CHECKED">NOT CHECKED</option>
                   <option value="Slightly movable">Slightly movable</option>
                   <option value="Fixed">Fixed</option>
                   <option value="Freely movable">Freely movable</option>
@@ -562,6 +574,7 @@ const NHC = () => {
               )}
               {!["skin", "hair", "nails", "mouth", "perineum", "hiddenSpaces", "pressureSpaces", "joints"].includes(field) && (
                 <>
+                <option value="NOT CHECKED">NOT CHECKED</option>
                   <option value="Clean">Clean </option>
                   <option value="Unclean">Unclean</option>
                   <option value="Average">Average</option>
@@ -584,7 +597,7 @@ const NHC = () => {
           <label>
             UL/LL:
             <select name="ulLl" value={formData.ulLl} onChange={handleChange}>
-              <option value="Null">Null</option>
+            <option value="NOT MENTION">NOT MENTION</option>
               <option value="UL">UL</option>
               <option value="LL">LL</option>
             </select>
@@ -592,6 +605,7 @@ const NHC = () => {
           <label>
             Position:
             <select name="position" value={formData.position} onChange={handleChange}>
+            <option value="NOT MENTION">NOT MENTION</option>
               <option value="Null">Null</option>
               <option value="RT Sitting">RT Sitting</option>
               <option value="RT Lying">RT Lying</option>
@@ -608,6 +622,7 @@ const NHC = () => {
           <label>
             RR Type:
             <select name="rrType" value={formData.rrType} onChange={handleChange}>
+            <option value="NOT MENTION">NOT MENTION</option>
               <option value="R">R</option>
               <option value="IR">IR</option>
             </select>
@@ -621,6 +636,7 @@ const NHC = () => {
           <label>
             Pulse Type:
             <select name="pulseType" value={formData.pulseType} onChange={handleChange}>
+            <option value="NOT MENTION">NOT MENTION</option>
               <option value="R">R</option>
               <option value="IR">IR</option>
             </select>
@@ -634,6 +650,7 @@ const NHC = () => {
           <label>
             Temperature Type:
             <select name="temperatureType" value={formData.temperatureType} onChange={handleChange}>
+              <option value="NOT MENTION">NOT MENTION</option>
               <option value="O">O</option>
               <option value="A">A</option>
               <option value="R">R</option>

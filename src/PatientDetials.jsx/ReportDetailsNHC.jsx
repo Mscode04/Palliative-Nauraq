@@ -59,37 +59,45 @@ const ReportDetailsNHC = () => {
           <style>
             body {
               font-family: Arial, sans-serif;
-              margin: 20px;
+              margin: 10px;
+              font-size: 10px; /* Reduced font size */
             }
             h1 {
-              font-size: 18px;
+              font-size: 16px; /* Reduced font size */
               color: #283593;
-              margin-bottom: 20px;
+              margin-bottom: 15px;
             }
             .section-header {
-              font-size: 12px;
+              font-size: 11px; /* Reduced font size */
               background-color: #d3d3d3;
-              padding: 5px;
-              margin-top: 10px;
-              margin-bottom: 5px;
+              padding: 3px; /* Reduced padding */
+              margin-top: 8px;
+              margin-bottom: 3px;
             }
             table {
               width: 100%;
               border-collapse: collapse;
-              margin-bottom: 10px;
+              margin-bottom: 8px; /* Reduced margin */
+              page-break-inside: avoid; /* Avoid breaking tables across pages */
             }
             table, th, td {
               border: 1px solid #ddd;
             }
             th, td {
-              padding: 8px;
+              padding: 4px; /* Reduced padding */
               text-align: left;
+              font-size: 10px; /* Reduced font size */
             }
             th {
               background-color: #f5f5f5;
             }
             tr:nth-child(even) {
               background-color: #f9f9f9;
+            }
+            @media print {
+              .section {
+                page-break-inside: avoid; /* Avoid breaking sections across pages */
+              }
             }
           </style>
         </head>
@@ -128,6 +136,7 @@ const ReportDetailsNHC = () => {
     };
   
     // Personal Details Section
+    printWindow.document.write('<div class="section">');
     addSectionHeader("Personal Details");
     addTable([
       ["Reg No", report.registernumber || "N/A"],
@@ -139,28 +148,36 @@ const ReportDetailsNHC = () => {
       ["Main Diagnosis", report.mainDiagnosis || "N/A"],
       ["Patient ID", report.patientId || "N/A"],
     ]);
+    printWindow.document.write('</div>');
   
     // First Impression Section
+    printWindow.document.write('<div class="section">');
     addSectionHeader("First Impression");
     addTable([["First Impressions", report.firstImpression || "N/A"]]);
+    printWindow.document.write('</div>');
   
     // Awareness Section
+    printWindow.document.write('<div class="section">');
     addSectionHeader("Awareness");
     addTable([
       ["Patient Awareness", report.patientAwareness || "N/A"],
       ["Caretaker Awareness", report.caretakerAwareness || "N/A"],
       ["Extra Details Awareness", report.extraDetailsAwareness || "N/A"],
     ]);
+    printWindow.document.write('</div>');
   
     // Habits Section
+    printWindow.document.write('<div class="section">');
     addSectionHeader("Habits");
     addTable([
       ["Bad Habit", report.badHabit || "N/A"],
       ["More About Bad Habits", report.moreAboutBadHabits || "NOT HAVE BAD HABITS"],
       ["Entertainments", report.entertainmentTime || "N/A"],
     ]);
+    printWindow.document.write('</div>');
   
     // Basic Matters Section
+    printWindow.document.write('<div class="section">');
     addSectionHeader("Basic Matters");
     addTable([
       ["Food", report.food || "N/A"],
@@ -173,16 +190,20 @@ const ReportDetailsNHC = () => {
       ["Basic Matters Notes", report.basicMattersNotes || "N/A"],
       ["Sexuality", report.sexuality || "N/A"],
     ]);
+    printWindow.document.write('</div>');
   
     // Exercise Section
+    printWindow.document.write('<div class="section">');
     addSectionHeader("Exercise");
     addTable([
       ["Exercise", report.exercise || "N/A"],
       ["Exercise Frequency", report.exerciseFrequency || "N/A"],
       ["Exercise Notes", report.exerciseNotes || "N/A"],
     ]);
+    printWindow.document.write('</div>');
   
     // Surroundings Section
+    printWindow.document.write('<div class="section">');
     addSectionHeader("Surroundings");
     addTable([
       ["Food", report.food || "N/A"],
@@ -192,8 +213,10 @@ const ReportDetailsNHC = () => {
       ["Dress", report.dress || "N/A"],
       ["More Details Surroundings", report.addmoresurroundings || "N/A"],
     ]);
+    printWindow.document.write('</div>');
   
     // General Matters Section
+    printWindow.document.write('<div class="section">');
     addSectionHeader("General Matters");
     addTable([
       ["General Status", report.generalStatus || "N/A"],
@@ -203,8 +226,10 @@ const ReportDetailsNHC = () => {
       ["Activity Score", report.activityScore || "N/A"],
       ["Add More General", report.addmoregeneral || "N/A"],
     ]);
+    printWindow.document.write('</div>');
   
     // Head to Foot Checkup Section
+    printWindow.document.write('<div class="section">');
     addSectionHeader("Head to Foot Checkup");
     addTable([
       ["Scalp", report.scalp || "N/A"],
@@ -218,8 +243,10 @@ const ReportDetailsNHC = () => {
       ["Joints", report.joints || "N/A"],
       ["Head to Foot Notes", report.headToFootNotes || "N/A"],
     ]);
+    printWindow.document.write('</div>');
   
     // Vital Signs Section
+    printWindow.document.write('<div class="section">');
     addSectionHeader("Vital Signs");
     addTable([
       ["BP", `${report.bp || "N/A"} mmHg - ${report.ulLl || ""} - ${report.position || ""}`],
@@ -230,8 +257,10 @@ const ReportDetailsNHC = () => {
       ["GCS", `${report.gcs || ""} /15`],
       ["GRBS", `${report.grbs || ""} mg/dl`],
     ]);
+    printWindow.document.write('</div>');
   
     // Summary Discussion Section
+    printWindow.document.write('<div class="section">');
     addSectionHeader("Summary Discussion");
     addTable([
       ["Summary Discussion", report.summaryDiscussion || "N/A"],
@@ -242,8 +271,10 @@ const ReportDetailsNHC = () => {
       ["Home Care Plan", report.homeCarePlan || "N/A"],
       ["Doctor Consultation / DHC", report.consultation || "N/A"],
     ]);
+    printWindow.document.write('</div>');
   
     // Miscellaneous Section
+    printWindow.document.write('<div class="section">');
     addSectionHeader("Miscellaneous");
     addTable([
       ["Form Type", report.formType || "N/A"],
@@ -262,6 +293,7 @@ const ReportDetailsNHC = () => {
       ["Team 3", report.team3 || "N/A"],
       ["Team 4", report.team4 || "N/A"],
     ]);
+    printWindow.document.write('</div>');
   
     printWindow.document.write(`
         </body>

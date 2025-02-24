@@ -31,7 +31,7 @@ const UpdateNHCE = () => {
     basicMattersNotes: "",
     sexuality: "nill",
     exercise: "No",
-    exerciseFrequency: "daily",
+    exerciseFrequency: "NOT MENTION",
     exercisenotes: "",
     entertainmentTime: "",
     houseCleanliness: "clean",
@@ -66,14 +66,14 @@ const UpdateNHCE = () => {
     formType: "NHC(E)",
     submittedAt: "",
     bp: "",
-    ulLl: "Null",
-    position: "Null",
+    ulLl: "NOT MENTION",
+    position: "NOT MENTION",
     rr: "",
     rrType: "R",
     pulse: "",
-    pulseType: "R",
+    pulseType: "NOT MENTION",
     temperature: "",
-    temperatureType: "NILL",
+    temperatureType: "NOT MENTION",
     spo2: "",
     gcs: "",
     grbs: "",
@@ -232,6 +232,7 @@ const UpdateNHCE = () => {
           <option value="High">High</option>
           <option value="Low">Low</option>
           <option value="Varying">Varying</option>
+          <option value="NOT CHECKED">NOT CHECKED</option>
         </>
       ) : (
         <>
@@ -239,6 +240,7 @@ const UpdateNHCE = () => {
           <option value="Bad">Bad</option>
           <option value="Average">Average</option>
           <option value="Satisfy">Satisfy</option>
+          <option value="NOT CHECKED">NOT CHECKED</option>
         </>
       )}
     </select>
@@ -262,6 +264,7 @@ const UpdateNHCE = () => {
         <label>
           Exercise:
           <select name="exercise" value={formData.exercise} onChange={handleChange}>
+          <option value="NOT MENTION">NOT MENTION</option>
             <option value="No">No</option>
             <option value="Yes">Yes</option>
           </select>
@@ -269,6 +272,7 @@ const UpdateNHCE = () => {
         <label>
           Frequency:
           <select name="exerciseFrequency" value={formData.exerciseFrequency} onChange={handleChange}>
+          <option value="NOT MENTION">NOT MENTION</option>
             <option value="daily">Daily</option>
             <option value="weekly once">Weekly Once</option>
             <option value="sometimes">Sometimes</option>
@@ -305,6 +309,7 @@ const UpdateNHCE = () => {
               <option value="clean">Clean</option>
               <option value="unclean">Unclean</option>
               <option value="average">Average</option>
+              <option value="NOT CHECKED">NOT CHECKED</option>
             </select>
           </label>
         ))}
@@ -397,6 +402,7 @@ const UpdateNHCE = () => {
                   <option value="Sensitive">Sensitive</option>
                   <option value="Normal">Normal</option>
                   <option value="Wrinkled">Wrinkled</option>
+                  <option value="NOT CHECKED">NOT CHECKED</option>
                 </>
               )}
               {field === "hair" && (
@@ -406,6 +412,7 @@ const UpdateNHCE = () => {
                   <option value="Clean">Clean</option>
                   <option value="Unclean">Unclean</option>
                   <option value="Normal">Normal</option>
+                  <option value="NOT CHECKED">NOT CHECKED</option>
                 </>
               )}
               {field === "nails" && (
@@ -415,6 +422,7 @@ const UpdateNHCE = () => {
                   <option value="Well maintain">Well maintain</option>
                   <option value="Normal">Normal</option>
                   <option value="Not maintain">Not maintain</option>
+                  <option value="NOT CHECKED">NOT CHECKED</option>
                 </>
               )}
               {field === "mouth" && (
@@ -424,6 +432,7 @@ const UpdateNHCE = () => {
                   <option value="Oral candidiasis">Oral candidiasis</option>
                   <option value="Glotitis">Glotitis</option>
                   <option value="Stomatitis">Stomatitis</option>
+                  <option value="NOT CHECKED">NOT CHECKED</option>
                 </>
               )}
               {field === "perineum" && (
@@ -431,6 +440,7 @@ const UpdateNHCE = () => {
                   <option value="Clean">Clean</option>
                   <option value="Unclean">Unclean</option>
                   <option value="Normal">Normal</option>
+                  <option value="NOT CHECKED">NOT CHECKED</option>
                 </>
               )}
               {field === "hiddenSpaces" && (
@@ -438,6 +448,7 @@ const UpdateNHCE = () => {
                   <option value="Clean">Clean</option>
                   <option value="Unclean">Unclean</option>
                   <option value="Normal">Normal</option>
+                  <option value="NOT CHECKED">NOT CHECKED</option>
                 </>
               )}
               {field === "pressureSpaces" && (
@@ -445,6 +456,7 @@ const UpdateNHCE = () => {
                   <option value="Clean">Clean</option>
                   <option value="Unclean">Unclean</option>
                   <option value="Normal">Normal</option>
+                  <option value="NOT CHECKED">NOT CHECKED</option>
                 </>
               )}
               {field === "joints" && (
@@ -453,6 +465,7 @@ const UpdateNHCE = () => {
                   <option value="Slightly movable">Slightly movable</option>
                   <option value="Fixed">Fixed</option>
                   <option value="Freely movable">Freely movable</option>
+                  <option value="NOT CHECKED">NOT CHECKED</option>
                 </>
               )}
               {!["skin", "hair", "nails", "mouth", "perineum", "hiddenSpaces", "pressureSpaces", "joints"].includes(field) && (
@@ -460,6 +473,7 @@ const UpdateNHCE = () => {
                          <option value="Clean">Clean </option>
                   <option value="Unclean">Unclean</option>
                   <option value="Average">Average</option>
+                  <option value="NOT CHECKED">NOT CHECKED</option>
                 </>
               )}
             </select>
@@ -479,6 +493,7 @@ const UpdateNHCE = () => {
           <label>
             UL/LL:
             <select name="ulLl" value={formData.ulLl} onChange={handleChange}>
+            <option value="NOT MENTION">NOT MENTION</option>
               <option value="Null">Null</option>
               <option value="UL">UL</option>
               <option value="LL">LL</option>
@@ -487,6 +502,7 @@ const UpdateNHCE = () => {
           <label>
             Position:
             <select name="position" value={formData.position} onChange={handleChange}>
+            <option value="NOT MENTION">NOT MENTION</option>
               <option value="Null">Null</option>
               <option value="RT Sitting">RT Sitting</option>
               <option value="RT Lying">RT Lying</option>
@@ -503,6 +519,7 @@ const UpdateNHCE = () => {
           <label>
             RR Type:
             <select name="rrType" value={formData.rrType} onChange={handleChange}>
+            <option value="NOT MENTION">NOT MENTION</option>
               <option value="R">R</option>
               <option value="IR">IR</option>
             </select>
@@ -516,6 +533,7 @@ const UpdateNHCE = () => {
           <label>
             Pulse Type:
             <select name="pulseType" value={formData.pulseType} onChange={handleChange}>
+            <option value="NOT MENTION">NOT MENTION</option>
               <option value="R">R</option>
               <option value="IR">IR</option>
             </select>
@@ -529,6 +547,7 @@ const UpdateNHCE = () => {
           <label>
             Temperature Type:
             <select name="temperatureType" value={formData.temperatureType} onChange={handleChange}>
+            <option value="NOT MENTION">NOT MENTION</option>
               <option value="O">O</option>
               <option value="A">A</option>
               <option value="R">R</option>
@@ -584,6 +603,7 @@ const UpdateNHCE = () => {
             <option value="1_day_1.5_month_1_6">1 Day 1.5 Month (1/6)</option>
             <option value="1_day_2_month_1_8">1 Day 2 Month (1/8)</option>
             <option value="1_day_3_month_1_12">1 Day 3 Month (1/12)</option>
+            <option value="NOT MENTION">NOT MENTION</option>
             <option value="sos">SOS</option>
           </select>
         </label>
