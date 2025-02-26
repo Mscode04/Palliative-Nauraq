@@ -155,10 +155,10 @@ const UpdateNHCE = () => {
         <label>
           Team Member 1:
           <select name="team1" value={formData.team1} onChange={handleChange}>
-            <option value="Shameema">Shameema</option>
-            <option value="Divya">Divya</option>
-            <option value="Haseen">Haseen</option>
             <option value="Null">Null</option>
+            <option value="SHAMEEMA">SHAMEEMA</option>
+            <option value="DIVYA">DIVYA</option>
+            <option value="HASEENA">HASEENA</option>
           </select>
         </label>
         {[2, 3, 4].map((num) => (

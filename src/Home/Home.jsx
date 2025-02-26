@@ -166,7 +166,7 @@ function Home() {
                   <div className="HomeReportInfo">
                     <h5>{report.formType} : {report.name} </h5>
                     <p></p>
-                    <small>{new Date(report.submittedAt).toLocaleString()}</small>
+                    <small>{new Date(report.submittedAt).toLocaleString()}- REPORTED BY {report.team1}</small>
                   </div>
                 </div>
               </Link>
