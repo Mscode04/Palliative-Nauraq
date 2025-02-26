@@ -20,7 +20,7 @@ const ReportsPage = () => {
   const [reportToDelete, setReportToDelete] = useState(null);
   const [pin, setPin] = useState("");
 
-  const reportsPerPage = 10;
+  const reportsPerPage = 20;
 
   useEffect(() => {
     const fetchReports = async () => {

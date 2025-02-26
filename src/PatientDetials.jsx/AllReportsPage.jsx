@@ -21,7 +21,7 @@ const AllReportsPage = () => {
   const [pin, setPin] = useState("");
   const [sortOrder, setSortOrder] = useState("asc"); // New state for sorting order
 
-  const reportsPerPage = 10;
+  const reportsPerPage = 20;
   const navigate = useNavigate();
 
   useEffect(() => {
