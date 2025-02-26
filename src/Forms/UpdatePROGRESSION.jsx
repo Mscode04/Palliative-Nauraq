@@ -110,6 +110,10 @@ const UpdatePROGRESSION = () => {
             onChange={handleChange}
           />
         </div>
+        <div className="DeathAdd-field">
+          <label>Reported By:</label>
+          <input type="text" name="team1" value={report.team1} onChange={handleChange} required />
+        </div>
         <div className="uprogression-field">
           <label>HC SI No:</label>
           <input

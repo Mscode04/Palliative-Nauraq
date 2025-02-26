@@ -13,6 +13,7 @@ const Progression = () => {
   const [formData, setFormData] = useState({
     timeIn: "",
     timeOut: "",
+    team1:"",
     hcSiNo: "",
     dnvsphcNumber: "",
     monthly: "",
@@ -108,6 +109,7 @@ const Progression = () => {
       setFormData({
         timeIn: "",
         timeOut: "",
+        team1:"",
         hcSiNo: "",
         dnvsphcNumber: "",
         monthly: "",
@@ -190,6 +192,10 @@ const Progression = () => {
           Time Out:
           <input type="time" name="timeOut" value={formData.timeOut} onChange={handleChange} />
         </label>
+        <div className="DeathAdd-field">
+          <label>Reported By:</label>
+          <input type="text" name="team1" value={formData.team1} onChange={handleChange} required />
+        </div>
         <label>
           HC SI No:
           <input type="text" name="hcSiNo" value={formData.hcSiNo} onChange={handleChange} />

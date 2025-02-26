@@ -127,6 +127,10 @@ const UpdateSOCIAL = () => {
             onChange={handleChange}
           />
         </div>
+        <div className="DeathAdd-field">
+          <label>Reported By:</label>
+          <input type="text" name="team1" value={report.team1} onChange={handleChange} required />
+        </div>
         <div className="UpdateSOCIAL-field">
           <label>Food:</label>
           <input

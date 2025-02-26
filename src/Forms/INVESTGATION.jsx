@@ -106,6 +106,7 @@ const INVESTIGATION = () => {
   
       setFormData({
         date: "",
+        team1:"",
         CBR: "",
         ESR: "",
         CRP: "",
@@ -171,7 +172,10 @@ const INVESTIGATION = () => {
           <label>Date:</label>
           <input type="date" name="date" value={formData.date} onChange={handleChange} required />
         </div>
-
+        <div className="DeathAdd-field">
+          <label>Reported By:</label>
+          <input type="text" name="team1" value={formData.team1} onChange={handleChange} required />
+        </div>
         <h3>Section 2: Investigation Details</h3>
         {["CBR", "ESR", "CRP", "FBS", "PPBS", "RBS", "HBa1c", "RFT", "LFT", "LIPID_PROFILE", "ELECTROLYTES", "URINE", "OTHERS"].map((field) => (
           <div className="INVAdd-field" key={field}>

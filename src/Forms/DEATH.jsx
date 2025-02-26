@@ -14,6 +14,7 @@ const DEATH = () => {
     date: "",
     timeOfDeath: "",
     deathReason: "",
+    team1:"",
     visitedHospital: "No",
     deathPlace: "",
     formType: "DEATH",
@@ -134,6 +135,10 @@ const DEATH = () => {
         <div className="DeathAdd-field">
           <label>Date of Death:</label>
           <input type="date" name="date" value={formData.date} onChange={handleChange} required />
+        </div>
+        <div className="DeathAdd-field">
+          <label>Reported By:</label>
+          <input type="text" name="team1" value={formData.team1} onChange={handleChange} required />
         </div>
         <div className="DeathAdd-field">
           <label>Time of Death:</label>

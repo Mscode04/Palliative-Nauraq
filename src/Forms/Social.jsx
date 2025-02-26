@@ -11,6 +11,7 @@ const Social = () => {
   const [patientData, setPatientData] = useState(null);
   const [formData, setFormData] = useState({
     date: "",
+    team1:"",
     food: "",
     edn: "",
     others: "",
@@ -143,6 +144,10 @@ const Social = () => {
           Date:
           <input type="date" name="date" value={formData.date} onChange={handleChange} />
         </label>
+        <div className="DeathAdd-field">
+          <label>Reported By:</label>
+          <input type="text" name="team1" value={formData.team1} onChange={handleChange} required />
+        </div>
         <label>
           Food:
           <input type="text" name="food" value={formData.food} onChange={handleChange} />
