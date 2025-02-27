@@ -624,7 +624,7 @@ const ReportDetailsNHC = () => {
           <span>{report.medicineChanges || "N/A"}</span>
         </div>
         <div className="rnhc-field">
-          <label>Medicine Changes:</label>
+          <label>Activities :</label>
           <span>{report.otherActivities || "N/A"}</span>
         </div>
         {/* <div className="rnhc-field">

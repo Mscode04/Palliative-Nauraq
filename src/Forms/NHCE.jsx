@@ -243,10 +243,10 @@ const NHCE = () => {
         />
       </div>
       )}
-      <form onSubmit={handleSubmit} className="NHCAdd-form">
+    <form onSubmit={handleSubmit} className="NHCAdd-form">
         {/* Form sections go here */}
         {/* Example for one section */}
-        <h3>Section 1: General Details</h3>
+        <h3>Section 1: General Details (ടീമും തീയതിയും)</h3>
         <label>
           Date:
           <input type="date" name="date" value={formData.date} onChange={handleChange} />
@@ -267,7 +267,7 @@ const NHCE = () => {
           </label>
         ))}
         <label>
-  First Impression:
+  First Impression :
   <textarea
     name="firstImpression"
     value={formData.firstImpression}
@@ -277,14 +277,14 @@ const NHCE = () => {
 </label>
 
         <label>
-          Patient Awareness:
+          Patient Awareness (രോഗത്തെ കുറിച്ച് രോഗികുള്ള അറിവ്):
           <select name="patientAwareness" value={formData.patientAwareness} onChange={handleChange}>
             <option value="Yes">Yes</option>
             <option value="No">No</option>
           </select>
         </label>
         <label>
-          Caretaker Awareness:
+          Caretaker Awareness (രോഗത്തെ കുറിച്ച് വീട്ടുകാർക്കുള്ള അറിവ്):
           <select name="caretakerAwareness" value={formData.caretakerAwareness} onChange={handleChange}>
             <option value="Yes">Yes</option>
             <option value="No">No</option>
@@ -320,10 +320,10 @@ const NHCE = () => {
           </select>
         </label>
 
-        <h3>Section 2: Basic Matters</h3>
+        <h3>Section 2: Basic Matters (പ്രാഥമിക കാര്യങ്ങൾ)</h3>
         {["food", "drink", "pee", "pop", "sleep", "selfHygiene", "breath"].map((field) => (
   <label key={field}>
-    {field === "pee" ? "Pee (Urine)" : field === "pop" ? "Pop (ശോധന)" : field.charAt(0).toUpperCase() + field.slice(1)}:
+    {field === "pee" ? "Pee (മൂത്രം)" : field === "pop" ? "Pop (ശോധന)" :field === "selfHygiene" ? "selfHygiene (ശുചിത്വം)" :field === "breath" ? "breath (ശ്വസനം)" :field === "sleep" ? "Sleep (ഉറക്കം)" : field.charAt(0).toUpperCase() + field.slice(1)}:
     <select name={field} value={formData[field]} onChange={handleChange}>
       {field === "breath" ? (
         <>
@@ -353,23 +353,23 @@ const NHCE = () => {
           <textarea name="basicMattersNotes" value={formData.basicMattersNotes} onChange={handleChange}></textarea>
         </label>
         <label>
-          Sexuality:
+          Sexuality(ലൈംഗികത):
           <select name="sexuality" value={formData.sexuality} onChange={handleChange}>
             <option value="nill">Nill</option>
             <option value="yes">Yes</option>
           </select>
         </label>
 
-        <h3>Section 3: Exercise</h3>
+        <h3>Section 3: Exercise (വ്യായാമം)</h3>
         <label>
-          Exercise:
+          Exercise (വ്യായാമം):
           <select name="exercise" value={formData.exercise} onChange={handleChange}>
             <option value="No">No</option>
             <option value="Yes">Yes</option>
           </select>
         </label>
         <label>
-          Frequency:
+          Frequency (എപ്പോഴൊക്കെയാണ് ചെയ്യുന്നത്):
           <select name="exerciseFrequency" value={formData.exerciseFrequency} onChange={handleChange}>
           <option value="NOT MENTION">NOT MENTION</option>
             <option value="daily">Daily</option>
@@ -389,9 +389,9 @@ const NHCE = () => {
 
   
 
-        <h3>Section 4: Habits</h3>
+        <h3>Section 4: Habits (ശീലങ്ങൾ)</h3>
         <label>
-  Entertainment Time Spending:
+  Entertainment Time Spending (വിനോദ സമയം ചെലവഴിക്കൽ):
   <textarea
     name="entertainmentTime"
     value={formData.entertainmentTime}
@@ -403,10 +403,10 @@ const NHCE = () => {
 
 
 
-        <h3>Section 5: Surroundings</h3>
+        <h3>Section 5: Surroundings (വീടും ചുറ്റുപാടും)</h3>
         {["house", "surroundings", "bedroom", "bed", "dress"].map((field) => (
           <label key={field}>
-            {field.charAt(0).toUpperCase() + field.slice(1)} Cleanliness:
+            {field.charAt(0).toUpperCase() + field.slice(1)} :
             <select name={`${field}Cleanliness`} value={formData[`${field}Cleanliness`]} onChange={handleChange}>
               <option value="clean">Clean</option>
               <option value="unclean">Unclean</option>
@@ -424,16 +424,16 @@ const NHCE = () => {
     rows="3"
   />
 </label>
-        <h3>Section 6: General Matters</h3>
+        <h3>Section 6: General Matters (പൊതു അവസ്ഥ)</h3>
         <label>
-          General Status:
+          General Status (stable/unstable):
           <select name="generalStatus" value={formData.generalStatus} onChange={handleChange}>
             <option value="stable">Stable</option>
             <option value="unstable">Unstable</option>
           </select>
         </label>
         <label>
-          Patient Currently:
+          Patient Currently(രോഗിയുടെ ഇപ്പോഴത്തെ അവസ്ഥ):
           <select name="patientCurrently" value={formData.patientCurrently} onChange={handleChange}>
           <option value="lying">Lying</option>
 <option value="standing">Standing</option>
@@ -451,7 +451,7 @@ const NHCE = () => {
           </select>
         </label>
         <label>
-          Memory Status:
+          Memory Status (ഓർമ്മ):
           <select name="memoryStatus" value={formData.memoryStatus} onChange={handleChange}>
           <option value="remember">Remember</option>
     <option value="not-remember">Do Not Remember</option>
@@ -461,7 +461,7 @@ const NHCE = () => {
           </select>
         </label>
         <label>
-          Response Status:
+          Response Status (പ്രതികരണം):
           <select name="responseStatus" value={formData.responseStatus} onChange={handleChange}>
           <option value="full-respond">Full Respond</option>
     <option value="slightly-respond">Slightly Respond</option>
@@ -475,7 +475,7 @@ const NHCE = () => {
           </select>
         </label>
         <label>
-          Activity Score:
+          Activity :
           <select name="activityScore" value={formData.activityScore} onChange={handleChange}>
             <option value="1">1</option>
             <option value="2">2</option>
@@ -493,7 +493,7 @@ const NHCE = () => {
     rows="3"
   />
 </label>
-        <h3>Section 7: Head to Foot Checkup</h3>
+        <h3>Section 7: Head to Foot Checkup (തല മുതൽ കാൽ വരെ)</h3>
         {["scalp", "hair", "skin", "nails", "mouth", "perineum", "hiddenSpaces", "pressureSpaces", "joints"].map((field) => (
           <label key={field}>
             {field.charAt(0).toUpperCase() + field.slice(1)}:
@@ -711,7 +711,7 @@ const NHCE = () => {
         </label>
    
         <label>
-          Docter Consultation:
+          Docter Consultation (ഡോക്ടറെ കാണിക്കുകയോ അല്ലെങ്കിൽ ഡോക്ടർ ഹോം കെയർ വേണമെങ്കിൽ):
           <textarea name="consultation" value={formData.consultation} onChange={handleChange}></textarea>
         </label>
 

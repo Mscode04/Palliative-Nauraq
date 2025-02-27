@@ -128,7 +128,7 @@ function Home() {
           <button className="HomeDrawerButton btn-danger" onClick={handleLogout}>
             Logout
           </button>
-          <div className="powered-by">Powered by neuraq</div>
+          <div className="powered-by">Powered by Neuraq Technologies</div>
         </div>
       </div>
 

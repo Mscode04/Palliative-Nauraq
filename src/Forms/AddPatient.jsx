@@ -282,7 +282,7 @@ const AddPatient = () => {
         />
       ) : (
         <input
-          type={field === "email" ? "email" : field === "password" ? "password" : "text"}
+          type={field === "email" ? "text" : field === "password" ? "password" : "text"}
           id={field}
           name={field}
           value={value || ""}
