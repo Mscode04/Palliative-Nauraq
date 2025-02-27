@@ -144,7 +144,7 @@ const ReportsPage = () => {
           Back
         </button>
       </div>
-      <h2>Reports for Patient ID: {patientId}</h2>
+      <h2 className="text-white">Reports ({reports.length})</h2>
 
       <div className="filters-container">
         <input
@@ -212,6 +212,7 @@ const ReportsPage = () => {
                     : "No date available"}
                 </p>
                 <p>{report.name || "No Name"}</p>
+                <p className="AllRep-report-name">REPORTED BY: {report.team1 || "NOT MENTION"}</p>
               </Link>
               <button onClick={() => handleDeleteClick(report.id)} className="delete-button">
                 Delete

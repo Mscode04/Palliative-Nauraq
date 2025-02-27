@@ -21,7 +21,7 @@ const AllReportsPage = () => {
   const [pin, setPin] = useState("");
   const [sortOrder, setSortOrder] = useState("asc"); // New state for sorting order
 
-  const reportsPerPage = 22;
+  const reportsPerPage = 40;
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -168,7 +168,7 @@ const AllReportsPage = () => {
       <button onClick={handleBackClick} className="AllRep-back-button">
         &larr; Back
       </button>
-      <h2 className="AllRep-heading">All Reports</h2>
+      <h2 className="AllRep-heading">All Reports   ({reports.length})</h2>
 
       {/* Filters */}
       <div className="AllRep-filters-container">
@@ -264,6 +264,8 @@ const AllReportsPage = () => {
                       : "No date available"}
                   </p>
                   <p className="AllRep-report-name">{report.name || "No Name"}</p>
+                  <p className="AllRep-report-name">REPORTED BY: {report.team1 || "NOT MENTION"}</p>
+
                   <p className="AllRep-report-name"> {report.registernumber}</p>
                   <p className="AllRep-report-address">{report.address || "No Address"}</p>
                 </Link>

@@ -9,6 +9,8 @@ function Home() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedReporter, setSelectedReporter] = useState("All");
+  const [uniqueReporters, setUniqueReporters] = useState([]);
   const navigate = useNavigate();
 
   const toggleDrawer = () => {
@@ -39,6 +41,10 @@ function Home() {
         });
 
         setReports(filteredReports);
+
+        // Extract unique reporters
+        const reporters = [...new Set(filteredReports.map((report) => report.team1))];
+        setUniqueReporters(["All", ...reporters]);
       } catch (error) {
         console.error("Error fetching data: ", error);
       } finally {
@@ -74,6 +80,14 @@ function Home() {
     }
   };
 
+  const handleReporterChange = (event) => {
+    setSelectedReporter(event.target.value);
+  };
+
+  const filteredReports = selectedReporter === "All"
+    ? reports
+    : reports.filter((report) => report.team1 === selectedReporter);
+
   return (
     <div className="HomeApp">
       {/* Topbar */}
@@ -89,15 +103,15 @@ function Home() {
           <i className="bi bi-arrow-left"></i>
         </button>
         <div className="drawer-content">
-        <Link to="/main/divya-list" className="HomeDrawerButton">
-  DIVYA
-</Link>
- <Link to="/main/haseena-list" className="HomeDrawerButton">
-  HASEENA
-</Link>
- <Link to="/main/shameema-list" className="HomeDrawerButton">
-  SHAMEEMA
-</Link>
+          <Link to="/main/divya-list" className="HomeDrawerButton">
+            DIVYA
+          </Link>
+          <Link to="/main/haseena-list" className="HomeDrawerButton">
+            HASEENA
+          </Link>
+          <Link to="/main/shameema-list" className="HomeDrawerButton">
+            SHAMEEMA
+          </Link>
           <a
             href="https://neuraq.github.io/Palliative-Mkba-App-Contact/"
             target="_blank"
@@ -106,18 +120,9 @@ function Home() {
           >
             Contact Us
           </a>
-          {/* <a
-            href="https://neuraq.github.io/Palliative-Mkba-App-About/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="HomeDrawerButton"
-          >
-            About Us
-          </a> */}
- <Link to="/main/medicine-list" className="HomeDrawerButton">
-  Medicine List
-</Link>
-
+          <Link to="/main/medicine-list" className="HomeDrawerButton">
+            Medicine List
+          </Link>
         </div>
         <div className="drawer-footer">
           <button className="HomeDrawerButton btn-danger" onClick={handleLogout}>
@@ -141,8 +146,20 @@ function Home() {
       </div>
 
       {/* Reports Section */}
-      <div className="HomeReports">
-        <h4 className="HomeReportsTitle">Reports From Today</h4>
+      <div className="HomeReports filter-section">
+        <h4 className="HomeReportsTitle">Reports From Today ({filteredReports.length})  <select
+            id="reporter-filter"
+            className="filter-section"
+            value={selectedReporter}
+            onChange={handleReporterChange}
+          >
+            {uniqueReporters.map((reporter) => (
+              <option key={reporter} value={reporter}>
+                {reporter}
+              </option>
+            ))}
+          </select></h4> 
+      
         {loading ? (
           <div className="loading-container">
             <img
@@ -151,11 +168,11 @@ function Home() {
               className="loading-image"
             />
           </div>
-        ) : reports.length === 0 ? (
+        ) : filteredReports.length === 0 ? (
           <p>No reports found for today.</p>
         ) : (
           <div className="HomeReportsCards">
-            {reports.map((report) => (
+            {filteredReports.map((report) => (
               <Link
                 to={getReportDetailsRoute(report.formType, report.id)}
                 className="HomeReportCardLink"
@@ -166,7 +183,7 @@ function Home() {
                   <div className="HomeReportInfo">
                     <h5>{report.formType} : {report.name} </h5>
                     <p></p>
-                    <small>{new Date(report.submittedAt).toLocaleString()}- REPORTED BY {report.team1}</small>
+                    <small>{new Date(report.submittedAt).toLocaleString()} - REPORTED BY {report.team1}</small>
                   </div>
                 </div>
               </Link>
