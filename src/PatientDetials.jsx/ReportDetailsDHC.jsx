@@ -5,7 +5,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import "./ReportDetailsDHC.css"; // Import the CSS file
 import { Printer } from "lucide-react";
 import "jspdf-autotable";
-import { Pencil } from "lucide-react";
+import { Pencil ,Download} from "lucide-react";
 const ReportDetailsDHC = () => {
   const { reportId } = useParams(); // Get reportId from URL
   const [report, setReport] = useState(null);
@@ -316,7 +316,185 @@ const ReportDetailsDHC = () => {
     printWindow.document.close();
     printWindow.print(); // Trigger the print dialog
 };
+const exportToPrintshort = (report) => {
+  // Create a new window for printing
+  const printWindow = window.open("", "_blank");
+  printWindow.document.write(`
+    <html>
+      <head>
+        <title>DHC Report - ${report.name}</title>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            margin: 10px;
+            font-size: 10px; /* Reduced font size */
+          }
+          h1 {
+            font-size: 16px; /* Reduced font size */
+            color: #283593;
+            margin-bottom: 15px;
+          }
+          .section-header {
+            font-size: 11px; /* Reduced font size */
+            background-color: #d3d3d3;
+            padding: 3px; /* Reduced padding */
+            margin-top: 8px;
+            margin-bottom: 3px;
+          }
+          table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 8px; /* Reduced margin */
+            page-break-inside: avoid; /* Avoid breaking tables across pages */
+          }
+          table, th, td {
+            border: 1px solid #ddd;
+          }
+          th, td {
+            padding: 4px; /* Reduced padding */
+            text-align: left;
+            font-size: 10px; /* Reduced font size */
+          }
+          th {
+            background-color: #f5f5f5;
+          }
+          tr:nth-child(even) {
+            background-color: #f9f9f9;
+          }
+          @media print {
+            .section {
+              page-break-inside: avoid; /* Avoid breaking sections across pages */
+            }
+          }
+        </style>
+      </head>
+      <body>
+        <h1>DHC Report - ${report.name}</h1>
+  `);
 
+  const addSectionHeader = (text) => {
+    printWindow.document.write(`
+      <div class="section-header">${text}</div>
+    `);
+  };
+
+  const addTable = (data) => {
+    printWindow.document.write(`
+      <table>
+        <tbody>
+          ${data
+            .map(
+              (row) => `
+            <tr>
+              ${row
+                .map(
+                  (cell) => `
+                <td>${cell}</td>
+              `
+                )
+                .join("")}
+            </tr>
+          `
+            )
+            .join("")}
+        </tbody>
+      </table>
+    `);
+  };
+
+  // Personal Details Section
+  printWindow.document.write('<div class="section">');
+  addSectionHeader("Personal Details");
+  addTable([
+    ["Reg No", report.registernumber || "N/A"],
+    ["Reported BY", report.team1 || "N/A"],
+    ["Patient Name", report.name || "N/A"],
+    ["Main Diagnosis", report.mainDiagnosis || "N/A"],
+    
+  ]);
+  printWindow.document.write('</div>');
+
+  // First Impression Section
+  printWindow.document.write('<div class="section">');
+  addSectionHeader("First Impression");
+  addTable([["First Impressions", report.firstImpression || "N/A"]]);
+  printWindow.document.write('</div>');
+
+
+  // Basic Matters Section
+  printWindow.document.write('<div class="section">');
+  addSectionHeader("Basic Matters");
+  addTable([
+    ["Basic Matters Notes", report.basicMattersNotes || "N/A"],
+  ]);
+  printWindow.document.write('</div>');
+
+  // General Matters Section
+  printWindow.document.write('<div class="section">');
+  addSectionHeader("General Matters");
+  addTable([
+    ["General Status", report.generalStatus || "N/A"],
+    ["Patient Currently", report.patientCurrently || "N/A"],
+    ["Activity Score", report.activityScore || "N/A"],
+    ["Add More General", report.addmoregeneral || "N/A"],
+  ]);
+  printWindow.document.write('</div>');
+
+ 
+
+  // Vital Signs Section
+  printWindow.document.write('<div class="section">');
+  addSectionHeader("Vital Signs");
+  addTable([
+    ["BP", `${report.bp || "N/A"} mmHg - ${report.ulLl || ""} - ${report.position || ""}`],
+    ["RR", `${report.rr || ""} Mt - ${report.rrType || ""}`],
+    ["Pulse", `${report.pulse || ""} Mt - ${report.pulseType || ""}`],
+    ["Temperature", `${report.pulse || ""} °F - ${report.temperatureType || ""}`],
+    ["SpO2", `${report.pulse || ""} %`],
+    ["GCS", `${report.gcs || ""} /15`],
+    ["GRBS", `${report.grbs || ""} mg/dl`],
+  ]);
+  printWindow.document.write('</div>');
+
+  // Summary Discussion Section
+  printWindow.document.write('<div class="section">');
+  addSectionHeader("Summary Discussion");
+  addTable([
+    ["Discussion and Management :", report.summaryDiscussion || "N/A"],
+    ["Special Care Areas", report.specialCareAreas || "N/A"],
+    ["ComplimentaryRx", report.complimentaryRx || "N/A"],
+    ["Medicine Changes", report.medicineChanges || "N/A"],
+    ["Other Activities", report.otherActivities || "N/A"],
+    ["Home Care Plan", report.homeCarePlan || "N/A"],
+    ["Medical Examination :", report.consultation || "N/A"],
+  ]);
+  printWindow.document.write('</div>');
+
+  // Miscellaneous Section
+  printWindow.document.write('<div class="section">');
+  addSectionHeader("Miscellaneous");
+  addTable([
+    ["Form Type", report.formType || "N/A"],
+    ["Registration Date", report.registrationDate || "N/A"],
+    ["Submitted At", report.submittedAt ? new Date(report.submittedAt).toLocaleString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true,
+    }) : "N/A"],
+  ]);
+  printWindow.document.write('</div>');
+
+  printWindow.document.write(`
+      </body>
+    </html>
+  `);
+  printWindow.document.close();
+  printWindow.print(); // Trigger the print dialog
+};
 
   if (!report) {
     return <p>No report found.</p>;
@@ -329,9 +507,11 @@ const ReportDetailsDHC = () => {
       </button>
       <h2 className="rdhc-title">DHC OF {report.name}</h2>
       <button className="custom-button" onClick={() => exportToPrint(report)}>
-  <Printer size={20} />
+  < Download size={20} />
 </button>
-
+<button className="custom-button" onClick={() => exportToPrintshort(report)}>
+  <Printer  size={20} />
+</button>
 <button className="custom-button" onClick={goToUpdate}>
   <Pencil size={20} />
 </button>

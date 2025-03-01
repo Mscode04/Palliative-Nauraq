@@ -3,7 +3,7 @@ import { db } from "../Firebase/config";
 import { doc, getDoc } from "firebase/firestore";
 import { useParams, useNavigate } from "react-router-dom";
 import "./ReportDetailsPROGRESSION.css"; // Import the CSS file
-import { Printer } from "lucide-react";
+import { Printer,Download } from "lucide-react";
 import "jspdf-autotable";
 import { Pencil } from "lucide-react";
 const ReportDetailsPROGRESSION = () => {
@@ -84,11 +84,8 @@ const ReportDetailsPROGRESSION = () => {
     addTable([
       ["Patient Name", report.name || "N/A"],
       ["Age", report.age || "N/A"],
-      ["Gender", report.gender || "N/A"],
-      ["Date of Birth", report.dob || "N/A"],
       ["Address", report.address || "N/A"],
-      ["Email", report.email || "N/A"],
-      ["Patient ID", report.patientId || "N/A"],
+    
     ]);
   
     // General Details
@@ -132,13 +129,114 @@ const ReportDetailsPROGRESSION = () => {
   
     // Date
     addSectionHeader("Date");
-    addTable([["Date", report.date || "N/A"]]);
+    addTable([]);
   
     printWindow.document.write(`</body></html>`);
     printWindow.document.close();
     printWindow.print();
   };
   
+  const exportToPrintshort = (report) => {
+    const printWindow = window.open("", "_blank");
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>Progression Report - ${report.name}</title>
+          <style>
+            body { font-family: Arial, sans-serif; margin: 20px; }
+            h1 { font-size: 18px; color: #283593; margin-bottom: 20px; text-align: center; }
+            .section-header { font-size: 14px; font-weight: bold; background-color: #d3d3d3; padding: 5px; margin-top: 10px; text-align: center; }
+            table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
+            table, th, td { border: 1px solid #ddd; }
+            th, td { padding: 8px; text-align: left; }
+            th { background-color: #f5f5f5; }
+            tr:nth-child(even) { background-color: #f9f9f9; }
+          </style>
+        </head>
+        <body>
+          <h1>Progression Report - ${report.name}</h1>
+    `);
+
+    const addSectionHeader = (text) => {
+        printWindow.document.write(`<div class="section-header">${text}</div>`);
+    };
+
+    const addTwoColumnTable = (data) => {
+        let rows = "";
+        for (let i = 0; i < data.length; i += 2) {
+            rows += `<tr>
+                      <td><b>${data[i][0]}</b></td><td>${data[i][1]}</td>
+                      ${data[i + 1] ? `<td><b>${data[i + 1][0]}</b></td><td>${data[i + 1][1]}</td>` : `<td></td><td></td>`}
+                    </tr>`;
+        }
+        printWindow.document.write(`
+          <table>
+            <tbody>${rows}</tbody>
+          </table>
+        `);
+    };
+
+    // Personal Details
+    addSectionHeader("Personal Details");
+    addTwoColumnTable([
+      ["Date", report.submittedAt || "N/A"],
+        ["Patient Name", report.name || "N/A"],
+        ["Age", report.age || "N/A"],
+        ["Address", report.address || "N/A"],
+        
+    ]);
+
+    // General Details
+    addSectionHeader("General Details");
+    addTwoColumnTable([
+        ["Time In", report.timeIn || "N/A"],
+        ["Time Out", report.timeOut || "N/A"],
+        ["HC SI No", report.hcSiNo || "N/A"],
+        ["D/N/V/SPHC Number", report.dnvsphcNumber || "N/A"],
+        ["Monthly", report.monthly || "N/A"],
+        ["Last Home Care", report.lastHomeCare || "N/A"],
+        ["Last Home Care Date", report.lastHomeCareDate || "N/A"],
+        ["Consultation/Hospitalisation", report.consultationHospitalisation || "N/A"],
+        
+        ["Physical Service", report.physicalService || "N/A"],
+        ["The Primary Once", report.primaryOnce || "N/A"],
+        ["Patient Awareness", report.patientAwareness || "N/A"],
+        ["Family Awareness", report.familyAwareness || "N/A"],
+        ["Financially", report.financially || "N/A"],
+        ["Emotional State", report.emotionalState || "N/A"],
+        ["Caretaker", report.caretaker || "N/A"],
+        ["Caretaker Type", report.caretakerType || "N/A"],
+        ["Community Support", report.communitySupport || "N/A"],
+        ["Palliative Team Support", report.palliativeTeamSupport || "N/A"],
+        ["Environmental Hygiene", report.environmentalHygiene || "N/A"],
+        ["Head to Foot Checkup", report.headToFootCheckup || "N/A"],
+        ["Silent Tapes", report.silentTapes || "N/A"],
+        ["Activity Mobility", report.activityMobility || "N/A"],
+        ["Glassglow", report.glassglow || "N/A"],
+        ["General Condition", report.generalCondition || "N/A"],
+        ["Care Status", report.careStatus || "N/A"],
+        ["Quality of Life", report.qualityOfLife || "N/A"],
+        ["Logistic", report.logistic || "N/A"],
+        ["HC Plan", report.hcPlan || "N/A"],
+        ["Team 1", report.team1 || "N/A"],
+        ["Team 2", report.team2 || "N/A"],
+        ["Team 3", report.team3 || "N/A"],
+        ["Team 4", report.team4 || "N/A"],
+        
+    ]);
+
+
+    addSectionHeader("Activities");
+    addTwoColumnTable([
+      ["Main Activities", report.mainActivities || "N/A"],
+    ]);
+
+    printWindow.document.write(`</body></html>`);
+    printWindow.document.close();
+    printWindow.print();
+};
+
+
   const goToUpdate = () => {
     navigate(`/main/update-progression/${reportId}`); // Navigate to the UpdatePROGRESSION component
   };
@@ -168,8 +266,12 @@ const ReportDetailsPROGRESSION = () => {
       </button>
       <h2 className="rprogression-title">Progression Report Details</h2>
             <button className="custom-button" onClick={() => exportToPrint(report)}>
+        < Download size={20} />
+      </button>
+            <button className="custom-button" onClick={() => exportToPrintshort(report)}>
         <Printer size={20} />
       </button>
+      
       
       <button className="custom-button" onClick={goToUpdate}>
         <Pencil size={20} />
