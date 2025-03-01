@@ -68,7 +68,7 @@ const AllReportsPage = () => {
         reportsData.sort((a, b) => {
           const dateA = new Date(a.submittedAt);
           const dateB = new Date(b.submittedAt);
-          return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
+          return sortOrder === "desc" ? dateA - dateB : dateB - dateA;
         });
 
         setReports(reportsData);
@@ -222,8 +222,8 @@ const AllReportsPage = () => {
           onChange={(e) => setSortOrder(e.target.value)}
           className="AllRep-filter-select"
         >
-          <option value="asc">Ascending</option>
           <option value="desc">Descending</option>
+          <option value="asc">Ascending</option>
         </select>
       </div>
 

@@ -4,6 +4,7 @@ import { collection, getDocs } from "firebase/firestore";
 import "./PatientTable.css";
 import { useNavigate } from "react-router-dom";
 import { FaFilter } from "react-icons/fa";
+
 const PatientTable = () => {
   const [patients, setPatients] = useState([]);
   const [showFilters, setShowFilters] = useState(false);
@@ -12,12 +13,13 @@ const PatientTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedDiagnosis, setSelectedDiagnosis] = useState("All"); // Filter by diagnosis
-  const [sortOrder, setSortOrder] = useState("asc"); // Sort order: asc or desc
-  const [sortBy, setSortBy] = useState("name"); // Sort by: name or registernumber
+  const [sortOrder, setSortOrder] = useState("desc"); // Default to descending
+  const [sortBy, setSortBy] = useState("registernumber"); // Default sort by register number
   const [selectedStatus, setSelectedStatus] = useState("All"); // Filter by active/inactive
-  const patientsPerPage = 100; // Show 20 cards per page
+  const patientsPerPage = 100; // Show 100 cards per page
   const navigate = useNavigate();
 
+  // Fetch patients from Firestore
   useEffect(() => {
     const fetchPatients = async () => {
       try {
@@ -39,11 +41,13 @@ const PatientTable = () => {
     fetchPatients();
   }, []);
 
+  // Normalize diagnosis string into an array
   const normalizeDiagnosis = (diagnosis) => {
     if (!diagnosis) return [];
     return diagnosis.split(",").map((d) => d.trim());
   };
 
+  // Filter and sort patients
   useEffect(() => {
     let filtered = patients.filter((patient) => {
       const name = patient.name || "";
@@ -75,7 +79,7 @@ const PatientTable = () => {
       return matchesSearchQuery && matchesDiagnosis && matchesStatus;
     });
 
-    // Sort patients (same as before)
+    // Sort patients
     if (sortBy === "name") {
       filtered.sort((a, b) => {
         const nameA = a.name || "";
@@ -108,12 +112,14 @@ const PatientTable = () => {
     setCurrentPage(1); // Reset to the first page on filter or sort change
   }, [searchQuery, selectedDiagnosis, selectedStatus, sortOrder, sortBy, patients]);
 
+  // Pagination logic
   const indexOfLastPatient = currentPage * patientsPerPage;
   const indexOfFirstPatient = indexOfLastPatient - patientsPerPage;
   const currentPatients = filteredPatients.slice(indexOfFirstPatient, indexOfLastPatient);
 
   const totalPages = Math.ceil(filteredPatients.length / patientsPerPage);
 
+  // Get unique diagnoses for the filter dropdown
   const uniqueDiagnoses = [
     "All",
     ...new Set(
@@ -123,10 +129,12 @@ const PatientTable = () => {
     ),
   ];
 
+  // Handle card click to navigate to patient details
   const handleCardClick = (patientId) => {
     navigate(`/main/patient/${patientId}`);
   };
 
+  // Pagination handlers
   const handleNextPage = () => {
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
@@ -144,15 +152,31 @@ const PatientTable = () => {
       <button className="PatientTable-back-button" onClick={() => navigate(-1)}>
         <i className="bi bi-arrow-left"></i> Back
       </button>
-  
+
       {/* Display total number of patients */}
       <div className="PatientTable-total-count">
         Total Patients: {filteredPatients.length}
       </div>
-  
-      {/* Filter toggle button */}
-     
-  
+
+      {/* Search bar and filter toggle */}
+      <div className="PatientTable-search-filter-container">
+        <div className="PatientTable-search-bar">
+          <input
+            type="text"
+            placeholder="Search by name, phone number, address, diagnosis, or register number..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
+        <button
+          className="PatientTable-filter-toggle mb-4"
+          onClick={() => setShowFilters(!showFilters)}
+          title={showFilters ? "Hide Filters" : "Show Filters"}
+        >
+          <FaFilter /> {/* Filter icon */}
+        </button>
+      </div>
+
       {/* Filter box */}
       {showFilters && (
         <div className="PatientTable-filters-box">
@@ -167,7 +191,7 @@ const PatientTable = () => {
                 ))}
               </select>
             </label>
-  
+
             <label>
               Filter by Status:
               <select value={selectedStatus} onChange={(e) => setSelectedStatus(e.target.value)}>
@@ -176,7 +200,7 @@ const PatientTable = () => {
                 <option value="Inactive">Inactive</option>
               </select>
             </label>
-  
+
             <label>
               Sort by:
               <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
@@ -184,7 +208,7 @@ const PatientTable = () => {
                 <option value="registernumber">Register Number</option>
               </select>
             </label>
-  
+
             <label>
               Order:
               <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)}>
@@ -195,25 +219,8 @@ const PatientTable = () => {
           </div>
         </div>
       )}
-  
-  <div className="PatientTable-search-filter-container">
-  <div className="PatientTable-search-bar">
-    <input
-      type="text"
-      placeholder="Search by name, phone number, address, diagnosis, or register number..."
-      value={searchQuery}
-      onChange={(e) => setSearchQuery(e.target.value)}
-    />
-  </div>
-  <button
-    className="PatientTable-filter-toggle mb-4"
-    onClick={() => setShowFilters(!showFilters)}
-    title={showFilters ? "Hide Filters" : "Show Filters"} // Tooltip
-  >
-    <FaFilter /> {/* Filter icon */}
-  </button>
-</div>
-     
+
+      {/* Loading indicator */}
       {isLoading ? (
         <div className="PatientTable-loading-indicator">
           <div className="loading-container">
@@ -226,6 +233,7 @@ const PatientTable = () => {
         </div>
       ) : (
         <>
+          {/* Patient cards */}
           <div className="PatientTable-patient-cards">
             {currentPatients.map((patient) => (
               <div key={patient.id} className="PatientTable-patient-card" onClick={() => handleCardClick(patient.id)}>
@@ -256,7 +264,7 @@ const PatientTable = () => {
               </div>
             ))}
           </div>
-  
+
           {/* Pagination */}
           <div className="PatientTable-pagination">
             <button onClick={handlePreviousPage} disabled={currentPage === 1} className="PatientTable-pagination-btn">
