@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Select from "react-select";
 import { db } from "../Firebase/config";
-import { collection, query, where, getDocs, addDoc, updateDoc, doc } from "firebase/firestore";
+import { collection, query, where, getDocs, updateDoc, doc, addDoc } from "firebase/firestore";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./MedAdd.css";
@@ -12,141 +12,171 @@ const Medicine = () => {
   const navigate = useNavigate();
   const [patientData, setPatientData] = useState(null);
   const [medicines, setMedicines] = useState([]);
-  const [isEditing, setIsEditing] = useState(false);
-  const [formFields, setFormFields] = useState([]);
+  const [medicineDocId, setMedicineDocId] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [medicineOptions, setMedicineOptions] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [editingIndex, setEditingIndex] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const [currentMedicine, setCurrentMedicine] = useState({
+    medicine: null,
+    newMedicine: "",
+    quantity: "",
+    time: "Morning",
+    patientsNow: true,
+  });
 
   useEffect(() => {
-    const fetchPatientData = async () => {
+    const fetchData = async () => {
       try {
+        setIsLoading(true);
+
+        // Fetch patient data
         const patientQuery = query(collection(db, "Patients"), where("patientId", "==", patientId));
         const patientSnapshot = await getDocs(patientQuery);
 
         if (!patientSnapshot.empty) {
-          const data = patientSnapshot.docs[0].data();
-          setPatientData(data);
-        } else {
-          console.error("No patient document found with patientId:", patientId);
+          setPatientData(patientSnapshot.docs[0].data());
         }
 
+        // Fetch medicines
         const medicineQuery = query(collection(db, "Medicines"), where("patientId", "==", patientId));
         const medicineSnapshot = await getDocs(medicineQuery);
 
         if (!medicineSnapshot.empty) {
-          const medicinesData = medicineSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-          setMedicines(medicinesData);
+          const docData = medicineSnapshot.docs[0].data();
+          setMedicines(docData.medicines || []);
+          setMedicineDocId(medicineSnapshot.docs[0].id);
         }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
 
-    const fetchMedicines = async () => {
-      try {
-        const medicineQuery = query(collection(db, "medibase"));
-        const medicineSnapshot = await getDocs(medicineQuery);
-
-        const options = medicineSnapshot.docs.map((doc) => ({
+        // Fetch medicine options
+        const medibaseSnapshot = await getDocs(collection(db, "medibase"));
+        const options = medibaseSnapshot.docs.map(doc => ({
           value: doc.data().name,
           label: doc.data().name,
         }));
-
         setMedicineOptions(options);
       } catch (error) {
-        console.error("Error fetching medicines:", error);
+        console.error("Error fetching data:", error);
+        toast.error("Error fetching data");
+      } finally {
+        setIsLoading(false);
       }
     };
 
-    fetchPatientData();
-    fetchMedicines();
+    fetchData();
   }, [patientId]);
 
-  const handleInputChange = (index, name, value) => {
-    const updatedFields = [...formFields];
-    updatedFields[index][name] = value;
-    setFormFields(updatedFields);
-  };
-
-  const addMedicineField = () => {
-    setFormFields([...formFields, { medicine: null, newMedicine: "", quantity: "", time: "Morning", patientsNow: false }]);
+  const handleInputChange = (name, value) => {
+    setCurrentMedicine(prev => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!currentMedicine.medicine && !currentMedicine.newMedicine) {
+      toast.error("Please enter medicine name");
+      return;
+    }
+    if (!currentMedicine.quantity) {
+      toast.error("Please enter quantity");
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
-      const currentDate = new Date().toISOString();
-
-      // Check if new medicines are added and add them to the medibase collection
-      for (const field of formFields) {
-        if (field.newMedicine && !medicineOptions.some(option => option.value === field.newMedicine)) {
-          await addDoc(collection(db, "medibase"), {
-            name: field.newMedicine,
-          });
-
-          // Update the medicineOptions state
-          setMedicineOptions(prevOptions => [
-            ...prevOptions,
-            { value: field.newMedicine, label: field.newMedicine },
-          ]);
-        }
+      // Add new medicine to medibase if needed
+      if (currentMedicine.newMedicine && !medicineOptions.some(opt => opt.value === currentMedicine.newMedicine)) {
+        await addDoc(collection(db, "medibase"), { name: currentMedicine.newMedicine });
+        setMedicineOptions(prev => [...prev, 
+          { value: currentMedicine.newMedicine, label: currentMedicine.newMedicine }
+        ]);
       }
 
-      const medicinesData = formFields.map((field) => ({
-        medicineName: field.newMedicine || field.medicine?.value,
-        quantity: field.quantity,
-        time: field.time,
-        patientsNow: field.patientsNow,
-      }));
+      const newMed = {
+        medicineName: currentMedicine.newMedicine || currentMedicine.medicine.value,
+        quantity: currentMedicine.quantity,
+        time: currentMedicine.time,
+        patientsNow: currentMedicine.patientsNow,
+      };
 
-      if (isEditing) {
-        const medicineRef = doc(db, "Medicines", medicines[0].id); // Assuming only one entry per patient
-        await updateDoc(medicineRef, { medicines: medicinesData });
-        toast.success("Medicines updated successfully!", {
-          position: "top-center",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-        });
+      const updatedMeds = editingIndex !== null 
+        ? medicines.map((med, i) => i === editingIndex ? newMed : med)
+        : [...medicines, newMed];
+
+      if (medicineDocId) {
+        await updateDoc(doc(db, "Medicines", medicineDocId), { medicines: updatedMeds });
       } else {
-        const reportData = {
+        const docRef = await addDoc(collection(db, "Medicines"), {
           patientId,
           patientDetails: patientData,
-          medicines: medicinesData,
-          submittedAt: currentDate,
-        };
-        await addDoc(collection(db, "Medicines"), reportData);
-        toast.success("Medicines saved successfully!", {
-          position: "top-center",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
+          medicines: updatedMeds,
+          submittedAt: new Date().toISOString(),
         });
+        setMedicineDocId(docRef.id);
       }
 
-      setMedicines(medicinesData);
-      setFormFields([]);
-      setIsEditing(false);
-    } catch (error) {
-      console.error("Error saving medicines:", error);
-      toast.error("Error saving medicines. Please try again.", {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
+      setMedicines(updatedMeds);
+      setShowModal(false);
+      setEditingIndex(null);
+      setCurrentMedicine({
+        medicine: null,
+        newMedicine: "",
+        quantity: "",
+        time: "Morning",
+        patientsNow: false,
       });
+
+      toast.success("Medicine saved successfully!");
+    } catch (error) {
+      console.error("Error saving medicine:", error);
+      toast.error("Error saving medicine");
     } finally {
       setIsSubmitting(false);
     }
   };
+
+  const handleEdit = (index) => {
+    const med = medicines[index];
+    setCurrentMedicine({
+      medicine: { value: med.medicineName, label: med.medicineName },
+      newMedicine: "",
+      quantity: med.quantity,
+      time: med.time,
+      patientsNow: med.patientsNow,
+    });
+    setEditingIndex(index);
+    setShowModal(true);
+  };
+
+  const handleDelete = async (index) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this medicine?");
+    if (!confirmDelete) return; // Exit if user cancels
+  
+    try {
+      const updatedMeds = medicines.filter((_, i) => i !== index);
+      await updateDoc(doc(db, "Medicines", medicineDocId), { medicines: updatedMeds });
+      setMedicines(updatedMeds);
+      toast.success("Medicine deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting medicine:", error);
+      toast.error("Error deleting medicine");
+    }
+  };
+  
+
+  if (isLoading) {
+    return (
+      <div className="loading-container">
+        <img
+          src="https://media.giphy.com/media/YMM6g7x45coCKdrDoj/giphy.gif"
+          alt="Loading..."
+          className="loading-image"
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="MedAdd-container">
@@ -154,141 +184,147 @@ const Medicine = () => {
         &larr; Back
       </button>
       <h2 className="MedAdd-title">Manage Medicines for Patient ID: {patientId}</h2>
-      {patientData ? (
+
+      {patientData && (
         <div className="MedAdd-patientInfo">
-           <h3 style={{color:"black"}}>Patient Medicines</h3>
-          <h3><strong>Name:</strong> {patientData.name}</h3>
-          <h3><strong>Address:</strong> {patientData.address}</h3>
+          <h3>Patient Details</h3>
+          <p><strong>Name:</strong> {patientData.name}</p>
+          <p><strong>Address:</strong> {patientData.address}</p>
         </div>
-      ) : (
-        <div className="loading-container">
-        <img
-          src="https://media.giphy.com/media/YMM6g7x45coCKdrDoj/giphy.gif"
-          alt="Loading..."
-          className="loading-image"
-        />
-      </div>
       )}
+
+      <div className="MedAdd-header">
+        <h3>Medication List</h3>
+        <button className="MedAdd-addButton" onClick={() => setShowModal(true)}>
+          Add New Medicine
+        </button>
+      </div>
 
       {medicines.length > 0 ? (
-        <div className="MedAdd-existingMedicines">
-          <h3>Existing Medicines</h3>
-          <table className="MedAdd-table">
-            <thead>
-              <tr>
-                <th>Medicine Name</th>
-                <th>Quantity</th>
-                <th>Time</th>
-                <th>Patients Show</th>
+        <table className="MedAdd-table">
+          <thead>
+            <tr>
+              <th>Medicine</th>
+              <th>Quantity</th>
+              <th>Time</th>
+              <th>Patients Show</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {medicines.map((med, index) => (
+              <tr key={index}>
+                <td>{med.medicineName}</td>
+                <td>{med.quantity}</td>
+                <td>{med.time}</td>
+                <td>{med.patientsNow ? "Yes" : "No"}</td>
+                <td>
+                  <button onClick={() => handleEdit(index)} class="btn btn-warning btn-sm me-1 del-get">Edit</button>
+                  <button onClick={() => handleDelete(index)} class="btn btn-danger btn-sm">Delete</button>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {medicines.length > 0 && medicines[0].medicines ? (
-                medicines[0].medicines.map((medicine, index) => (
-                  <tr key={index}>
-                    <td data-label="Medicine Name">{medicine.medicineName}</td>
-                    <td data-label="Quantity">{medicine.quantity}</td>
-                    <td data-label="Time">{medicine.time}</td>
-                    <td data-label="Patients Now">{medicine.patientsNow ? "Yes" : "No"}</td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="4">No medicines available.</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-
-          <button
-            onClick={() => navigate(`/main/update-medicines/${patientId}`)} // Navigate to the update route
-            className="MedAdd-updateButton"
-          >
-            Update Medicines
-          </button>
-        </div>
+            ))}
+          </tbody>
+        </table>
       ) : (
-        <form onSubmit={handleSubmit} className="MedAdd-form">
-          <h3>Add Medicines</h3>
-          {formFields.map((field, index) => (
-            <div key={index} className="MedAdd-field">
-              <label>
-                Medicine Name:
-                <Select
-                  options={medicineOptions}
-                  value={field.medicine}
-                  onChange={(selectedOption) => handleInputChange(index, "medicine", selectedOption)}
-                  placeholder="Select Medicine"
-                  isClearable
-                />
-                <span>or Add New:</span>
-                <input
-                  type="text"
-                  name="newMedicine"
-                  value={field.newMedicine}
-                  placeholder="New Medicine"
-                  onChange={(e) => handleInputChange(index, "newMedicine", e.target.value)}
-                />
-              </label>
-              <label>
-                Quantity:
-                <input
-                  type="number"
-                  name="quantity"
-                  value={field.quantity}
-                  onChange={(e) => handleInputChange(index, "quantity", e.target.value)}
-                />
-              </label>
-              <label>
-                Time:
-                <select
-                  name="time"
-                  value={field.time}
-                  onChange={(e) => handleInputChange(index, "time", e.target.value)}
-                >
-                  <option value="Mor-Noon-Eve">Mor-Noon-Eve</option>
-                  <option value="Mor-Noon">Mor-Noon</option>
-                  <option value="Mor-Eve">Mor-Eve</option>
-                  <option value="Noon-Eve">Noon-Eve</option>
-                  <option value="Mor">Morning</option>
-                  <option value="Noon">Noon</option>
-                  <option value="Eve">Evening</option>
-                  <option value="SOS">SOS</option>
-                  <option value="If Required">If Required</option>
-                </select>
-              </label>
-              <label>
-                Patients Show:
-                <input
-                  type="checkbox"
-                  name="patientsNow"
-                  checked={field.patientsNow}
-                  onChange={(e) => handleInputChange(index, "patientsNow", e.target.checked)}
-                />
-              </label>
-            </div>
-          ))}
-          <button type="button" onClick={addMedicineField} className="MedAdd-addButton">
-            Add More
-          </button>
-          <button type="submit" className="MedAdd-submitButton" disabled={isSubmitting}>
-            {isSubmitting ? "Submitting..." : "Save Medicines"}
-          </button>
-        </form>
+        <p>No medications found</p>
       )}
 
-      <ToastContainer
-        position="top-center"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={true}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        toastStyle={{ marginTop: "20px" }}
-      />
+      {showModal && (
+        <div className="MedAdd-modal">
+          <div className="MedAdd-modalContent">
+            <h3>{editingIndex !== null ? "Edit Medicine" : "Add New Medicine"}</h3>
+            <form onSubmit={handleSubmit}>
+              <div className="MedAdd-formGroup">
+                <label>Medicine Name:</label>
+                <Select
+                  options={medicineOptions}
+                  value={currentMedicine.medicine}
+                  onChange={(option) => handleInputChange("medicine", option)}
+                  placeholder="Select medicine"
+                  isClearable
+                />
+                <span className="MedAdd-or">OR</span>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Enter new medicine name"
+                  value={currentMedicine.newMedicine}
+                  onChange={(e) => handleInputChange("newMedicine", e.target.value)}
+                />
+              </div>
+
+              <div className="MedAdd-formGroup">
+                <label>Quantity:</label>
+                <input
+                  type="number"
+                  className="form-control"
+                  value={currentMedicine.quantity}
+                  onChange={(e) => handleInputChange("quantity", e.target.value)}
+                />
+              </div>
+
+              <div className="MedAdd-formGroup">
+                <label>Time:</label>
+                <select
+                  value={currentMedicine.time}
+                  className="form-control"
+                  onChange={(e) => handleInputChange("time", e.target.value)}
+                >
+                 <option value="Morning">Morning</option>
+<option value="Noon">Noon</option>
+<option value="Night">Night</option>
+<option value="Morning-Noon">Morning & Noon</option>
+<option value="Morning-Night">Morning & Night</option>
+<option value="Noon-Night">Noon & Night</option>
+<option value="Morning-Noon-Night">Morning, Noon & Night</option>
+<option value="SOS">SOS</option> 
+                  
+                 
+                </select>
+              </div>
+
+              <div className="MedAdd-formGroup">
+                <label>
+                <input
+  type="checkbox"
+  checked={!!currentMedicine.patientsNow} 
+  onChange={(e) => handleInputChange("patientsNow", e.target.checked)}
+/>
+
+
+                  Patients Show
+                </label>
+              </div>
+
+              <div className="MedAdd-modalActions">
+                <button
+                  type="button"
+                  class="btn btn-danger btn-sm"
+                  onClick={() => {
+                    setShowModal(false);
+                    setEditingIndex(null);
+                    setCurrentMedicine({
+                      medicine: null,
+                      newMedicine: "",
+                      quantity: "",
+                      time: "Morning",
+                      patientsNow: false,
+                    });
+                  }}
+                >
+                  Cancel
+                </button>
+                <button type="submit" disabled={isSubmitting} class="btn btn-success btn-sm">
+                  {isSubmitting ? "Saving..." : "Save"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      <ToastContainer position="top-center" autoClose={3000} />
     </div>
   );
 };

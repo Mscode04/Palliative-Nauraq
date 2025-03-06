@@ -4,6 +4,7 @@ import { collection, getDocs } from "firebase/firestore";
 import "./PatientTable.css";
 import { useNavigate } from "react-router-dom";
 import { FaFilter } from "react-icons/fa";
+import * as XLSX from "xlsx"; // Import the xlsx library
 
 const PatientTable = () => {
   const [patients, setPatients] = useState([]);
@@ -147,6 +148,64 @@ const PatientTable = () => {
     }
   };
 
+// Download to Excel function
+const handleDownloadExcel = () => {
+  // Define the headers for the Excel sheet
+  const headers = [
+    "Reg No", "Name", "Registration Date", "Address", "Location", "Ward", "Age", "Gender", "Category", "Medical History",
+    "Main Diagnosis", "Date of Birth", "Current Difficulties", "Email", "Main Caretaker", "Main Caretaker Phone",
+    "Neighbour Name", "Neighbour Phone", "Panchayat", "Patient ID", "Relative Phone", "Referral Person",
+    "Referral Phone", "Community Volunteer", "Community Volunteer Phone", "Ward Member", "Ward Member Phone",
+    "Asha Worker", "Status"
+  ];
+
+  // Map the filteredPatients array to match the headers
+  const data = filteredPatients.map((patient) => ({
+    "Reg No": patient.registernumber,
+    "Name": patient.name,
+    "Registration Date": patient.registrationDate,
+    "Address": patient.address,
+    "Location": patient.location,
+    "Ward": patient.ward,
+    "Age": patient.age,
+    "Gender": patient.gender,
+    "Category": patient.category,
+    "Medical History": patient.medicalHistory,
+    "Main Diagnosis": patient.mainDiagnosis,
+    "Date of Birth": patient.dob,
+    "Current Difficulties": patient.currentDifficulties,
+    "Email": patient.email,
+    "Main Caretaker": patient.mainCaretaker,
+    "Main Caretaker Phone": patient.mainCaretakerPhone,
+    "Neighbour Name": patient.neighbourName,
+    "Neighbour Phone": patient.neighbourPhone,
+    "Panchayat": patient.panchayat,
+    "Patient ID": patient.patientId,
+    "Relative Phone": patient.relativePhone,
+    "Referral Person": patient.referralPerson,
+    "Referral Phone": patient.referralPhone,
+    "Community Volunteer": patient.communityVolunteer,
+    "Community Volunteer Phone": patient.communityVolunteerPhone,
+    "Ward Member": patient.wardMember,
+    "Ward Member Phone": patient.wardMemberPhone,
+    "Asha Worker": patient.ashaWorker,
+    "Status": patient.deactivated ? "INACTIVE" : "ACTIVE"
+  }));
+
+  // Create a new worksheet from the data
+  const worksheet = XLSX.utils.json_to_sheet(data, { header: headers });
+
+  // Prepend the headers to the worksheet
+  XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: "A1" });
+
+  // Create a new workbook and append the worksheet
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Patients");
+
+  // Write the workbook to a file
+  XLSX.writeFile(workbook, "patients_data.xlsx");
+};
+
   return (
     <div className="PatientTable-container">
       <button className="PatientTable-back-button" onClick={() => navigate(-1)}>
@@ -216,6 +275,11 @@ const PatientTable = () => {
                 <option value="desc">Descending</option>
               </select>
             </label>
+
+            {/* Download to Excel button */}
+            <button className="btn btn-success btn-sm mt-2" onClick={handleDownloadExcel} style={{height:"40px"}}>
+              Download to Excel
+            </button>
           </div>
         </div>
       )}

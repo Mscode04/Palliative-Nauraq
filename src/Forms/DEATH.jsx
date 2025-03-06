@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { db } from "../Firebase/config";
-import { collection, query, where, getDocs, addDoc } from "firebase/firestore";
+import { collection, query, where, getDocs, addDoc ,updateDoc,doc} from "firebase/firestore";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./DeathAdd.css";
@@ -59,6 +59,7 @@ const DEATH = () => {
       const currentDate = new Date();
       const timestamp = currentDate.toISOString();
   
+      // Prepare report data
       const reportData = {
         ...formData,
         ...patientData,
@@ -66,10 +67,30 @@ const DEATH = () => {
         submittedAt: timestamp,
       };
   
+      // Add death report to Firestore
       const docRef = await addDoc(collection(db, "Reports"), reportData);
+      console.log("Death report added with ID: ", docRef.id);
   
-      console.log("Document written with ID: ", docRef.id);
-      toast.success("Death report submitted successfully!", {
+      // Find the patient document in Firestore
+      const patientQuery = query(collection(db, "Patients"), where("patientId", "==", patientId));
+      const patientSnapshot = await getDocs(patientQuery);
+  
+      if (!patientSnapshot.empty) {
+        const patientDoc = patientSnapshot.docs[0];
+        const patientRef = doc(db, "Patients", patientDoc.id);
+  
+        // Deactivate patient
+        await updateDoc(patientRef, {
+          deactivated: true,
+          deactivationReason: "Patient passed away",
+        });
+  
+        console.log("Patient deactivated successfully.");
+      } else {
+        console.error("Patient not found for deactivation.");
+      }
+  
+      toast.success("Death report submitted and patient deactivated!", {
         position: "top-center",
         autoClose: 3000,
         hideProgressBar: false,
@@ -78,22 +99,24 @@ const DEATH = () => {
         draggable: true,
       });
   
-      // Redirect to /patient/:patientId after 3 seconds
+      // Redirect after success
       setTimeout(() => {
         navigate(-1);
       }, 3000);
   
+      // Reset form
       setFormData({
         date: "",
         timeOfDeath: "",
         deathReason: "",
+        team1: "",
         visitedHospital: "No",
         deathPlace: "",
         formType: "DEATH",
         submittedAt: "",
       });
     } catch (error) {
-      console.error("Error adding document: ", error);
+      console.error("Error submitting death report:", error);
       toast.error("Error submitting the report. Please try again.", {
         position: "top-center",
         autoClose: 5000,
@@ -106,6 +129,7 @@ const DEATH = () => {
       setIsSubmitting(false);
     }
   };
+  
   return (
     <div className="DeathAdd-container">
       <button className="DeathAdd-backButton" onClick={() => navigate(-1)}>

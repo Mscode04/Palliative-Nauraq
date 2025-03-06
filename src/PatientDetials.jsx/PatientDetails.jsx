@@ -33,7 +33,7 @@ const PatientDetails = () => {
       console.error("Error fetching patient details: ", error);
     }
   };
-
+  
   // Fetching medicines related to this patient
   const fetchMedicines = async () => {
     try {
@@ -117,6 +117,228 @@ const PatientDetails = () => {
       alert("Incorrect confirmation code. Deletion canceled.");
     }
   };
+
+  const exportToPrint = (patient) => {
+    const printWindow = window.open("", "_blank");
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>Patient Report - ${patient.name}</title>
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+              margin: 10px;
+              font-size: 12px;
+            }
+            h1 {
+              font-size: 18px;
+              color: #283593;
+              margin-bottom: 15px;
+            }
+            .section-header {
+              font-size: 14px;
+              background-color: #d3d3d3;
+              padding: 5px;
+              margin-top: 10px;
+              margin-bottom: 5px;
+              page-break-after: avoid;
+            }
+            table {
+              width: 100%;
+              border-collapse: collapse;
+              margin-bottom: 10px;
+            }
+            table, th, td {
+              border: 1px solid #ddd;
+            }
+            th, td {
+              padding: 6px;
+              text-align: left;
+              font-size: 12px;
+            }
+            th {
+              background-color: #f5f5f5;
+            }
+            tr:nth-child(even) {
+              background-color: #f9f9f9;
+            }
+            .section {
+              page-break-before: auto;
+              page-break-inside: auto;
+            }
+            @media print {
+              body {
+                margin: 0;
+                padding: 0;
+              }
+              .section {
+                page-break-inside: avoid;
+                page-break-after: auto;
+              }
+              table {
+                page-break-before: auto;
+              }
+              thead {
+                display: table-header-group;
+              }
+              tfoot {
+                display: table-footer-group;
+              }
+            }
+          </style>
+        </head>
+        <body>
+          
+    `);
+
+    const addSectionHeader = (text) => {
+      printWindow.document.write(`
+        <div class="section-header">${text}</div>
+      `);
+    };
+
+    const addTable = (data, headers) => {
+      printWindow.document.write(`
+        <table>
+          <thead>
+            <tr>
+              ${headers.map((header) => `<th>${header}</th>`).join("")}
+            </tr>
+          </thead>
+          <tbody>
+            ${data
+              .map(
+                (row) => `
+              <tr>
+                ${row
+                  .map(
+                    (cell) => `
+                  <td>${cell || "N/A"}</td>
+                `
+                  )
+                  .join("")}
+              </tr>
+            `
+              )
+              .join("")}
+          </tbody>
+        </table>
+      `);
+    };
+
+    // Personal Details Section
+    printWindow.document.write('<div class="section"><h1>Patient Profile</h1>');
+    addSectionHeader("Personal Details");
+    addTable(
+      [
+        ["Reg No", patient.registernumber],
+        ["Name", patient.name],
+        ["Registration Date", patient.registrationDate],
+        ["Address", patient.address],
+        ["Location", patient.location],
+        ["Ward", patient.ward],
+        ["Age", patient.age],
+        ["Gender", patient.gender],
+        ["Category", patient.category],
+        ["Medical History", patient.medicalHistory],
+        ["Main Diagnosis", patient.mainDiagnosis],
+        ["Date of Birth", patient.dob],
+        ["Current Difficulties", patient.currentDifficulties],
+        ["Email", patient.email],
+        ["Main Caretaker", patient.mainCaretaker],
+        ["Main Caretaker Phone", patient.mainCaretakerPhone],
+        ["Neighbour Name", patient.neighbourName],
+        ["Neighbour Phone", patient.neighbourPhone],
+        ["Panchayat", patient.panchayat],
+        ["Patient ID", patient.patientId],
+        ["Relative Phone", patient.relativePhone],
+        ["Referral Person", patient.referralPerson],
+        ["Referral Phone", patient.referralPhone],
+        ["Community Volunteer", patient.communityVolunteer],
+        ["Community Volunteer Phone", patient.communityVolunteerPhone],
+        ["Ward Member", patient.wardMember],
+        ["Ward Member Phone", patient.wardMemberPhone],
+        ["Asha Worker", patient.ashaWorker],
+        ["Status", patient.deactivated ? "INACTIVE" : "ACTIVE"],
+      ],
+      ["Field", "Value"]
+    );
+    printWindow.document.write('</div>');
+
+    // Family Details Section
+    if (patient.familyDetails && patient.familyDetails.length > 0) {
+      printWindow.document.write('<div class="section">');
+      addSectionHeader("Family Details");
+      addTable(
+        patient.familyDetails.map((family) => [
+          family.name,
+          family.relation,
+          family.age,
+          family.education,
+          family.income,
+          family.marriageStatus,
+          family.remark,
+        ]),
+        ["Name", "Relation", "Age", "Education", "Income", "Marriage Status", "Remark"]
+      );
+      printWindow.document.write('</div>');
+    }
+
+    // Medicines Section
+    if (patient.medicines && patient.medicines.length > 0) {
+      printWindow.document.write('<div class="section">');
+      addSectionHeader("Medicines");
+      addTable(
+        patient.medicines.map((medicine) => [
+          medicine.medicineName,
+          medicine.quantity,
+          medicine.time,
+          medicine.patientsNow ? "Show" : "Hide",
+        ]),
+        ["Medicine Name", "Quantity", "Time", "Show"]
+      );
+      printWindow.document.write('</div>');
+    }
+
+    // Equipments Section
+    if (patient.equipments && patient.equipments.length > 0) {
+      printWindow.document.write('<div class="section">');
+      addSectionHeader("Equipments");
+      addTable(
+        patient.equipments.map((equipment) => [
+          equipment.equipmentName,
+          equipment.providedDate,
+          equipment.returnDate,
+          equipment.damage ? "Yes" : "No",
+        ]),
+        ["Equipment Name", "Provided Date", "Return Date", "Damage"]
+      );
+      printWindow.document.write('</div>');
+    }
+
+    // Conditions Section
+    if (patient.conditions && patient.conditions.length > 0) {
+      printWindow.document.write('<div class="section">');
+      addSectionHeader("Conditions");
+      addTable(
+        patient.conditions.map((condition) => [condition.conditionName]),
+        ["Condition Name"]
+      );
+      printWindow.document.write('</div>');
+    }
+
+    printWindow.document.write(`
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
+
+    setTimeout(() => {
+      printWindow.print();
+    }, 500); // Ensures the content is fully loaded before printing
+};
+
+ 
   return (
     <div className="PTDetail-container">
       <button className="PTDetail-backButton" onClick={() => navigate(-1)}>
@@ -437,7 +659,7 @@ const PatientDetails = () => {
         <div style={{ display: "flex", gap: "10px", marginTop: "20px" }}>
   <button 
     className="PTDetail-updateButton" 
-    style={{ flex: 5 }} // 3 parts for Update button
+    style={{ flex: 6 }} // 5 parts for Update button
     onClick={() => navigate(`/main/update-patient/${patientId}`)}
   >
     Update Patient Details
@@ -448,6 +670,13 @@ const PatientDetails = () => {
     onClick={deletePatient}
   >
     Delete 
+  </button>
+  <button 
+    className="PTDetail-deleteButton2" 
+    style={{ flex: 1 }} // 1 part for Print button
+    onClick={() => exportToPrint(patient)}
+  >
+    Print 
   </button>
 </div>
       </div>

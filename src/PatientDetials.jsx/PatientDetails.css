@@ -218,3 +218,64 @@
 .PTDetail-deleteButton:hover {
   background-color: #cc0000;
 }
+
+
+.PTDetail-deleteButton2 {
+  background-color: #FFC107; 
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.PTDetail-deleteButton2:hover {
+  background-color: #bf920b;
+}
+
+@media print {
+  h1 {
+    font-size: 18px;
+    color: #283593;
+    margin-bottom: 5px;
+    page-break-after: avoid; /* Ensures title is not alone on a blank page */
+  }
+
+  .section {
+    page-break-before: auto;  /* Allows natural flow of sections */
+    page-break-inside: avoid; /* Prevents breaking inside a section */
+  }
+
+  .section-header {
+    font-size: 14px;
+    background-color: #d3d3d3;
+    padding: 5px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    page-break-after: avoid; /* Ensures header stays with the section */
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 10px;
+    page-break-inside: auto; /* Allows tables to break naturally if needed */
+  }
+
+  th, td {
+    border: 1px solid #ddd;
+    padding: 6px;
+    text-align: left;
+    font-size: 12px;
+  }
+
+  th {
+    background-color: #f5f5f5;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+}
