@@ -1,20 +1,20 @@
 {
   "files": {
-    "main.css": "/Palliative-Nauraq/static/css/main.9688d2e6.css",
-    "main.js": "/Palliative-Nauraq/static/js/main.77007fc9.js",
+    "main.css": "/Palliative-Nauraq/static/css/main.548db8c9.css",
+    "main.js": "/Palliative-Nauraq/static/js/main.4df2dae9.js",
     "static/js/239.6e0b9c23.chunk.js": "/Palliative-Nauraq/static/js/239.6e0b9c23.chunk.js",
     "static/js/213.3088029c.chunk.js": "/Palliative-Nauraq/static/js/213.3088029c.chunk.js",
     "static/js/455.b93efc79.chunk.js": "/Palliative-Nauraq/static/js/455.b93efc79.chunk.js",
     "static/media/home-banner-nurse.jpg": "/Palliative-Nauraq/static/media/home-banner-nurse.4187a4847bd8808a8794.jpg",
     "index.html": "/Palliative-Nauraq/index.html",
-    "main.9688d2e6.css.map": "/Palliative-Nauraq/static/css/main.9688d2e6.css.map",
-    "main.77007fc9.js.map": "/Palliative-Nauraq/static/js/main.77007fc9.js.map",
+    "main.548db8c9.css.map": "/Palliative-Nauraq/static/css/main.548db8c9.css.map",
+    "main.4df2dae9.js.map": "/Palliative-Nauraq/static/js/main.4df2dae9.js.map",
     "239.6e0b9c23.chunk.js.map": "/Palliative-Nauraq/static/js/239.6e0b9c23.chunk.js.map",
     "213.3088029c.chunk.js.map": "/Palliative-Nauraq/static/js/213.3088029c.chunk.js.map",
     "455.b93efc79.chunk.js.map": "/Palliative-Nauraq/static/js/455.b93efc79.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.9688d2e6.css",
-    "static/js/main.77007fc9.js"
+    "static/css/main.548db8c9.css",
+    "static/js/main.4df2dae9.js"
   ]
 }
