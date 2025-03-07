@@ -157,6 +157,7 @@ const UpdateNHCE = () => {
           <select name="team1" value={formData.team1} onChange={handleChange}>
             <option value="Null">Null</option>
             <option value="SHAMEEMA">SHAMEEMA</option>
+            <option value="PRAVITHA">PRAVITHA</option>
             <option value="DIVYA">DIVYA</option>
             <option value="HASEENA">HASEENA</option>
           </select>

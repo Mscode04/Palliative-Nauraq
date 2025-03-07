@@ -257,6 +257,7 @@ const NHCE = () => {
             <option value="Null">Select Nurse</option>
             <option value="SHAMEEMA">SHAMEEMA</option>
             <option value="DIVYA">DIVYA</option>
+            <option value="PRAVITHA">PRAVITHA</option>
             <option value="HASEENA">HASEENA</option>
           </select>
         </label>
