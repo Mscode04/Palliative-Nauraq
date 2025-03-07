@@ -111,7 +111,7 @@ const Shemeema = () => {
          <button className="rdeath-back-button" onClick={goBack}>
         &larr; Back
       </button>
-      <h2>SHEMEEMA'S</h2>
+      <h2>PRAVITHA'S</h2>
       <h2>({formattedDate}) </h2>
 
       <div className="divya-patient-form">

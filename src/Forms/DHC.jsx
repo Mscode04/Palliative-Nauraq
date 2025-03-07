@@ -5,14 +5,14 @@ import { collection, query, where, getDocs, addDoc } from "firebase/firestore";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./NHCE.css"; // New CSS file for styling
-
+import CreatableSelect from "react-select/creatable";
 const DHC = () => {
   const { patientId } = useParams();
   const navigate = useNavigate();
   const [patientData, setPatientData] = useState(null);
   const [formData, setFormData] = useState({
     date: "",
-    team1: "Null",
+    team1: "",
     team2: "",
     team3: "",
     team4: "",
@@ -220,6 +220,13 @@ const DHC = () => {
     }
   };
 
+
+  const nurseOptions = [
+    { value: "SHAMEEMA", label: "SHAMEEMA" },
+    { value: "PRAVITHA", label: "PRAVITHA" },
+    { value: "DIVYA", label: "DIVYA" },
+    { value: "HASEENA", label: "HASEENA" },
+  ];
   return (
     <div className="NHCAdd-container">
       <ToastContainer />
@@ -251,17 +258,22 @@ const DHC = () => {
           Date:
           <input type="date" name="date" value={formData.date} onChange={handleChange} />
         </label>
-        <label>
-          Team Member 1:
-          <select name="team1" value={formData.team1} onChange={handleChange}>
-          <option value="NOT MENTION">NOT MENTION</option>
-          <option value="SHAMEEMA">SHAMEEMA</option>
-          <option value="PRAVITHA">PRAVITHA</option>
-            <option value="DIVYA">DIVYA</option>
-            <option value="HASEENA">HASEENA</option>
-            
-          </select>
-        </label>
+          <label>
+                  Team Member 1:
+                  <CreatableSelect
+                    options={nurseOptions} // Predefined options
+                    value={formData.team1 ? { value: formData.team1, label: formData.team1 } : null}
+                    onChange={(selectedOption) => {
+                      setFormData((prevData) => ({
+                        ...prevData,
+                        team1: selectedOption ? selectedOption.value : "", // Update team1 with selected or custom value
+                      }));
+                    }}
+                    placeholder="Select or enter a Nurse name"
+                    isClearable // Allows clearing the selected value
+                    formatCreateLabel={(inputValue) => `Add "${inputValue}"`} // Custom label for new options
+                  />
+                </label>
         {[2, 3, 4].map((num) => (
           <label key={num}>
             Team Member {num}:

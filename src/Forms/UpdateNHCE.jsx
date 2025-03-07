@@ -5,13 +5,14 @@ import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import './UpdateNHC.css'
+import CreatableSelect from "react-select/creatable";
 const UpdateNHCE = () => {
   const { reportId } = useParams();
   const navigate = useNavigate();
   const [report, setReport] = useState(null);
   const [formData, setFormData] = useState({
     date: "",
-    team1: "Null",
+    team1: "",
     team2: "",
     team3: "",
     team4: "",
@@ -137,7 +138,12 @@ const UpdateNHCE = () => {
     />
   </div>;
   }
-
+  const nurseOptions = [
+    { value: "SHAMEEMA", label: "SHAMEEMA" },
+    { value: "PRAVITHA", label: "PRAVITHA" },
+    { value: "DIVYA", label: "DIVYA" },
+    { value: "HASEENA", label: "HASEENA" },
+  ];
   return (
     <div className="UpdateNHC-container">
       <ToastContainer position="top-center" autoClose={3000} />
@@ -154,13 +160,19 @@ const UpdateNHCE = () => {
         </label>
         <label>
           Team Member 1:
-          <select name="team1" value={formData.team1} onChange={handleChange}>
-            <option value="Null">Null</option>
-            <option value="SHAMEEMA">SHAMEEMA</option>
-            <option value="PRAVITHA">PRAVITHA</option>
-            <option value="DIVYA">DIVYA</option>
-            <option value="HASEENA">HASEENA</option>
-          </select>
+          <CreatableSelect
+            options={nurseOptions} // Predefined options
+            value={formData.team1 ? { value: formData.team1, label: formData.team1 } : null}
+            onChange={(selectedOption) => {
+              setFormData((prevData) => ({
+                ...prevData,
+                team1: selectedOption ? selectedOption.value : "", // Update team1 with selected or custom value
+              }));
+            }}
+            placeholder="Select or enter a Nurse name"
+            isClearable // Allows clearing the selected value
+            formatCreateLabel={(inputValue) => `Add "${inputValue}"`} // Custom label for new options
+          />
         </label>
         {[2, 3, 4].map((num) => (
           <label key={num}>

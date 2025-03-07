@@ -110,7 +110,7 @@ function Home() {
             HASEENA
           </Link>
           <Link to="/main/shameema-list" className="HomeDrawerButton">
-            SHAMEEMA
+          PRAVITHA
           </Link>
           <a
             href="https://neuraq.github.io/Palliative-Mkba-App-Contact/"
