@@ -306,6 +306,7 @@ const ReportDetailsDHC = () => {
       ["Team 2", report.team2 || "N/A"],
       ["Team 3", report.team3 || "N/A"],
       ["Team 4", report.team4 || "N/A"],
+      ["Team 5", report.team5 || "N/A"],
     ]);
     printWindow.document.write('</div>');
 
@@ -861,6 +862,10 @@ const exportToPrintshort = (report) => {
         </div>
         <div className="rnhc-field">
           <label>Team 4:</label>
+          <span>{report.team4 || "N/A"}</span>
+        </div>
+        <div className="rnhc-field">
+          <label>Team 5:</label>
           <span>{report.team4 || "N/A"}</span>
         </div>
       </div>

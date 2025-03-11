@@ -16,6 +16,7 @@ const UpdateDHC = () => {
     team2: "",
     team3: "",
     team4: "",
+    team5: "",
     firstImpression: "",
     patientAwareness: "Yes",
     caretakerAwareness: "Yes",
@@ -174,7 +175,7 @@ const UpdateDHC = () => {
             formatCreateLabel={(inputValue) => `Add "${inputValue}"`} // Custom label for new options
           />
         </label>
-        {[2, 3, 4].map((num) => (
+        {[2, 3, 4,5].map((num) => (
           <label key={num}>
             Team Member {num}:
             <input type="text" name={`team${num}`} value={formData[`team${num}`]} onChange={handleChange} />
