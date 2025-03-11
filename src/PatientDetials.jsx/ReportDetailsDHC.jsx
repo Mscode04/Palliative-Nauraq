@@ -866,7 +866,7 @@ const exportToPrintshort = (report) => {
         </div>
         <div className="rnhc-field">
           <label>Team 5:</label>
-          <span>{report.team4 || "N/A"}</span>
+          <span>{report.team5 || "N/A"}</span>
         </div>
       </div>
    
