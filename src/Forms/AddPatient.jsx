@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { db } from "../Firebase/config";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, getDocs, query } from "firebase/firestore";
 import { doc, setDoc } from "firebase/firestore";
 
 import { ToastContainer, toast } from "react-toastify";
@@ -11,14 +11,15 @@ import "./AddPatient.css";
 const AddPatient = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [existingRegisterNumbers, setExistingRegisterNumbers] = useState([]);
   const [patientData, setPatientData] = useState({
     profile: {
-      registernumber:"",
+      registernumber: "",
       name: "",
       age: "",
       dob: "",
-      gender: "NOT SAY", 
-      category: "B", 
+      gender: "NOT SAY",
+      category: "B",
       address: "",
       email: ".mkba@gmail.com",
       password: "",
@@ -26,11 +27,11 @@ const AddPatient = () => {
       mainCaretakerPhone: "",
       panchayat: "",
       ward: "",
-      location: "", 
+      location: "",
       relativePhone: "",
       communityVolunteer: "",
       communityVolunteerPhone: "",
-      deactivated:false,
+      deactivated: false,
       referralPerson: "",
       referralPhone: "",
       neighbourName: "",
@@ -64,6 +65,18 @@ const AddPatient = () => {
       remark: "NOT",
     },
   ]);
+
+  useEffect(() => {
+    // Fetch all existing registernumbers from Firestore
+    const fetchRegisterNumbers = async () => {
+      const q = query(collection(db, "Patients"));
+      const querySnapshot = await getDocs(q);
+      const registerNumbers = querySnapshot.docs.map((doc) => doc.data().registernumber);
+      setExistingRegisterNumbers(registerNumbers);
+    };
+
+    fetchRegisterNumbers();
+  }, []);
 
   const handleChange = (e, section) => {
     const { name, value } = e.target;
@@ -103,11 +116,25 @@ const AddPatient = () => {
     const max = 999999999999; // Largest 12-digit number
     return (Math.floor(Math.random() * (max - min + 1)) + min).toString(); // Ensure it's a string
   };
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Check if registernumber already exists
+    if (existingRegisterNumbers.includes(patientData.profile.registernumber)) {
+      toast.warning("Register number already exists!", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+      return;
+    }
+
     setLoading(true); // Start loading
-  
+
     // Show "wait a moment" toast
     toast.info("Wait a moment...", {
       position: "top-center",
@@ -117,11 +144,11 @@ const AddPatient = () => {
       pauseOnHover: true,
       draggable: true,
     });
-  
+
     try {
       const patientId = generatePatientId();
       const registerTime = new Date().toISOString();
-  
+
       const profileData = {
         ...patientData.profile,
         age: patientData.profile.age.toString(),
@@ -143,21 +170,20 @@ const AddPatient = () => {
           income: member.income.toString(),
         })),
         registrationDate,
-        
         registerTime,
         patientId,
       });
-  
+
       await addDoc(collection(db, "users"), {
         email: patientData.profile.email,
         password: patientData.profile.password,
         patientId,
         is_nurse: false,
       });
-  
+
       // Dismiss the "wait a moment" toast
       toast.dismiss();
-  
+
       // Show success toast
       toast.success("Patient added successfully!", {
         position: "top-center",
@@ -167,14 +193,14 @@ const AddPatient = () => {
         pauseOnHover: true,
         draggable: true,
       });
-  
+
       setTimeout(() => {
         navigate(`/main/patient/${patientId}`);
       }, 3000);
     } catch (error) {
       // Dismiss the "wait a moment" toast
       toast.dismiss();
-  
+
       // Show error toast
       toast.error(`Failed to add patient: ${error.message}`, {
         position: "top-center",
@@ -188,17 +214,18 @@ const AddPatient = () => {
       setLoading(false); // Stop loading
     }
   };
+
   return (
     <div className="AddPatient-container">
-          {loading && (
-      <div className="loading-container">
-        <img
-          src="https://media.giphy.com/media/YMM6g7x45coCKdrDoj/giphy.gif"
-          alt="Loading..."
-          className="loading-image"
-        />
-      </div>
-    )}
+      {loading && (
+        <div className="loading-container">
+          <img
+            src="https://media.giphy.com/media/YMM6g7x45coCKdrDoj/giphy.gif"
+            alt="Loading..."
+            className="loading-image"
+          />
+        </div>
+      )}
       <button className="AddPatient-backButton" onClick={() => navigate(-1)}>
         &larr; Back
       </button>
@@ -218,81 +245,80 @@ const AddPatient = () => {
           />
         </div>
         <div className="AddPatient-row">
-  {Object.entries(patientData.profile).map(([field, value]) => (
-    <div className="AddPatient-field" key={field}>
-      <label
-        htmlFor={field}
-        className={field === "deactivated" ? "d-none" : ""}
-      >
-        {field.replace(/([A-Z])/g, " $1").replace(/^./, (str) => str.toUpperCase())}:
-      </label>
-      {field === "gender" ? (
-        <select
-          id={field}
-          name={field}
-          className="form-control"
-          value={value || ""}
-          onChange={(e) => handleChange(e, "profile")}
-        >
-          <option value="NOT SAY">Not Mention</option>
-          <option value="MALE">Male</option>
-          <option value="FEMALE">Female</option>
-          <option value="OTHER">Other</option>
-        </select>
-      ) : field === "category" ? (
-        <select
-          id={field}
-          name={field}
-          className="form-control"
-          value={value || ""}
-          onChange={(e) => handleChange(e, "profile")}
-        >
-          <option value="">Not Mention</option>
-          <option value="B">B</option>
-          <option value="A">A</option>
-          <option value="C">C</option>
-          <option value="NHC">NHC</option>
-          <option value="SOS">SOS</option>
-          <option value="MEDICAL SUPPORT">MEDICAL SUPPORT</option>
-        </select>
-      ) : field === "location" || field === "additionalInfo" ? (
-        <textarea
-          id={field}
-          name={field}
-          value={value || ""}
-          onChange={(e) => handleChange(e, "profile")}
-          rows="3"
-        />
-      ) : field === "dob" ? (
-        <input
-          type="date"
-          id={field}
-          name={field}
-          value={value || ""}
-          onChange={(e) => handleChange(e, "profile")}
-        />
-      ) : field === "deactivated" ? (
-        <input
-          type="text"
-          id={field}
-          className="d-none"
-          name={field}
-          value={value || ""}
-          onChange={(e) => handleChange(e, "profile")}
-        />
-      ) : (
-        <input
-          type={field === "email" ? "text" : field === "password" ? "password" : "text"}
-          id={field}
-          name={field}
-          value={value || ""}
-          onChange={(e) => handleChange(e, "profile")}
-        />
-      )}
-    </div>
-  ))}
-</div>
-
+          {Object.entries(patientData.profile).map(([field, value]) => (
+            <div className="AddPatient-field" key={field}>
+              <label
+                htmlFor={field}
+                className={field === "deactivated" ? "d-none" : ""}
+              >
+                {field.replace(/([A-Z])/g, " $1").replace(/^./, (str) => str.toUpperCase())}:
+              </label>
+              {field === "gender" ? (
+                <select
+                  id={field}
+                  name={field}
+                  className="form-control"
+                  value={value || ""}
+                  onChange={(e) => handleChange(e, "profile")}
+                >
+                  <option value="NOT SAY">Not Mention</option>
+                  <option value="MALE">Male</option>
+                  <option value="FEMALE">Female</option>
+                  <option value="OTHER">Other</option>
+                </select>
+              ) : field === "category" ? (
+                <select
+                  id={field}
+                  name={field}
+                  className="form-control"
+                  value={value || ""}
+                  onChange={(e) => handleChange(e, "profile")}
+                >
+                  <option value="">Not Mention</option>
+                  <option value="B">B</option>
+                  <option value="A">A</option>
+                  <option value="C">C</option>
+                  <option value="NHC">NHC</option>
+                  <option value="SOS">SOS</option>
+                  <option value="MEDICAL SUPPORT">MEDICAL SUPPORT</option>
+                </select>
+              ) : field === "location" || field === "additionalInfo" ? (
+                <textarea
+                  id={field}
+                  name={field}
+                  value={value || ""}
+                  onChange={(e) => handleChange(e, "profile")}
+                  rows="3"
+                />
+              ) : field === "dob" ? (
+                <input
+                  type="date"
+                  id={field}
+                  name={field}
+                  value={value || ""}
+                  onChange={(e) => handleChange(e, "profile")}
+                />
+              ) : field === "deactivated" ? (
+                <input
+                  type="text"
+                  id={field}
+                  className="d-none"
+                  name={field}
+                  value={value || ""}
+                  onChange={(e) => handleChange(e, "profile")}
+                />
+              ) : (
+                <input
+                  type={field === "email" ? "text" : field === "password" ? "password" : "text"}
+                  id={field}
+                  name={field}
+                  value={value || ""}
+                  onChange={(e) => handleChange(e, "profile")}
+                />
+              )}
+            </div>
+          ))}
+        </div>
 
         {/* Section 2: Medical Section */}
         <h4 className="AddPatient-sectionTitle">Section 2: Medical Section</h4>
@@ -361,8 +387,8 @@ const AddPatient = () => {
 
         {/* Submit Button */}
         <button type="submit" className="AddPatient-submitButton" disabled={loading}>
-  {loading ? "Submitting..." : "Submit"}
-</button>
+          {loading ? "Submitting..." : "Submit"}
+        </button>
       </form>
       <ToastContainer />
     </div>
