@@ -257,7 +257,7 @@ const Medicine = () => {
               <div className="MedAdd-formGroup">
                 <label>Quantity:</label>
                 <input
-                  type="number"
+                  type="text"
                   className="form-control"
                   value={currentMedicine.quantity}
                   onChange={(e) => handleInputChange("quantity", e.target.value)}
