@@ -190,3 +190,26 @@
     border-radius: 5px;
   }
   
+  .filter-icon-container {
+  margin-bottom: 10px;
+}
+
+.filter-icon {
+  background-color: #50a4b4 !important;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.filter-icon:hover {
+  background-color: #0056b3;
+}
+
+.filters-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}

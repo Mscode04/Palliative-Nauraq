@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { db } from "../Firebase/config";
 import { collection, query, where, getDocs, doc, deleteDoc } from "firebase/firestore";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify"; // Import ToastContainer and toast
-import "react-toastify/dist/ReactToastify.css"; // Import the CSS
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./ReportsPage.css";
 
 const ReportsPage = () => {
@@ -19,6 +19,8 @@ const ReportsPage = () => {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [reportToDelete, setReportToDelete] = useState(null);
   const [pin, setPin] = useState("");
+  const [sortOrder, setSortOrder] = useState("desc"); // Default to descending
+  const [showFilters, setShowFilters] = useState(false); // Default to hidden
 
   const reportsPerPage = 22;
 
@@ -42,10 +44,17 @@ const ReportsPage = () => {
         }
 
         const querySnapshot = await getDocs(q);
-        const reportsData = querySnapshot.docs.map((doc) => ({
+        let reportsData = querySnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
+
+        // Sort reports based on sortOrder
+        reportsData.sort((a, b) => {
+          const dateA = new Date(a.submittedAt);
+          const dateB = new Date(b.submittedAt);
+          return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
+        });
 
         setReports(reportsData);
       } catch (error) {
@@ -57,7 +66,7 @@ const ReportsPage = () => {
     };
 
     fetchReports();
-  }, [patientId, startDate, endDate, typeFilter, currentPage]);
+  }, [patientId, startDate, endDate, typeFilter, sortOrder]); // Add sortOrder to dependencies
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -108,13 +117,13 @@ const ReportsPage = () => {
         setReports(reports.filter((report) => report.id !== reportToDelete));
         setShowConfirmation(false);
         setPin("");
-        toast.success("Report deleted successfully!"); // Use toast.success for success messages
+        toast.success("Report deleted successfully!");
       } catch (error) {
         console.error("Error deleting report: ", error);
-        toast.error("Failed to delete report."); // Use toast.error for error messages
+        toast.error("Failed to delete report.");
       }
     } else {
-      toast.error("Incorrect PIN."); // Use toast.error for incorrect PIN
+      toast.error("Incorrect PIN.");
     }
   };
 
@@ -125,7 +134,6 @@ const ReportsPage = () => {
 
   return (
     <div className="reports-page-container">
-      {/* Add ToastContainer here */}
       <ToastContainer
         position="top-center"
         autoClose={3000}
@@ -146,44 +154,63 @@ const ReportsPage = () => {
       </div>
       <h2 className="text-white">Reports ({reports.length})</h2>
 
-      <div className="filters-container">
-        <input
-          type="date"
-          value={startDate}
-          onChange={(e) => setStartDate(e.target.value)}
-          placeholder="Start Date"
-        />
-        <input
-          type="date"
-          value={endDate}
-          onChange={(e) => setEndDate(e.target.value)}
-          placeholder="End Date"
-        />
-        <select
-          value={typeFilter}
-          onChange={(e) => setTypeFilter(e.target.value)}
-        >
-          <option value="">Select Type</option>
-          <option value="NHC">NHC</option>
-          <option value="NHC(E)">NHC(E)</option>
-          <option value="DHC">DHC</option>
-          <option value="PROGRESSION REPORT">Progression Report</option>
-          <option value="SOCIAL REPORT">Social Report</option>
-          <option value="VHC">VHC</option>
-          <option value="GVHC">GVHC</option>
-          <option value="INVESTIGATION">Investigation</option>
-          <option value="DEATH">Death</option>
-        </select>
+      {/* Filter Icon */}
+      <div className="filter-icon-container">
+        <button onClick={() => setShowFilters(!showFilters)} className="filter-icon">
+          {showFilters ? "Hide Filters" : "Filters"}
+        </button>
       </div>
 
+      {/* Filter Section (Conditionally Rendered) */}
+      {showFilters && (
+        <div className="filters-container">
+          <input
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            placeholder="Start Date"
+          />
+          <input
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            placeholder="End Date"
+          />
+          <select
+            value={typeFilter}
+            onChange={(e) => setTypeFilter(e.target.value)}
+          >
+            <option value="">Select Type</option>
+            <option value="NHC">NHC</option>
+            <option value="NHC(E)">NHC(E)</option>
+            <option value="DHC">DHC</option>
+            <option value="PROGRESSION REPORT">Progression Report</option>
+            <option value="SOCIAL REPORT">Social Report</option>
+            <option value="VHC">VHC</option>
+            <option value="GVHC">GVHC</option>
+            <option value="INVESTIGATION">Investigation</option>
+            <option value="DEATH">Death</option>
+          </select>
+          <select
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+          >
+            <option value="desc">Newest First</option>
+            <option value="asc">Oldest First</option>
+          </select>
+        </div>
+      )}
+
       {loading ? (
-        <p>         <div className="loading-container">
-        <img
-          src="https://media.giphy.com/media/YMM6g7x45coCKdrDoj/giphy.gif"
-          alt="Loading..."
-          className="loading-image"
-        />
-      </div></p>
+        <p>
+          <div className="loading-container">
+            <img
+              src="https://media.giphy.com/media/YMM6g7x45coCKdrDoj/giphy.gif"
+              alt="Loading..."
+              className="loading-image"
+            />
+          </div>
+        </p>
       ) : error ? (
         <p>{error}</p>
       ) : currentReports.length === 0 ? (

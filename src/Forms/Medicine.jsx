@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Select from "react-select";
 import { db } from "../Firebase/config";
+import {  FaTrash} from "react-icons/fa";
 import { collection, query, where, getDocs, updateDoc, doc, addDoc } from "firebase/firestore";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -46,7 +47,11 @@ const Medicine = () => {
 
         if (!medicineSnapshot.empty) {
           const docData = medicineSnapshot.docs[0].data();
-          setMedicines(docData.medicines || []);
+          const medicinesWithStatus = docData.medicines.map(med => ({
+            ...med,
+            status: med.status || "active", // Ensure default status
+          }));
+          setMedicines(medicinesWithStatus);
           setMedicineDocId(medicineSnapshot.docs[0].id);
         }
 
@@ -99,6 +104,7 @@ const Medicine = () => {
         quantity: currentMedicine.quantity,
         time: currentMedicine.time,
         patientsNow: currentMedicine.patientsNow,
+        status: "active", // Default status is active
       };
 
       const updatedMeds = editingIndex !== null 
@@ -164,7 +170,24 @@ const Medicine = () => {
       toast.error("Error deleting medicine");
     }
   };
-  
+
+  const handleStopStart = async (index, newStatus) => {
+    const confirmAction = window.confirm(`Are you sure you want to ${newStatus === "stopped" ? "stop" : "start"} this medicine?`);
+    if (!confirmAction) return;
+
+    try {
+      const updatedMeds = medicines.map((med, i) => 
+        i === index ? { ...med, status: newStatus } : med
+      );
+
+      await updateDoc(doc(db, "Medicines", medicineDocId), { medicines: updatedMeds });
+      setMedicines(updatedMeds);
+      toast.success(`Medicine ${newStatus === "stopped" ? "stopped" : "started"} successfully!`);
+    } catch (error) {
+      console.error(`Error ${newStatus === "stopped" ? "stopping" : "starting"} medicine:`, error);
+      toast.error(`Error ${newStatus === "stopped" ? "stopping" : "starting"} medicine`);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -213,14 +236,19 @@ const Medicine = () => {
           </thead>
           <tbody>
             {medicines.map((med, index) => (
-              <tr key={index}>
+              <tr key={index} style={{ backgroundColor: med.status === "stopped" ? "#ffcccc" : "white" }}>
                 <td>{med.medicineName}</td>
                 <td>{med.quantity}</td>
                 <td>{med.time}</td>
                 <td>{med.patientsNow ? "Yes" : "No"}</td>
                 <td>
                   <button onClick={() => handleEdit(index)} class="btn btn-warning btn-sm me-1 del-get">Edit</button>
-                  <button onClick={() => handleDelete(index)} class="btn btn-danger btn-sm">Delete</button>
+                  <button onClick={() => handleDelete(index)} class="btn btn-danger btn-sm m-1"><FaTrash /></button>
+                  {med.status === "active" ? (
+                    <button onClick={() => handleStopStart(index, "stopped")} class="btn btn-secondary btn-sm st-btn">Stop</button>
+                  ) : (
+                    <button onClick={() => handleStopStart(index, "active")} class="btn btn-success btn-sm st-btn">Start</button>
+                  )}
                 </td>
               </tr>
             ))}
@@ -271,28 +299,24 @@ const Medicine = () => {
                   className="form-control"
                   onChange={(e) => handleInputChange("time", e.target.value)}
                 >
-                 <option value="Morning">Morning</option>
-<option value="Noon">Noon</option>
-<option value="Night">Night</option>
-<option value="Morning-Noon">Morning & Noon</option>
-<option value="Morning-Night">Morning & Night</option>
-<option value="Noon-Night">Noon & Night</option>
-<option value="Morning-Noon-Night">Morning, Noon & Night</option>
-<option value="SOS">SOS</option> 
-                  
-                 
+                  <option value="Morning">Morning</option>
+                  <option value="Noon">Noon</option>
+                  <option value="Night">Night</option>
+                  <option value="Morning-Noon">Morning & Noon</option>
+                  <option value="Morning-Night">Morning & Night</option>
+                  <option value="Noon-Night">Noon & Night</option>
+                  <option value="Morning-Noon-Night">Morning, Noon & Night</option>
+                  <option value="SOS">SOS</option>
                 </select>
               </div>
 
               <div className="MedAdd-formGroup">
                 <label>
-                <input
-  type="checkbox"
-  checked={!!currentMedicine.patientsNow} 
-  onChange={(e) => handleInputChange("patientsNow", e.target.checked)}
-/>
-
-
+                  <input
+                    type="checkbox"
+                    checked={!!currentMedicine.patientsNow}
+                    onChange={(e) => handleInputChange("patientsNow", e.target.checked)}
+                  />
                   Patients Show
                 </label>
               </div>
