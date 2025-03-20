@@ -179,7 +179,8 @@ const ReportDetailsPROGRESSION = () => {
     // Personal Details
     addSectionHeader("Personal Details");
     addTwoColumnTable([
-      ["Date", report.submittedAt || "N/A"],
+      ["Submitted Date", report.submittedAt || "N/A"],
+      ["Date", report.date || "N/A"],
         ["Patient Name", report.name || "N/A"],
         ["Age", report.age || "N/A"],
         ["Address", report.address || "N/A"],
@@ -282,6 +283,10 @@ const ReportDetailsPROGRESSION = () => {
         <div className="rprogression-field">
           <label>Patient Name:</label>
           <span>{report.name || "N/A"}</span>
+        </div>
+        <div className="rnhc-field">
+          <label>Date:</label>
+          <span>{report.date || "N/A"}</span>
         </div>
         <div className="rprogression-field">
           <label>Age:</label>

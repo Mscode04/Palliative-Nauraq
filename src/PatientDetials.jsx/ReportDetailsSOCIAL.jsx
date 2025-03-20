@@ -88,6 +88,7 @@ const ReportDetailsSOCIAL = () => {
     addTable([
       ["Patient Name", report.name || "N/A"],
       ["Age", report.age || "N/A"],
+      ["Date", report.date || "N/A"],
       ["Gender", report.gender || "N/A"],
       ["Date of Birth", report.dob || "N/A"],
       ["Address", report.address || "N/A"],
@@ -159,6 +160,10 @@ const ReportDetailsSOCIAL = () => {
         <div className="rsocial-field">
           <label>Patient Name:</label>
           <span>{report.name || "N/A"}</span>
+        </div>
+        <div className="rnhc-field">
+          <label>Date:</label>
+          <span>{report.date || "N/A"}</span>
         </div>
         <div className="rsocial-field">
           <label>Age:</label>

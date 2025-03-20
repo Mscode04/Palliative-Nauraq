@@ -200,7 +200,122 @@ const Medicine = () => {
       </div>
     );
   }
-
+  const exportMedicineToPrint = () => {
+    // Create a new window for printing
+    const printWindow = window.open("", "_blank");
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>Medicine List - Patient ID: ${patientId}</title>
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+              margin: 10px;
+              font-size: 10px; /* Reduced font size */
+            }
+            h1 {
+              font-size: 16px; /* Reduced font size */
+              color: #283593;
+              margin-bottom: 15px;
+            }
+            .section-header {
+              font-size: 11px; /* Reduced font size */
+              background-color: #d3d3d3;
+              padding: 3px; /* Reduced padding */
+              margin-top: 8px;
+              margin-bottom: 3px;
+            }
+            table {
+              width: 100%;
+              border-collapse: collapse;
+              margin-bottom: 8px; /* Reduced margin */
+              page-break-inside: avoid; /* Avoid breaking tables across pages */
+            }
+            table, th, td {
+              border: 1px solid #ddd;
+            }
+            th, td {
+              padding: 4px; /* Reduced padding */
+              text-align: left;
+              font-size: 10px; /* Reduced font size */
+            }
+            th {
+              background-color: #f5f5f5;
+            }
+            tr:nth-child(even) {
+              background-color: #f9f9f9;
+            }
+            @media print {
+              .section {
+                page-break-inside: avoid; /* Avoid breaking sections across pages */
+              }
+            }
+          </style>
+        </head>
+        <body>
+          <h1>Medicine List - Patient ID: ${patientId}</h1>
+    `);
+  
+    // Add Patient Details Section
+    printWindow.document.write('<div class="section">');
+    printWindow.document.write('<div class="section-header">Patient Details</div>');
+    printWindow.document.write(`
+      <table>
+        <tbody>
+          <tr>
+            <td><strong>Name:</strong></td>
+            <td>${patientData?.name || "N/A"}</td>
+          </tr>
+          <tr>
+            <td><strong>Address:</strong></td>
+            <td>${patientData?.address || "N/A"}</td>
+          </tr>
+        </tbody>
+      </table>
+    `);
+    printWindow.document.write('</div>');
+  
+    // Add Medicine List Section
+    printWindow.document.write('<div class="section">');
+    printWindow.document.write('<div class="section-header">Medication List</div>');
+    printWindow.document.write(`
+      <table>
+        <thead>
+          <tr>
+            <th>Medicine</th>
+            <th>Quantity</th>
+            <th>Time</th>
+            <th>Patients Show</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${medicines
+            .map(
+              (med) => `
+            <tr style="background-color: ${med.status === "stopped" ? "#ffcccc" : "white"}">
+              <td>${med.medicineName}</td>
+              <td>${med.quantity}</td>
+              <td>${med.time}</td>
+              <td>${med.patientsNow ? "Yes" : "No"}</td>
+              <td>${med.status}</td>
+            </tr>
+          `
+            )
+            .join("")}
+        </tbody>
+      </table>
+    `);
+    printWindow.document.write('</div>');
+  
+    // Close the document and trigger print
+    printWindow.document.write(`
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
+    printWindow.print(); // Trigger the print dialog
+  };
   return (
     <div className="MedAdd-container">
       <button className="MedAdd-backButton" onClick={() => navigate(-1)}>
@@ -219,8 +334,11 @@ const Medicine = () => {
       <div className="MedAdd-header">
         <h3>Medication List</h3>
         <button className="MedAdd-addButton" onClick={() => setShowModal(true)}>
-          Add New Medicine
+          Add New
         </button>
+        <button className="MedAdd-addButton2 MedAdd-addButton" onClick={exportMedicineToPrint}>
+    Print
+  </button>
       </div>
 
       {medicines.length > 0 ? (

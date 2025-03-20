@@ -97,6 +97,7 @@ const ReportDetailsVHC = () => {
     addSectionHeader("Personal Details");
     addTable([
       ["Patient Name", report.name || "N/A"],
+      ["Date", report.date || "N/A"],
       ["Age", report.age || "N/A"],
       ["Gender", report.gender || "N/A"],
       ["Date of Birth", report.dob || "N/A"],
@@ -172,6 +173,10 @@ const ReportDetailsVHC = () => {
         <div className="rvhc-field">
           <label>Patient Name:</label>
           <span>{report.name || "N/A"}</span>
+        </div>
+        <div className="rnhc-field">
+          <label>Date:</label>
+          <span>{report.date || "N/A"}</span>
         </div>
         <div className="rvhc-field">
           <label>Age:</label>

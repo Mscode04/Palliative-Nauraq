@@ -129,6 +129,16 @@
   cursor: pointer;
   margin-bottom: 20px;
 }
+.MedAdd-addButton2 {
+  background-color: #eed202;
+  color: #000;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  margin-left: 5px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
 
 .MedAdd-submitButton {
   background-color: #288598;

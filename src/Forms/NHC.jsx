@@ -61,7 +61,7 @@ const NHC = () => {
     summaryDiscussion: "",
     medicineChanges: "",
     otherActivities: "",
-    homeCarePlan: "",
+    homeCarePlan: "daily_7_1",
     
     consultation: "",
     formType: "NHC",
@@ -187,7 +187,7 @@ const NHC = () => {
         summaryDiscussion: "",
         medicineChanges: "",
         otherActivities: "",
-        homeCarePlan: "",
+        homeCarePlan: "daily_7_1",
         
         consultation: "",
         formType: "NHC",

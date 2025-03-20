@@ -154,6 +154,7 @@ const ReportDetailsNHCE = () => {
     addTable([
       ["Reg No", report.registernumber || "N/A"],
       ["Reported BY", report.team1 || "N/A"],
+      ["Date", report.date || "N/A"],
       ["Patient Name", report.name || "N/A"],
       ["Age", report.age || "N/A"],
       ["Gender", report.gender || "N/A"],
@@ -410,6 +411,7 @@ const ReportDetailsNHCE = () => {
     addTable([
       ["Reg No", report.registernumber || "N/A"],
       ["Reported BY", report.team1 || "N/A"],
+      ["Date", report.date || "N/A"],
       ["Patient Name", report.name || "N/A"],
       ["Age", report.age || "N/A"],
       ["Address", report.address || "N/A"],
@@ -522,6 +524,10 @@ const ReportDetailsNHCE = () => {
         <div className="rnhc-field">
           <label>Reg No:</label>
           <span>{report.registernumber || "N/A"}</span>
+        </div>
+        <div className="rnhc-field">
+          <label>Date:</label>
+          <span>{report.date || "N/A"}</span>
         </div>
         <div className="rnhc-field">
           <label>Reported BY:</label>

@@ -61,7 +61,7 @@ const UpdateNHC = () => {
     summaryDiscussion: "",
     medicineChanges: "",
     otherActivities: "",
-    homeCarePlan: "",
+    homeCarePlan: "daily_7_1",
     
     consultation: "",
     formType: "NHC",
