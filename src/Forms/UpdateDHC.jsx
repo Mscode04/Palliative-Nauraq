@@ -629,10 +629,10 @@ const UpdateDHC = () => {
      
         </label>
        
-        <label>
+        {/* <label>
             FORM TYPE:
             <input type="text" name="formType" value={formData.formType} onChange={handleChange} placeholder="mg/dl" />
-          </label>
+          </label> */}
        
         <button type="submit" className="UpdateNHC-submit-btn" disabled={isSubmitting}>
           {isSubmitting ? "Updating..." : "Update Report"}
