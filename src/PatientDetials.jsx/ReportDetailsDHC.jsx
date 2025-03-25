@@ -651,31 +651,31 @@ const exportToPrintshort = (report) => {
 </div>
 <div className="rnhc-field">
   <label>Exercise Notes:</label>
-  <span>{report.exerciseNotes || "N/A"}</span>
+  <span>{report.exercisenotes || "N/A"}</span>
 </div>
 
 
 
 <h3 className="rnhc-section-title">Surroundings</h3>
 <div className="rnhc-field">
-  <label>Food:</label>
-  <span>{report.food || "N/A"}</span>
+  <label>House:</label>
+  <span>{report.houseCleanliness || "N/A"}</span>
 </div>
 <div className="rnhc-field">
-  <label>House:</label>
-  <span>{report.house || "N/A"}</span>
+  <label>Surroundings:</label>
+  <span>{report.surroundingsCleanliness || "N/A"}</span>
 </div>
 <div className="rnhc-field">
   <label>Bedroom:</label>
-  <span>{report.bedroom || "N/A"}</span>
+  <span>{report.bedroomCleanliness || "N/A"}</span>
 </div>
 <div className="rnhc-field">
   <label>Bed:</label>
-  <span>{report.bed || "N/A"}</span>
+  <span>{report.bedCleanliness || "N/A"}</span>
 </div>
 <div className="rnhc-field">
   <label>Dress:</label>
-  <span>{report.dress || "N/A"}</span>
+  <span>{report.dressCleanliness || "N/A"}</span>
 </div>
 <div className="rnhc-field">
   <label>More Details Surroundings:</label>
