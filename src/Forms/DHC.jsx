@@ -225,7 +225,7 @@ const DHC = () => {
 
   const nurseOptions = [
     { value: "SHAMEEMA", label: "SHAMEEMA" },
-    { value: "PRAVITHA", label: "PRAVITHA" },
+    { value: "", label: "" },
     { value: "DIVYA", label: "DIVYA" },
     { value: "HASEENA", label: "HASEENA" },
   ];

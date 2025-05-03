@@ -103,14 +103,14 @@ function Home() {
           <i className="bi bi-arrow-left"></i>
         </button>
         <div className="drawer-content">
+          <Link to="/main/shameema-list" className="HomeDrawerButton">
+          SHAMEEMA
+          </Link>
           <Link to="/main/divya-list" className="HomeDrawerButton">
             DIVYA
           </Link>
           <Link to="/main/haseena-list" className="HomeDrawerButton">
             HASEENA
-          </Link>
-          <Link to="/main/shameema-list" className="HomeDrawerButton">
-          PRAVITHA
           </Link>
           <a
             href="https://neuraq.github.io/Palliative-Mkba-App-Contact/"

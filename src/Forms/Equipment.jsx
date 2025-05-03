@@ -153,11 +153,21 @@ const Equipment = () => {
     }
   };
 
-  const handleUpdate = async (id, updatedEquipment) => {
+  const handleUpdate = async (id, updatedFields) => {
     try {
       const equipmentRef = doc(db, "Equipments", id);
-      await updateDoc(equipmentRef, { ...updatedEquipment });
-
+      
+      // Get the current equipment data
+      const equipmentToUpdate = equipments.find(eq => eq.id === id);
+      
+      // Merge the updated fields with the existing equipment data
+      const updatedEquipment = {
+        ...equipmentToUpdate,
+        ...updatedFields
+      };
+  
+      await updateDoc(equipmentRef, updatedEquipment);
+  
       toast.success("Equipment updated successfully!", {
         position: "top-center",
         autoClose: 3000,
@@ -166,11 +176,11 @@ const Equipment = () => {
         pauseOnHover: true,
         draggable: true,
       });
-
+  
       setEquipments(equipments.map(equipment =>
-        equipment.id === id ? { ...equipment, ...updatedEquipment } : equipment
+        equipment.id === id ? updatedEquipment : equipment
       ));
-      setUpdatingEquipmentId(null); // Reset after update
+      setUpdatingEquipmentId(null);
     } catch (error) {
       console.error("Error updating equipment:", error);
       toast.error("Error updating equipment. Please try again.", {
@@ -239,51 +249,70 @@ const Equipment = () => {
                     </td>
                   </tr>
                   {updatingEquipmentId === equipment.id && (
-                    <tr>
-                      <td colSpan="5">
-                        <div className="EquAdd-updateForm">
-                          <label>
-                            Equipment Name:
-                            <Select
-                              options={equipmentOptions}
-                              value={{ label: equipment.equipmentName, value: equipment.equipmentName }}
-                              onChange={(selectedOption) => handleUpdate(equipment.id, { equipmentName: selectedOption.value })}
-                              placeholder="Select Equipment"
-                              isClearable
-                            />
-                          </label>
-                          <label>
-                            Provided Date:
-                            <input
-                              type="date"
-                              value={equipment.providedDate}
-                              onChange={(e) => handleUpdate(equipment.id, { providedDate: e.target.value })}
-                            />
-                          </label>
-                          <label>
-                            Return Date:
-                            <input
-                              type="date"
-                              value={equipment.returnDate}
-                              onChange={(e) => handleUpdate(equipment.id, { returnDate: e.target.value })}
-                            />
-                          </label>
-                          <label>
-                            Damage:
-                            <input
-                              type="text"
-                              value={equipment.damage}
-                              onChange={(e) => handleUpdate(equipment.id, { damage: e.target.value })}
-                              placeholder="Enter damage details"
-                            />
-                          </label>
-                          <button onClick={() => handleUpdate(equipment.id, equipment)} className="EquAdd-saveButton">
-                            Save Changes
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  )}
+  <tr>
+    <td colSpan="5">
+      <div className="EquAdd-updateForm">
+        <label>
+          Equipment Name:
+          <Select
+            options={equipmentOptions}
+            value={equipmentOptions.find(opt => opt.value === equipment.equipmentName)}
+            onChange={(selectedOption) => 
+              handleUpdate(equipment.id, { equipmentName: selectedOption.value })
+            }
+            placeholder="Select Equipment"
+            isClearable
+          />
+        </label>
+        <label>
+          Provided Date:
+          <input
+            type="date"
+            value={equipment.providedDate || ''}
+            onChange={(e) => 
+              handleUpdate(equipment.id, { providedDate: e.target.value })
+            }
+          />
+        </label>
+        <label>
+          Return Date:
+          <input
+            type="date"
+            value={equipment.returnDate || ''}
+            onChange={(e) => 
+              handleUpdate(equipment.id, { returnDate: e.target.value })
+            }
+          />
+        </label>
+        <label>
+          Damage:
+          <input
+            type="text"
+            value={equipment.damage || ''}
+            onChange={(e) => 
+              handleUpdate(equipment.id, { damage: e.target.value })
+            }
+            placeholder="Enter damage details"
+          />
+        </label>
+        <div className="EquAdd-updateButtons">
+          <button 
+            onClick={() => handleUpdate(equipment.id, equipment)} 
+            className="EquAdd-saveButton"
+          >
+            Save Changes
+          </button>
+          <button 
+            onClick={() => setUpdatingEquipmentId(null)} 
+            className="EquAdd-cancelButton"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </td>
+  </tr>
+)}
                 </React.Fragment>
               ))}
             </tbody>

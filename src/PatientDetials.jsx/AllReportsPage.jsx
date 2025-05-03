@@ -29,33 +29,41 @@ const AllReportsPage = () => {
       try {
         setLoading(true);
         setError(null);
-
+  
         const reportsRef = collection(db, "Reports");
         let q = query(reportsRef);
-
-        if (nameFilter) {
-          q = query(q, where("name", ">=", nameFilter), where("name", "<=", nameFilter + "\uf8ff"));
-        }
+  
+        // Only apply formType filter (since it's exact match)
         if (formTypeFilter) {
           q = query(q, where("formType", "==", formTypeFilter));
         }
-        if (addressFilter) {
-          q = query(q, where("address", ">=", addressFilter), where("address", "<=", addressFilter + "\uf8ff"));
-        }
-
+  
         const querySnapshot = await getDocs(q);
         let reportsData = querySnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
-
+  
+        // Client-side filtering for name and address (case-insensitive)
+        if (nameFilter) {
+          reportsData = reportsData.filter((report) =>
+            report.name?.toLowerCase().includes(nameFilter.toLowerCase())
+          );
+        }
+        if (addressFilter) {
+          reportsData = reportsData.filter((report) =>
+            report.address?.toLowerCase().includes(addressFilter.toLowerCase())
+          );
+        }
+  
+        // Date filtering (same as before)
         if (startDate || endDate) {
           const startDateObj = startDate ? new Date(startDate) : null;
           const endDateObj = endDate ? new Date(endDate) : null;
           if (endDateObj) {
             endDateObj.setHours(23, 59, 59, 999);
           }
-
+  
           reportsData = reportsData.filter((report) => {
             const submittedAtDate = new Date(report.submittedAt);
             if (startDateObj && submittedAtDate < startDateObj) return false;
@@ -63,14 +71,14 @@ const AllReportsPage = () => {
             return true;
           });
         }
-
-        // Sorting logic
+  
+        // Sorting (same as before)
         reportsData.sort((a, b) => {
           const dateA = new Date(a.submittedAt);
           const dateB = new Date(b.submittedAt);
           return sortOrder === "desc" ? dateA - dateB : dateB - dateA;
         });
-
+  
         setReports(reportsData);
       } catch (error) {
         console.error("Error fetching reports: ", error);
@@ -79,10 +87,9 @@ const AllReportsPage = () => {
         setLoading(false);
       }
     };
-
+  
     fetchReports();
-  }, [nameFilter, formTypeFilter, addressFilter, startDate, endDate, sortOrder]); // Added sortOrder to dependencies
-
+  }, [nameFilter, formTypeFilter, addressFilter, startDate, endDate, sortOrder]);
   const handleBackClick = () => {
     navigate(-1);
   };
