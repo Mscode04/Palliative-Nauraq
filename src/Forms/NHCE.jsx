@@ -48,8 +48,8 @@ const NHCE = () => {
     activityScore: "1",
     addmoregeneral:"",
     scalp: "Good",
-    hair: "Good",
-    skin: "Good",
+    hair: "Clean",
+    skin: "Normal",
     nails: "Good",
     mouth: "Good",
     perineum: "Good",
@@ -174,8 +174,8 @@ const NHCE = () => {
         activityScore: "1",
         addmoregeneral:"",
         scalp: "Good",
-        hair: "Good",
-        skin: "Good",
+     hair: "Clean",
+    skin: "Normal",
         nails: "Good",
         mouth: "Good",
         perineum: "Good",
@@ -478,6 +478,7 @@ const NHCE = () => {
           <select name="responseStatus" value={formData.responseStatus} onChange={handleChange}>
           <option value="full-respond">Full Respond</option>
     <option value="slightly-respond">Slightly Respond</option>
+     <option value="Fully_bedded">Fully Bedded</option>
     <option value="not-respond">Not Respond</option>
     <option value="respond-with-talking">Respond with Talking</option>
     <option value="respond-with-hands">Respond with Hands</option>
@@ -513,20 +514,20 @@ const NHCE = () => {
             <select name={field} value={formData[field]} onChange={handleChange}>
               {field === "skin" && (
                 <>
+                  <option value="Normal">Normal</option>
                   <option value="Dry">Dry</option>
                   <option value="Oily">Oily</option>
                   <option value="Combination">Combination</option>
                   <option value="Sensitive">Sensitive</option>
-                  <option value="Normal">Normal</option>
                   <option value="Wrinkled">Wrinkled</option>
                   <option value="NOT CHECKED">NOT CHECKED</option>
                 </>
               )}
               {field === "hair" && (
                 <>
+                  <option value="Clean">Clean</option>
                   <option value="Messy Hair">Messy Hair</option>
                   <option value="Well maintain">Well maintain</option>
-                  <option value="Clean">Clean</option>
                   <option value="Unclean">Unclean</option>
                   <option value="Normal">Normal</option>
                   <option value="NOT CHECKED">NOT CHECKED</option>
