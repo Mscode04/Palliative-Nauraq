@@ -103,6 +103,9 @@ function Home() {
           <i className="bi bi-arrow-left"></i>
         </button>
         <div className="drawer-content">
+          {/* <Link to="/main/auto-list" className="HomeDrawerButton">
+          AUTO SCHEDULE
+          </Link> */}
           <Link to="/main/shameema-list" className="HomeDrawerButton">
           SHAMEEMA
           </Link>

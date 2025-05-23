@@ -45,6 +45,7 @@ import DeactivatePatient from "../Forms/DeactivatePatient";
 import Divya from "../PatientDetials.jsx/Divya";
 import Shemeema from "../PatientDetials.jsx/Shemeema";
 import Haseena from "../PatientDetials.jsx/Haseena";
+import Auto from "../PatientDetials.jsx/Auto";
 function Main({ isAuthenticated, isNurse }) {
   if (!isAuthenticated || !isNurse) {
     return <Navigate to="/" />; // Redirect to login if not authenticated or not a nurse
@@ -60,6 +61,7 @@ function Main({ isAuthenticated, isNurse }) {
           <Route path="/allrepots" element={<AllReportsPage />} />
           <Route path="/medicine-list" element={<MedicineList />} />
           <Route path="/divya-list" element={<Divya />} />
+          <Route path="/auto-list" element={<Auto />} />
           <Route path="/shameema-list" element={<Shemeema />} />
           <Route path="/haseena-list" element={<Haseena />} />
           <Route path="/ptlist" element={<PatientTable />} />

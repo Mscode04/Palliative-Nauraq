@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { db } from "../Firebase/config";
-import { collection, query, where, getDocs, addDoc } from "firebase/firestore";
+import { collection, query, where, getDocs, addDoc, updateDoc } from "firebase/firestore";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./NHCE.css"; // New CSS file for styling
@@ -24,7 +24,7 @@ const NHC = () => {
     complimentaryRx: "nill",
     food: "Good",
     drink: "Good",
-    breath:"Normal",
+    breath: "Normal",
     pee: "Good",
     pop: "Good",
     sleep: "Good",
@@ -40,13 +40,14 @@ const NHC = () => {
     bedroomCleanliness: "clean",
     bedCleanliness: "clean",
     dressCleanliness: "clean",
-    addmoresurroundings:"",
+    addmoresurroundings: "",
     generalStatus: "stable",
+    financialsituation:"",
     patientCurrently: "sitting",
     memoryStatus: "remember",
     responseStatus: "good",
     activityScore: "1",
-    addmoregeneral:"",
+    addmoregeneral: "",
     scalp: "Good",
     hair: "Clean",
     skin: "Normal",
@@ -62,7 +63,7 @@ const NHC = () => {
     medicineChanges: "",
     otherActivities: "",
     homeCarePlan: "daily_7_1",
-    
+
     consultation: "",
     formType: "NHC",
     submittedAt: "",
@@ -125,6 +126,31 @@ const NHC = () => {
       };
 
       await addDoc(collection(db, "Reports"), reportData);
+      // Then handle the Plans collection
+      const plansCollection = collection(db, "Plans");
+      const plansQuery = query(plansCollection, where("patientId", "==", patientId));
+      const querySnapshot = await getDocs(plansQuery);
+
+      if (!querySnapshot.empty) {
+        // Update existing plan
+        const planDoc = querySnapshot.docs[0];
+        await updateDoc(planDoc.ref, {
+          homeCarePlan: formData.homeCarePlan,
+          updatedAt: timestamp,
+        });
+      } else {
+        // Create new plan
+        await addDoc(plansCollection, {
+          patientId,
+          registernumber: patientData.registernumber,
+          name: patientData.name,
+          address: patientData.address,
+          mainCaretakerPhone: patientData.mainCaretakerPhone,
+          homeCarePlan: formData.homeCarePlan,
+          createdAt: timestamp,
+          updatedAt: timestamp,
+        });
+      }
 
       toast.success("Report submitted successfully!", {
         position: "top-center",
@@ -149,7 +175,7 @@ const NHC = () => {
         badHabit: "No",
         complimentaryRx: "nill",
         food: "Good",
-        breath:"Normal",
+        breath: "Normal",
         drink: "Good",
         pee: "Good",
         pop: "Good",
@@ -165,14 +191,15 @@ const NHC = () => {
         surroundingsCleanliness: "clean",
         bedroomCleanliness: "clean",
         bedCleanliness: "clean",
+        financialsituation:"",
         dressCleanliness: "clean",
-        addmoresurroundings:"",
+        addmoresurroundings: "",
         generalStatus: "stable",
         patientCurrently: "sitting",
         memoryStatus: "remember",
         responseStatus: "good",
         activityScore: "1",
-        addmoregeneral:"",
+        addmoregeneral: "",
         scalp: "Good",
         hair: "Clean",
         skin: "Normal",
@@ -188,7 +215,7 @@ const NHC = () => {
         medicineChanges: "",
         otherActivities: "",
         homeCarePlan: "daily_7_1",
-        
+
         consultation: "",
         formType: "NHC",
         submittedAt: "",
@@ -235,19 +262,19 @@ const NHC = () => {
       <h2 className="NHCAdd-title">NHC REPORT</h2>
       {patientData ? (
         <div className="NHCAdd-patientInfo">
-          
+
           <h3><strong>Reg:</strong> {patientData.registernumber}</h3>
           <h3><strong>Name:</strong> {patientData.name}</h3>
           <h3 className="mb-5"><strong>Address:</strong> {patientData.address}</h3>
         </div>
       ) : (
         <div className="loading-container">
-        <img
-          src="https://media.giphy.com/media/YMM6g7x45coCKdrDoj/giphy.gif"
-          alt="Loading..."
-          className="loading-image"
-        />
-      </div>
+          <img
+            src="https://media.giphy.com/media/YMM6g7x45coCKdrDoj/giphy.gif"
+            alt="Loading..."
+            className="loading-image"
+          />
+        </div>
       )}
       <form onSubmit={handleSubmit} className="NHCAdd-form">
         {/* Form sections go here */}
@@ -280,14 +307,14 @@ const NHC = () => {
           </label>
         ))}
         <label>
-  First Impression :
-  <textarea
-    name="firstImpression"
-    value={formData.firstImpression}
-    onChange={handleChange}
-    rows="5"
-  />
-</label>
+          First Impression :
+          <textarea
+            name="firstImpression"
+            value={formData.firstImpression}
+            onChange={handleChange}
+            rows="5"
+          />
+        </label>
 
         <label>
           Patient Awareness (രോഗത്തെ കുറിച്ച് രോഗികുള്ള അറിവ്):
@@ -333,28 +360,70 @@ const NHC = () => {
           </select>
         </label>
 
-        <h3>Section 2: Basic Matters (പ്രാഥമിക കാര്യങ്ങൾ)</h3>
-        {["food", "drink", "pee", "pop", "sleep", "selfHygiene", "breath"].map((field) => (
-  <label key={field}>
-    {field === "pee" ? "Pee (മൂത്രം)" : field === "pop" ? "Pop (ശോധന)" :field === "selfHygiene" ? "selfHygiene (ശുചിത്വം)" :field === "breath" ? "breath (ശ്വസനം)" :field === "sleep" ? "Sleep (ഉറക്കം)" : field.charAt(0).toUpperCase() + field.slice(1)}:
-    <select name={field} value={formData[field]} onChange={handleChange}>
-      {field === "breath" ? (
-        <>
-          <option value="Normal">Normal</option>
-          <option value="High">High</option>
-          <option value="Low">Low</option>
-          <option value="Varying">Varying</option>
-          <option value="NOT CHECKED">NOT CHECKED</option>
-        </>
-      ) : (
-        <>
-          <option value="Good">Good</option>
-          <option value="Bad">Bad</option>
-          <option value="Average">Average</option>
-          <option value="Satisfy">Satisfy</option>
-          <option value="NOT CHECKED">NOT CHECKED</option>
-        </>
-      )}
+      <h3>Section 2: Basic Matters (പ്രാഥമിക കാര്യങ്ങൾ)</h3>
+{[
+  {field: "food", label: "Food (ഭക്ഷണം)", options: ["Good", "Bad", "Average", "Satisfy", "NOT CHECKED"]},
+  {field: "drink", label: "Drink (പാനീയം)", options: ["Good", "Bad", "Average", "Satisfy", "NOT CHECKED"]},
+  {field: "pee", label: "Urine (മൂത്രം)", options: ["Normal", "Retention", "Inconvenience urinary", "NOT CHECKED"]},
+  {field: "pop", label: "Pop (ശോധന)", options: [
+    "Normal", 
+    "Constipation", 
+    "Diarrhea", 
+    "Spurious Diarrhea", 
+    "With the Help of Medicine (Daily)", 
+    "With the Help of Medicine (Alternative Days)", 
+    "With the Help of Medicine (Twice Weekly)",
+    "NOT CHECKED"
+  ]},
+  {field: "sleep", label: "Sleep (ഉറക്കം)", options: [
+    "Normal", 
+    "Support to medicine (good)", 
+    "Support to medicine (bad)",
+    "NOT CHECKED"
+  ]},
+{
+  field: "selfHygiene",
+  label: "Hygiene (ശുചിത്വം)",
+  options: [
+    "Daily bath (പ്രതിദിന കുളി)", 
+    "Alternative days (ഒരു ദിവസം വിടിച്ചാണ് കുളിക്കുന്നത്)", 
+    "Once a week (ആഴ്ചയിൽ ഒന്ന്)", 
+    "Twice a week (ആഴ്ചയിൽ രണ്ട് പ്രാവശ്യം)", 
+    "Wetting and licking (daily) (തുണിയിലും നക്കലും – ദിവസവും)", 
+    "Both bath and Wetting and licking (കുളിയും തുണിയിലും നക്കലും)", 
+    "NOT CHECKED (പരിശോധിച്ചിട്ടില്ല)"
+  ]
+},
+  {field: "breath", label: "Breath (ശ്വസനം)", options: [
+    "Normal – സാധാരണ ശ്വാസം", 
+    "Low/Shallow Breathing – താഴ്ന്ന ശ്വാസം / താഴ്ന്ന ശ്വാസോച്ഛ്വാസം", 
+    "Breathing with Support – സഹായത്തോടെ ശ്വാസം (ഉദാഹരണം: ഓക്സിജൻ)", 
+    "Shortness of Breath – ശ്വാസക്കുഴപ്പ് / ശ്വാസം പിടക്കൽ", 
+    "Rapid Breathing – വേഗത്തിലുള്ള ശ്വാസം", 
+    "No Breathing (Apnea) – ശ്വാസം ഇല്ലായ്മ / ശ്വാസവിലയം",
+    "NOT CHECKED"
+  ]},
+  {field: "digestion", label: "Digestion (ജീർണ്ണം)", options: [
+    "Normal Digestion – സാധാരണ ജീർണ്ണം", 
+    "Indigestion (Dyspepsia) – അജീർണ്ണം / കുടലൊരുക്കം", 
+    "Acidity – അമ്ലത", 
+    "Bloating – വയർ നിറഞ്ഞു തോന്നൽ / ഗ്യാസടക്കം",
+    "NOT CHECKED"
+  ]},
+  {field: "thirst", label: "Thirst (ദാഹം)", options: [
+    "Normal Thirst – സാധാരണ ദാഹം", 
+    "Excessive Thirst (Polydipsia) – അത്യധികം ദാഹം", 
+    "Reduced Thirst – കുറവായ ദാഹം", 
+    "No Thirst – ദാഹം ഇല്ലായ്മ",
+    "NOT CHECKED"
+  ]},
+].map((item) => (
+  <label key={item.field}>
+    {item.label}:
+    <select name={item.field} value={formData[item.field]} onChange={handleChange}>
+      {item.options.map(option => (
+        <option key={option} value={option}>{option}</option>
+      ))}
     </select>
   </label>
 ))}
@@ -384,34 +453,34 @@ const NHC = () => {
         <label>
           Frequency (എപ്പോഴൊക്കെയാണ് ചെയ്യുന്നത്):
           <select name="exerciseFrequency" value={formData.exerciseFrequency} onChange={handleChange}>
-          <option value="NOT MENTION">NOT MENTION</option>
+            <option value="NOT MENTION">NOT MENTION</option>
             <option value="daily">Daily</option>
             <option value="weekly once">Weekly Once</option>
             <option value="sometimes">Sometimes</option>
           </select>
         </label>
         <label>
-        Additional Notes About Exercise:
-  <textarea
-    name="exercisenotes"
-    value={formData.exercisenotes}
-    onChange={handleChange}
-    rows="3"
-  />
-</label>
+          Additional Notes About Exercise and Outdoor Activities:
+          <textarea
+            name="exercisenotes"
+            value={formData.exercisenotes}
+            onChange={handleChange}
+            rows="3"
+          />
+        </label>
 
-  
+
 
         <h3>Section 4: Habits (ശീലങ്ങൾ)</h3>
         <label>
-  Entertainment Time Spending (വിനോദ സമയം ചെലവഴിക്കൽ):
-  <textarea
-    name="entertainmentTime"
-    value={formData.entertainmentTime}
-    onChange={handleChange}
-    rows="3"
-  />
-</label>
+          Entertainment Time Spending (വിനോദ സമയം ചെലവഴിക്കൽ):
+          <textarea
+            name="entertainmentTime"
+            value={formData.entertainmentTime}
+            onChange={handleChange}
+            rows="3"
+          />
+        </label>
 
 
 
@@ -428,15 +497,15 @@ const NHC = () => {
             </select>
           </label>
         ))}
-                <label>
-                Additional Notes About Surroundings:
-  <textarea
-    name="addmoresurroundings"
-    value={formData.addmoresurroundings}
-    onChange={handleChange}
-    rows="3"
-  />
-</label>
+        <label>
+          Additional Notes About Surroundings:
+          <textarea
+            name="addmoresurroundings"
+            value={formData.addmoresurroundings}
+            onChange={handleChange}
+            rows="3"
+          />
+        </label>
         <h3>Section 6: General Matters (പൊതു അവസ്ഥ)</h3>
         <label>
           General Status (stable/unstable):
@@ -448,44 +517,44 @@ const NHC = () => {
         <label>
           Patient Currently(രോഗിയുടെ ഇപ്പോഴത്തെ അവസ്ഥ):
           <select name="patientCurrently" value={formData.patientCurrently} onChange={handleChange}>
-          <option value="lying">Lying</option>
-          <option value="Fully_bedded">Fully Bedded</option>
-<option value="standing">Standing</option>
-<option value="sitting">Sitting</option>
-<option value="fully_capable">Fully Capable</option>
-<option value="toss_and_turns_in_bed_self">Toss and Turns in Bed (Self)</option>
-<option value="toss_and_turns_with_help">Toss and Turns with Help</option>
-<option value="sitting_with_help">Sitting with Help</option>
-<option value="standing_with_help">Standing with Help</option>
-<option value="walking_house_self">Walking (House) Self</option>
-<option value="walking_house_with_help">Walking (House) with Help</option>
-<option value="walking_out_with_help">Walking (Out) with Help</option>
-<option value="walking_out_self">Walking (Out) Self</option>
-            
+            <option value="lying">Lying</option>
+            <option value="Fully_bedded">Fully Bedded</option>
+            <option value="standing">Standing</option>
+            <option value="sitting">Sitting</option>
+            <option value="fully_capable">Fully Capable</option>
+            <option value="toss_and_turns_in_bed_self">Toss and Turns in Bed (Self)</option>
+            <option value="toss_and_turns_with_help">Toss and Turns with Help</option>
+            <option value="sitting_with_help">Sitting with Help</option>
+            <option value="standing_with_help">Standing with Help</option>
+            <option value="walking_house_self">Walking (House) Self</option>
+            <option value="walking_house_with_help">Walking (House) with Help</option>
+            <option value="walking_out_with_help">Walking (Out) with Help</option>
+            <option value="walking_out_self">Walking (Out) Self</option>
+
           </select>
         </label>
         <label>
           Memory Status (ഓർമ്മ):
           <select name="memoryStatus" value={formData.memoryStatus} onChange={handleChange}>
-          <option value="remember">Remember</option>
-    <option value="not-remember">Do Not Remember</option>
-    <option value="sometimes">Sometimes</option>
-    <option value="something">Something</option>  
-             
+            <option value="remember">Remember</option>
+            <option value="not-remember">Do Not Remember</option>
+            <option value="sometimes">Sometimes</option>
+            <option value="something">Something</option>
+
           </select>
         </label>
         <label>
           Response Status (പ്രതികരണം):
           <select name="responseStatus" value={formData.responseStatus} onChange={handleChange}>
-          <option value="full-respond">Full Respond</option>
-    <option value="slightly-respond">Slightly Respond</option>
-    <option value="not-respond">Not Respond</option>
-    <option value="respond-with-talking">Respond with Talking</option>
-    <option value="respond-with-hands">Respond with Hands</option>
-    <option value="respond-with-fingers">Respond with Fingers</option>
-    <option value="respond-with-eye">Respond with Eye</option>
-    <option value="respond-with-head">Respond with Head</option>
-    <option value="respond-with-sound">Respond with Sound</option>
+            <option value="full-respond">Full Respond</option>
+            <option value="slightly-respond">Slightly Respond</option>
+            <option value="not-respond">Not Respond</option>
+            <option value="respond-with-talking">Respond with Talking</option>
+            <option value="respond-with-hands">Respond with Hands</option>
+            <option value="respond-with-fingers">Respond with Fingers</option>
+            <option value="respond-with-eye">Respond with Eye</option>
+            <option value="respond-with-head">Respond with Head</option>
+            <option value="respond-with-sound">Respond with Sound</option>
           </select>
         </label>
         <label>
@@ -499,14 +568,23 @@ const NHC = () => {
           </select>
         </label>
         <label>
-                Additional Notes About General Matters:
-  <textarea
-    name="addmoregeneral"
-    value={formData.addmoregeneral}
-    onChange={handleChange}
-    rows="3"
-  />
-</label>
+          Financial situation (സാമ്പത്തിക അവസ്ഥ):
+          <textarea
+            name="addmoregeneral"
+            value={formData.financialsituation}
+            onChange={handleChange}
+            rows="1"
+          />
+        </label>
+        <label>
+          Additional Notes About General Matters:
+          <textarea
+            name="addmoregeneral"
+            value={formData.addmoregeneral}
+            onChange={handleChange}
+            rows="3"
+          />
+        </label>
         <h3>Section 7: Head to Foot Checkup (തല മുതൽ കാൽ വരെ)</h3>
         {["scalp", "hair", "skin", "nails", "mouth", "perineum", "hiddenSpaces", "pressureSpaces", "joints"].map((field) => (
           <label key={field}>
@@ -588,7 +666,7 @@ const NHC = () => {
               )}
               {!["skin", "hair", "nails", "mouth", "perineum", "hiddenSpaces", "pressureSpaces", "joints"].includes(field) && (
                 <>
-                <option value="NOT CHECKED">NOT CHECKED</option>
+                  <option value="NOT CHECKED">NOT CHECKED</option>
                   <option value="Clean">Clean </option>
                   <option value="Unclean">Unclean</option>
                   <option value="Average">Average</option>
@@ -611,7 +689,7 @@ const NHC = () => {
           <label>
             UL/LL:
             <select name="ulLl" value={formData.ulLl} onChange={handleChange}>
-            <option value="NOT MENTION">NOT MENTION</option>
+              <option value="NOT MENTION">NOT MENTION</option>
               <option value="UL">UL</option>
               <option value="LL">LL</option>
             </select>
@@ -619,7 +697,7 @@ const NHC = () => {
           <label>
             Position:
             <select name="position" value={formData.position} onChange={handleChange}>
-            <option value="NOT MENTION">NOT MENTION</option>
+              <option value="NOT MENTION">NOT MENTION</option>
               <option value="Null">Null</option>
               <option value="RT Sitting">RT Sitting</option>
               <option value="RT Lying">RT Lying</option>
@@ -636,7 +714,7 @@ const NHC = () => {
           <label>
             RR Type:
             <select name="rrType" value={formData.rrType} onChange={handleChange}>
-            <option value="NOT MENTION">NOT MENTION</option>
+              <option value="NOT MENTION">NOT MENTION</option>
               <option value="R">R</option>
               <option value="IR">IR</option>
             </select>
@@ -650,7 +728,7 @@ const NHC = () => {
           <label>
             Pulse Type:
             <select name="pulseType" value={formData.pulseType} onChange={handleChange}>
-            <option value="NOT MENTION">NOT MENTION</option>
+              <option value="NOT MENTION">NOT MENTION</option>
               <option value="R">R</option>
               <option value="IR">IR</option>
             </select>
@@ -710,7 +788,7 @@ const NHC = () => {
         <label>
           Home Care Plan:
           <select name="homeCarePlan" value={formData.homeCarePlan} onChange={handleChange}>
-         
+
             <option value="daily_7_1">Daily (7/1)</option>
             <option value="1_day_1_week_1_1">1 Day 1 Week (1/1)</option>
             <option value="2_day_1_week_2_1">2 Day 1 Week (2/1)</option>
@@ -723,7 +801,7 @@ const NHC = () => {
             <option value="sos">SOS</option>
           </select>
         </label>
-   
+
         <label>
           Docter Consultation (ഡോക്ടറെ കാണിക്കുകയോ അല്ലെങ്കിൽ ഡോക്ടർ ഹോം കെയർ വേണമെങ്കിൽ):
           <textarea name="consultation" value={formData.consultation} onChange={handleChange}></textarea>

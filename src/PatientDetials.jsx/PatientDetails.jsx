@@ -3,7 +3,7 @@ import { db } from "../Firebase/config";
 import { doc, getDoc } from "firebase/firestore";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import "./PatientDetails.css";
-import { collection, query, where, getDocs,deleteDoc } from "firebase/firestore";
+import { collection, query, where, getDocs, deleteDoc } from "firebase/firestore";
 
 const PatientDetails = () => {
   const { patientId } = useParams(); // Getting patientId from the URL
@@ -33,7 +33,7 @@ const PatientDetails = () => {
       console.error("Error fetching patient details: ", error);
     }
   };
-  
+
   // Fetching medicines related to this patient
   const fetchMedicines = async () => {
     try {
@@ -207,20 +207,20 @@ const PatientDetails = () => {
           </thead>
           <tbody>
             ${data
-              .map(
-                (row) => `
+          .map(
+            (row) => `
               <tr>
                 ${row
-                  .map(
-                    (cell) => `
+                .map(
+                  (cell) => `
                   <td>${cell || "N/A"}</td>
                 `
-                  )
-                  .join("")}
+                )
+                .join("")}
               </tr>
             `
-              )
-              .join("")}
+          )
+          .join("")}
           </tbody>
         </table>
       `);
@@ -336,9 +336,9 @@ const PatientDetails = () => {
     setTimeout(() => {
       printWindow.print();
     }, 500); // Ensures the content is fully loaded before printing
-};
+  };
 
- 
+
   return (
     <div className="PTDetail-container">
       <button className="PTDetail-backButton" onClick={() => navigate(-1)}>
@@ -375,6 +375,7 @@ const PatientDetails = () => {
                 <td><strong>Location:</strong></td>
                 <td>{patient.location || "N/A"}</td>
               </tr>
+
               <tr>
                 <td><strong>Ward:</strong></td>
                 <td>{patient.ward || "N/A"}</td>
@@ -391,12 +392,12 @@ const PatientDetails = () => {
                 <td><strong>Category:</strong></td>
                 <td>{patient.category || "N/A"}</td>
               </tr>
-            
+
               <tr>
                 <td><strong>Date of Birth:</strong></td>
                 <td>{patient.dob || "N/A"}</td>
               </tr>
-             
+
               <tr>
                 <td><strong>Current Difficulties:</strong></td>
                 <td>{patient.currentDifficulties || "N/A"}</td>
@@ -441,7 +442,7 @@ const PatientDetails = () => {
                 <td><strong>Relative Phone:</strong></td>
                 <td>{patient.relativePhone || "N/A"}</td>
               </tr>
-            
+
               <tr>
                 <td><strong>Nurse Note:</strong></td>
                 <td>{patient.additionalInfo || "N/A"}</td>
@@ -505,7 +506,12 @@ const PatientDetails = () => {
                   {patient.deactivated ? "INACTIVE" : "ACTIVE"}
                 </td>
               </tr>
-
+              {patient.deactivationReason &&
+                <tr>
+                  <td><strong>Deactive Reason:</strong></td>
+                  <td>{patient.deactivationReason}</td>
+                </tr>
+              }
             </tbody>
           </table>
         </div>
@@ -657,28 +663,28 @@ const PatientDetails = () => {
         </div>
         {/* Update Button */}
         <div style={{ display: "flex", gap: "10px", marginTop: "20px" }}>
-  <button 
-    className="PTDetail-updateButton" 
-    style={{ flex: 6 }} // 5 parts for Update button
-    onClick={() => navigate(`/main/update-patient/${patientId}`)}
-  >
-    Update Patient Details
-  </button>
-  <button 
-    className="PTDetail-deleteButton" 
-    style={{ flex: 1 }} // 1 part for Delete button
-    onClick={deletePatient}
-  >
-    Delete 
-  </button>
-  <button 
-    className="PTDetail-deleteButton2" 
-    style={{ flex: 1 }} // 1 part for Print button
-    onClick={() => exportToPrint(patient)}
-  >
-    Print 
-  </button>
-</div>
+          <button
+            className="PTDetail-updateButton"
+            style={{ flex: 6 }} // 5 parts for Update button
+            onClick={() => navigate(`/main/update-patient/${patientId}`)}
+          >
+            Update Patient Details
+          </button>
+          <button
+            className="PTDetail-deleteButton"
+            style={{ flex: 1 }} // 1 part for Delete button
+            onClick={deletePatient}
+          >
+            Delete
+          </button>
+          <button
+            className="PTDetail-deleteButton2"
+            style={{ flex: 1 }} // 1 part for Print button
+            onClick={() => exportToPrint(patient)}
+          >
+            Print
+          </button>
+        </div>
       </div>
     </div>
   );

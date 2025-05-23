@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { db } from "../Firebase/config";
-import { collection, query, where, getDocs, addDoc } from "firebase/firestore";
+import { collection, query, where, getDocs, addDoc ,updateDoc} from "firebase/firestore";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./NHCE.css"; // New CSS file for styling
@@ -41,6 +41,7 @@ const DHC = () => {
     bedroomCleanliness: "clean",
     bedCleanliness: "clean",
     dressCleanliness: "clean",
+    financialsituation:"",
     addmoresurroundings:"",
     generalStatus: "stable",
     patientCurrently: "sitting",
@@ -126,6 +127,31 @@ const DHC = () => {
       };
 
       await addDoc(collection(db, "Reports"), reportData);
+       // Then handle the Plans collection
+      const plansCollection = collection(db, "Plans");
+      const plansQuery = query(plansCollection, where("patientId", "==", patientId));
+      const querySnapshot = await getDocs(plansQuery);
+  
+      if (!querySnapshot.empty) {
+        // Update existing plan
+        const planDoc = querySnapshot.docs[0];
+        await updateDoc(planDoc.ref, {
+          homeCarePlan: formData.homeCarePlan,
+          updatedAt: timestamp,
+        });
+      } else {
+        // Create new plan
+        await addDoc(plansCollection, {
+          patientId,
+          registernumber: patientData.registernumber,
+          name: patientData.name,
+          address: patientData.address,
+          mainCaretakerPhone: patientData.mainCaretakerPhone,
+          homeCarePlan: formData.homeCarePlan,
+          createdAt: timestamp,
+          updatedAt: timestamp,
+        });
+      }
 
       toast.success("Report submitted successfully!", {
         position: "top-center",
@@ -179,6 +205,7 @@ const DHC = () => {
     hair: "Clean",
     skin: "Normal",
         nails: "Good",
+        financialsituation:"",
         mouth: "Good",
         perineum: "Good",
         hiddenSpaces: "Good",
@@ -336,28 +363,70 @@ const DHC = () => {
           </select>
         </label>
 
-        <h3>Section 2: Basic Matters</h3>
-        {["food", "drink", "pee", "pop", "sleep", "selfHygiene", "breath"].map((field) => (
-  <label key={field}>
-    {field === "pee" ? "Pee (Urine)" : field === "pop" ? "Pop (ശോധന)" : field.charAt(0).toUpperCase() + field.slice(1)}:
-    <select name={field} value={formData[field]} onChange={handleChange}>
-      {field === "breath" ? (
-        <>
-          <option value="Normal">Normal</option>
-          <option value="High">High</option>
-          <option value="Low">Low</option>
-          <option value="Varying">Varying</option>
-          <option value="NOT CHECKED">NOT CHECKED</option>
-        </>
-      ) : (
-        <>
-          <option value="Good">Good</option>
-          <option value="Bad">Bad</option>
-          <option value="Average">Average</option>
-          <option value="Satisfy">Satisfy</option>
-          <option value="NOT CHECKED">NOT CHECKED</option>
-        </>
-      )}
+        <h3>Section 2: Basic Matters (പ്രാഥമിക കാര്യങ്ങൾ)</h3>
+{[
+  {field: "food", label: "Food (ഭക്ഷണം)", options: ["Good", "Bad", "Average", "Satisfy", "NOT CHECKED"]},
+  {field: "drink", label: "Drink (പാനീയം)", options: ["Good", "Bad", "Average", "Satisfy", "NOT CHECKED"]},
+  {field: "pee", label: "Urine (മൂത്രം)", options: ["Normal", "Retention", "Inconvenience urinary", "NOT CHECKED"]},
+  {field: "pop", label: "Pop (ശോധന)", options: [
+    "Normal", 
+    "Constipation", 
+    "Diarrhea", 
+    "Spurious Diarrhea", 
+    "With the Help of Medicine (Daily)", 
+    "With the Help of Medicine (Alternative Days)", 
+    "With the Help of Medicine (Twice Weekly)",
+    "NOT CHECKED"
+  ]},
+  {field: "sleep", label: "Sleep (ഉറക്കം)", options: [
+    "Normal", 
+    "Support to medicine (good)", 
+    "Support to medicine (bad)",
+    "NOT CHECKED"
+  ]},
+{
+  field: "selfHygiene",
+  label: "Hygiene (ശുചിത്വം)",
+  options: [
+    "Daily bath (പ്രതിദിന കുളി)", 
+    "Alternative days (ഒരു ദിവസം വിടിച്ചാണ് കുളിക്കുന്നത്)", 
+    "Once a week (ആഴ്ചയിൽ ഒന്ന്)", 
+    "Twice a week (ആഴ്ചയിൽ രണ്ട് പ്രാവശ്യം)", 
+    "Wetting and licking (daily) (തുണിയിലും നക്കലും – ദിവസവും)", 
+    "Both bath and Wetting and licking (കുളിയും തുണിയിലും നക്കലും)", 
+    "NOT CHECKED (പരിശോധിച്ചിട്ടില്ല)"
+  ]
+},
+  {field: "breath", label: "Breath (ശ്വസനം)", options: [
+    "Normal – സാധാരണ ശ്വാസം", 
+    "Low/Shallow Breathing – താഴ്ന്ന ശ്വാസം / താഴ്ന്ന ശ്വാസോച്ഛ്വാസം", 
+    "Breathing with Support – സഹായത്തോടെ ശ്വാസം (ഉദാഹരണം: ഓക്സിജൻ)", 
+    "Shortness of Breath – ശ്വാസക്കുഴപ്പ് / ശ്വാസം പിടക്കൽ", 
+    "Rapid Breathing – വേഗത്തിലുള്ള ശ്വാസം", 
+    "No Breathing (Apnea) – ശ്വാസം ഇല്ലായ്മ / ശ്വാസവിലയം",
+    "NOT CHECKED"
+  ]},
+  {field: "digestion", label: "Digestion (ജീർണ്ണം)", options: [
+    "Normal Digestion – സാധാരണ ജീർണ്ണം", 
+    "Indigestion (Dyspepsia) – അജീർണ്ണം / കുടലൊരുക്കം", 
+    "Acidity – അമ്ലത", 
+    "Bloating – വയർ നിറഞ്ഞു തോന്നൽ / ഗ്യാസടക്കം",
+    "NOT CHECKED"
+  ]},
+  {field: "thirst", label: "Thirst (ദാഹം)", options: [
+    "Normal Thirst – സാധാരണ ദാഹം", 
+    "Excessive Thirst (Polydipsia) – അത്യധികം ദാഹം", 
+    "Reduced Thirst – കുറവായ ദാഹം", 
+    "No Thirst – ദാഹം ഇല്ലായ്മ",
+    "NOT CHECKED"
+  ]},
+].map((item) => (
+  <label key={item.field}>
+    {item.label}:
+    <select name={item.field} value={formData[item.field]} onChange={handleChange}>
+      {item.options.map(option => (
+        <option key={option} value={option}>{option}</option>
+      ))}
     </select>
   </label>
 ))}
@@ -393,7 +462,7 @@ const DHC = () => {
           </select>
         </label>
         <label>
-        Additional Notes About Exercise:
+       Additional Notes About Exercise and Outdoor Activities:
   <textarea
     name="exercisenotes"
     value={formData.exercisenotes}
