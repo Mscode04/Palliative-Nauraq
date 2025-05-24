@@ -59,7 +59,14 @@
   background-color: #1e506b;
   color: #ffffff;
 }
-
+.hero-name{
+  background-color: #ffffffa7;
+  padding-top: 10px;
+  padding-left: 15px;
+  padding-right: 15px;
+  border-radius: 10px;
+  
+}
 .HomeDrawerCloseButton {
   background: none;
   border: none;
@@ -97,7 +104,7 @@
   background-image: url("../assets/img/home-banner-nurse.jpg");
   background-size: cover;
   background-position: center;
-  height: 300px;
+  height: 200px;
   text-align: center;
   position: relative;
   display: flex;
@@ -143,6 +150,8 @@
 
 .HomeReportsTitle {
   margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
 }
 
 .HomeReportsCards {
@@ -217,10 +226,12 @@
 .filter-section select {
   background-color: #288598; /* Matching the primary theme color */
   color: white;
+  height: 30px;
   border: 2px solid #1e506b; /* Darker shade for border */
   border-radius: 8px;
-  padding: 8px 12px;
-  font-size: 14px;
+  padding-left: 5px;
+  padding-right: 5px;
+  font-size: 10px;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
 }

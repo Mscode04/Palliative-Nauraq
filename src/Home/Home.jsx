@@ -137,20 +137,22 @@ function Home() {
 
       {/* Banner Section */}
       <div className="HomeBanner">
-        <h1>NURSES HOME</h1>
-        <div className="HomeBannerButtons">
+        <div className="hero-name">
+        <h1 style={{ color: "#1e506b" }} className="">NURSES HOME</h1>
+        </div>
+        {/* <div className="HomeBannerButtons">
           <Link to="/main/addpt" className="HomeBannerButton">
             Register New Patients
           </Link>
           <Link to="/main/allrepots" className="HomeBannerButton">
             Patients Reports
           </Link>
-        </div>
+        </div> */}
       </div>
 
       {/* Reports Section */}
       <div className="HomeReports filter-section">
-        <h4 className="HomeReportsTitle">Reports From Today ({filteredReports.length})  <select
+        <h4 className="HomeReportsTitle">Today ({filteredReports.length})  <select
             id="reporter-filter"
             className="filter-section"
             value={selectedReporter}
@@ -186,7 +188,11 @@ function Home() {
                   <div className="HomeReportInfo">
                     <h5>{report.formType} : {report.name} </h5>
                     <p></p>
-                    <small>{new Date(report.submittedAt).toLocaleString()} - REPORTED BY {report.team1}</small>
+                  <small>
+  {new Date(report.submittedAt).toLocaleString()} - REPORTED BY {"  "}
+  <span style={{ color: "#000" }}>{report.team1}</span>
+</small>
+
                   </div>
                 </div>
               </Link>

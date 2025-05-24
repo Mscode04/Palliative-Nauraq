@@ -1,23 +1,25 @@
-import React, { useState, useEffect } from "react";
-import { db } from "../Firebase/config"; // Adjust the path if necessary
+import React, { useState, useEffect, useMemo, useCallback } from "react";
+import { db } from "../Firebase/config";
+import { FaUserInjured } from "react-icons/fa";
+
 import { collection, getDocs } from "firebase/firestore";
 import "./PatientTable.css";
 import { useNavigate } from "react-router-dom";
-import { FaFilter } from "react-icons/fa";
-import * as XLSX from "xlsx"; // Import the xlsx library
+import { FaFilter, FaFileExcel, FaArrowLeft, FaSort, FaSortUp, FaSortDown } from "react-icons/fa";
+import * as XLSX from "xlsx";
 
 const PatientTable = () => {
+  // State management
   const [patients, setPatients] = useState([]);
   const [showFilters, setShowFilters] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredPatients, setFilteredPatients] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedDiagnosis, setSelectedDiagnosis] = useState("All"); // Filter by diagnosis
-  const [sortOrder, setSortOrder] = useState("desc"); // Default to descending
-  const [sortBy, setSortBy] = useState("registernumber"); // Default sort by register number
-  const [selectedStatus, setSelectedStatus] = useState("All"); // Filter by active/inactive
-  const patientsPerPage = 100; // Show 100 cards per page
+  const [selectedDiagnosis, setSelectedDiagnosis] = useState("All");
+  const [selectedStatus, setSelectedStatus] = useState("All");
+  const [sortConfig, setSortConfig] = useState({ key: "registernumber", direction: "desc" });
+  
+  const patientsPerPage = 100;
   const navigate = useNavigate();
 
   // Fetch patients from Firestore
@@ -31,7 +33,6 @@ const PatientTable = () => {
           ...doc.data(),
         }));
         setPatients(patientsData);
-        setFilteredPatients(patientsData);
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching patients: ", error);
@@ -43,306 +44,368 @@ const PatientTable = () => {
   }, []);
 
   // Normalize diagnosis string into an array
-  const normalizeDiagnosis = (diagnosis) => {
+  const normalizeDiagnosis = useCallback((diagnosis) => {
     if (!diagnosis) return [];
     return diagnosis.split(",").map((d) => d.trim());
-  };
+  }, []);
+
+  // Get unique diagnoses for the filter dropdown
+  const uniqueDiagnoses = useMemo(() => {
+    const diagnoses = ["All"];
+    patients.forEach((patient) => {
+      const normalized = normalizeDiagnosis(patient.mainDiagnosis);
+      normalized.forEach((d) => {
+        if (d && !diagnoses.includes(d)) diagnoses.push(d);
+      });
+    });
+    return diagnoses;
+  }, [patients, normalizeDiagnosis]);
 
   // Filter and sort patients
-  useEffect(() => {
+  const filteredPatients = useMemo(() => {
     let filtered = patients.filter((patient) => {
-      const name = patient.name || "";
-      const address = patient.address || "";
-      const caretakerPhone = patient.mainCaretakerPhone || "";
-      const mainDiagnosis = patient.mainDiagnosis || "";
-      const registernumber = patient.registernumber || "";
-      const isDeactivated = patient.deactivated || false;
+      const searchFields = [
+        patient.name || "",
+        patient.address || "",
+        patient.mainCaretakerPhone || "",
+        patient.mainDiagnosis || "",
+        patient.registernumber || ""
+      ].join(" ").toLowerCase();
 
-      // Search filter
-      const matchesSearchQuery =
-        name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        address.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        caretakerPhone.includes(searchQuery) ||
-        mainDiagnosis.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        registernumber.includes(searchQuery);
-
-      // Diagnosis filter
-      const normalizedDiagnosis = normalizeDiagnosis(mainDiagnosis);
-      const matchesDiagnosis =
-        selectedDiagnosis === "All" || normalizedDiagnosis.includes(selectedDiagnosis);
-
-      // Status filter (Active / Inactive)
-      const matchesStatus =
-        selectedStatus === "All" ||
-        (selectedStatus === "Active" && !isDeactivated) ||
-        (selectedStatus === "Inactive" && isDeactivated);
+      const matchesSearchQuery = searchFields.includes(searchQuery.toLowerCase());
+      const normalizedDiagnosis = normalizeDiagnosis(patient.mainDiagnosis);
+      const matchesDiagnosis = selectedDiagnosis === "All" || normalizedDiagnosis.includes(selectedDiagnosis);
+      const matchesStatus = selectedStatus === "All" || 
+                         (selectedStatus === "Active" && !patient.deactivated) || 
+                         (selectedStatus === "Inactive" && patient.deactivated);
 
       return matchesSearchQuery && matchesDiagnosis && matchesStatus;
     });
 
-    // Sort patients
-    if (sortBy === "name") {
+    // Sorting logic
+    if (sortConfig.key) {
       filtered.sort((a, b) => {
-        const nameA = a.name || "";
-        const nameB = b.name || "";
-        return sortOrder === "asc"
-          ? nameA.localeCompare(nameB)
-          : nameB.localeCompare(nameA);
-      });
-    } else if (sortBy === "registernumber") {
-      filtered.sort((a, b) => {
-        const parseRegisterNumber = (reg) => {
-          if (!reg) return { number: Infinity, year: Infinity };
-          const parts = reg.split("/");
-          const number = parseInt(parts[0]) || 0;
-          const year = parts[1] ? 2000 + parseInt(parts[1]) : 0;
-          return { number, year };
-        };
-
-        const regA = parseRegisterNumber(a.registernumber);
-        const regB = parseRegisterNumber(b.registernumber);
-
-        if (regA.year !== regB.year) {
-          return sortOrder === "asc" ? regA.year - regB.year : regB.year - regA.year;
+        if (sortConfig.key === "registernumber") {
+          const parseReg = (reg) => {
+            if (!reg) return { number: Infinity, year: Infinity };
+            const parts = reg.split("/");
+            return {
+              number: parseInt(parts[0]) || 0,
+              year: parts[1] ? 2000 + parseInt(parts[1]) : 0
+            };
+          };
+          const regA = parseReg(a.registernumber);
+          const regB = parseReg(b.registernumber);
+          
+          if (regA.year !== regB.year) {
+            return sortConfig.direction === "asc" ? regA.year - regB.year : regB.year - regA.year;
+          }
+          return sortConfig.direction === "asc" ? regA.number - regB.number : regB.number - regA.number;
+        } else {
+          const aValue = a[sortConfig.key] || "";
+          const bValue = b[sortConfig.key] || "";
+          if (aValue < bValue) return sortConfig.direction === "asc" ? -1 : 1;
+          if (aValue > bValue) return sortConfig.direction === "asc" ? 1 : -1;
+          return 0;
         }
-        return sortOrder === "asc" ? regA.number - regB.number : regB.number - regA.number;
       });
     }
 
-    setFilteredPatients(filtered);
-    setCurrentPage(1); // Reset to the first page on filter or sort change
-  }, [searchQuery, selectedDiagnosis, selectedStatus, sortOrder, sortBy, patients]);
+    return filtered;
+  }, [patients, searchQuery, selectedDiagnosis, selectedStatus, sortConfig, normalizeDiagnosis]);
 
-  // Pagination logic
-  const indexOfLastPatient = currentPage * patientsPerPage;
-  const indexOfFirstPatient = indexOfLastPatient - patientsPerPage;
-  const currentPatients = filteredPatients.slice(indexOfFirstPatient, indexOfLastPatient);
+  // Pagination
+  const currentPatients = useMemo(() => {
+    const indexOfLastPatient = currentPage * patientsPerPage;
+    const indexOfFirstPatient = indexOfLastPatient - patientsPerPage;
+    return filteredPatients.slice(indexOfFirstPatient, indexOfLastPatient);
+  }, [filteredPatients, currentPage]);
 
   const totalPages = Math.ceil(filteredPatients.length / patientsPerPage);
 
-  // Get unique diagnoses for the filter dropdown
-  const uniqueDiagnoses = [
-    "All",
-    ...new Set(
-      patients
-        .flatMap((patient) => normalizeDiagnosis(patient.mainDiagnosis))
-        .filter(Boolean)
-    ),
-  ];
-
-  // Handle card click to navigate to patient details
-  const handleCardClick = (patientId) => {
-    navigate(`/main/patient/${patientId}`);
-  };
-
-  // Pagination handlers
-  const handleNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
+  // Handlers
+  const handleCardClick = (patientId) => navigate(`/main/patient/${patientId}`);
+  const handleNextPage = () => currentPage < totalPages && setCurrentPage(currentPage + 1);
+  const handlePreviousPage = () => currentPage > 1 && setCurrentPage(currentPage - 1);
+  const handleSort = (key) => {
+    let direction = "asc";
+    if (sortConfig.key === key && sortConfig.direction === "asc") {
+      direction = "desc";
     }
+    setSortConfig({ key, direction });
+    setCurrentPage(1);
   };
 
-  const handlePreviousPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
+  const handleDownloadExcel = () => {
+    const headers = [
+      "Reg No", "Name", "Registration Date", "Address", "Location", "Ward", 
+      "Age", "Gender", "Category", "Medical History", "Main Diagnosis", 
+      "Date of Birth", "Current Difficulties", "Email", "Main Caretaker", 
+      "Main Caretaker Phone", "Neighbour Name", "Neighbour Phone", "Panchayat", 
+      "Patient ID", "Relative Phone", "Referral Person", "Referral Phone", 
+      "Community Volunteer", "Community Volunteer Phone", "Ward Member", 
+      "Ward Member Phone", "Asha Worker", "Status"
+    ];
+
+    const data = filteredPatients.map((patient) => ({
+      "Reg No": patient.registernumber || "N/A",
+      "Name": patient.name || "N/A",
+      "Registration Date": patient.registrationDate || "N/A",
+      "Address": patient.address || "N/A",
+      "Location": patient.location || "N/A",
+      "Ward": patient.ward || "N/A",
+      "Age": patient.age || "N/A",
+      "Gender": patient.gender || "N/A",
+      "Category": patient.category || "N/A",
+      "Medical History": patient.medicalHistory || "N/A",
+      "Main Diagnosis": patient.mainDiagnosis || "N/A",
+      "Date of Birth": patient.dob || "N/A",
+      "Current Difficulties": patient.currentDifficulties || "N/A",
+      "Email": patient.email || "N/A",
+      "Main Caretaker": patient.mainCaretaker || "N/A",
+      "Main Caretaker Phone": patient.mainCaretakerPhone || "N/A",
+      "Neighbour Name": patient.neighbourName || "N/A",
+      "Neighbour Phone": patient.neighbourPhone || "N/A",
+      "Panchayat": patient.panchayat || "N/A",
+      "Patient ID": patient.patientId || "N/A",
+      "Relative Phone": patient.relativePhone || "N/A",
+      "Referral Person": patient.referralPerson || "N/A",
+      "Referral Phone": patient.referralPhone || "N/A",
+      "Community Volunteer": patient.communityVolunteer || "N/A",
+      "Community Volunteer Phone": patient.communityVolunteerPhone || "N/A",
+      "Ward Member": patient.wardMember || "N/A",
+      "Ward Member Phone": patient.wardMemberPhone || "N/A",
+      "Asha Worker": patient.ashaWorker || "N/A",
+      "Status": patient.deactivated ? "INACTIVE" : "ACTIVE"
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(data, { header: headers });
+    XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: "A1" });
+    
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Patients");
+    XLSX.writeFile(workbook, `patients_export_${new Date().toISOString().slice(0,10)}.xlsx`);
   };
 
-// Download to Excel function
-const handleDownloadExcel = () => {
-  // Define the headers for the Excel sheet
-  const headers = [
-    "Reg No", "Name", "Registration Date", "Address", "Location", "Ward", "Age", "Gender", "Category", "Medical History",
-    "Main Diagnosis", "Date of Birth", "Current Difficulties", "Email", "Main Caretaker", "Main Caretaker Phone",
-    "Neighbour Name", "Neighbour Phone", "Panchayat", "Patient ID", "Relative Phone", "Referral Person",
-    "Referral Phone", "Community Volunteer", "Community Volunteer Phone", "Ward Member", "Ward Member Phone",
-    "Asha Worker", "Status"
-  ];
-
-  // Map the filteredPatients array to match the headers
-  const data = filteredPatients.map((patient) => ({
-    "Reg No": patient.registernumber,
-    "Name": patient.name,
-    "Registration Date": patient.registrationDate,
-    "Address": patient.address,
-    "Location": patient.location,
-    "Ward": patient.ward,
-    "Age": patient.age,
-    "Gender": patient.gender,
-    "Category": patient.category,
-    "Medical History": patient.medicalHistory,
-    "Main Diagnosis": patient.mainDiagnosis,
-    "Date of Birth": patient.dob,
-    "Current Difficulties": patient.currentDifficulties,
-    "Email": patient.email,
-    "Main Caretaker": patient.mainCaretaker,
-    "Main Caretaker Phone": patient.mainCaretakerPhone,
-    "Neighbour Name": patient.neighbourName,
-    "Neighbour Phone": patient.neighbourPhone,
-    "Panchayat": patient.panchayat,
-    "Patient ID": patient.patientId,
-    "Relative Phone": patient.relativePhone,
-    "Referral Person": patient.referralPerson,
-    "Referral Phone": patient.referralPhone,
-    "Community Volunteer": patient.communityVolunteer,
-    "Community Volunteer Phone": patient.communityVolunteerPhone,
-    "Ward Member": patient.wardMember,
-    "Ward Member Phone": patient.wardMemberPhone,
-    "Asha Worker": patient.ashaWorker,
-    "Status": patient.deactivated ? "INACTIVE" : "ACTIVE"
-  }));
-
-  // Create a new worksheet from the data
-  const worksheet = XLSX.utils.json_to_sheet(data, { header: headers });
-
-  // Prepend the headers to the worksheet
-  XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: "A1" });
-
-  // Create a new workbook and append the worksheet
-  const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, worksheet, "Patients");
-
-  // Write the workbook to a file
-  XLSX.writeFile(workbook, "patients_data.xlsx");
-};
+  // Sort indicator component
+  const SortIndicator = ({ sortKey }) => {
+    if (sortConfig.key !== sortKey) return <FaSort className="sort-icon" />;
+    return sortConfig.direction === "asc" ? 
+      <FaSortUp className="sort-icon active" /> : 
+      <FaSortDown className="sort-icon active" />;
+  };
 
   return (
-    <div className="PatientTable-container">
-      <button className="PatientTable-back-button" onClick={() => navigate(-1)}>
-        <i className="bi bi-arrow-left"></i> Back
-      </button>
+    <div className="PatientTable-container compact-view">
+      {/* Header Section */}
+      <div className="PatientTable-header compact-header">
+        <div className="header-left">
+          <button className="back-button compact" onClick={() => navigate(-1)}>
+            <FaArrowLeft />
+          </button>
+          <h2 className="compact-title">Patient List</h2>
+        </div>
+        
+        <div className="header-right">
+          <span className="patient-count compact ">
+  <FaUserInjured style={{ marginRight: "5px",  }} />
+  {filteredPatients.length} 
+</span>
 
-      {/* Display total number of patients */}
-      <div className="PatientTable-total-count">
-        Total Patients: {filteredPatients.length}
+
+          
+        </div>
       </div>
 
-      {/* Search bar and filter toggle */}
-      <div className="PatientTable-search-filter-container">
-        <div className="PatientTable-search-bar">
+      {/* Search and Filter Section */}
+      <div className="search-filter-container compact">
+        <div className="search-bar compact">
           <input
             type="text"
-            placeholder="Search by name, phone number, address, diagnosis, or register number..."
+            placeholder="Search patients..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              setCurrentPage(1);
+            }}
           />
         </div>
+        
         <button
-          className="PatientTable-filter-toggle mb-4"
+          className={`filter-toggle compact ${showFilters ? "active" : ""}`}
           onClick={() => setShowFilters(!showFilters)}
           title={showFilters ? "Hide Filters" : "Show Filters"}
         >
-          <FaFilter /> {/* Filter icon */}
+          <FaFilter />
         </button>
       </div>
 
-      {/* Filter box */}
+      {/* Filter Panel */}
       {showFilters && (
-        <div className="PatientTable-filters-box">
-          <div className="PatientTable-filters">
-            <label>
-              Filter by Diagnosis:
-              <select value={selectedDiagnosis} onChange={(e) => setSelectedDiagnosis(e.target.value)}>
-                {uniqueDiagnoses.map((diagnosis) => (
-                  <option key={diagnosis} value={diagnosis}>
-                    {diagnosis}
-                  </option>
-                ))}
-              </select>
-            </label>
-
-            <label>
-              Filter by Status:
-              <select value={selectedStatus} onChange={(e) => setSelectedStatus(e.target.value)}>
-                <option value="All">All</option>
-                <option value="Active">Active</option>
-                <option value="Inactive">Inactive</option>
-              </select>
-            </label>
-
-            <label>
-              Sort by:
-              <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
-                <option value="name">Name</option>
-                <option value="registernumber">Register Number</option>
-              </select>
-            </label>
-
-            <label>
-              Order:
-              <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)}>
-                <option value="asc">Ascending</option>
-                <option value="desc">Descending</option>
-              </select>
-            </label>
-
-            {/* Download to Excel button */}
-            <button className="btn btn-success btn-sm mt-2" onClick={handleDownloadExcel} style={{height:"40px"}}>
-              Download to Excel
-            </button>
+        <div className="filters-box compact">
+          <div className="filter-group compact">
+            <label>Diagnosis</label>
+            <select 
+              value={selectedDiagnosis} 
+              onChange={(e) => {
+                setSelectedDiagnosis(e.target.value);
+                setCurrentPage(1);
+              }}
+            >
+              {uniqueDiagnoses.map((diagnosis) => (
+                <option key={diagnosis} value={diagnosis}>
+                  {diagnosis}
+                </option>
+              ))}
+            </select>
+          </div>
+          
+          <div className="filter-group compact">
+            <label>Status</label>
+            <select 
+              value={selectedStatus} 
+              onChange={(e) => {
+                setSelectedStatus(e.target.value);
+                setCurrentPage(1);
+              }}
+            >
+              <option value="All">All Status</option>
+              <option value="Active">Active Only</option>
+              <option value="Inactive">Inactive Only</option>
+            </select>
+          </div>
+          
+          <div className="sort-options compact">
+            <label>Sort By</label>
+            <div className="sort-buttons">
+              <button 
+                className={`sort-btn compact ${sortConfig.key === "name" ? "active" : ""}`}
+                onClick={() => handleSort("name")}
+              >
+                Name <SortIndicator sortKey="name" />
+              </button>
+              <button 
+                className={`sort-btn compact ${sortConfig.key === "registernumber" ? "active" : ""}`}
+                onClick={() => handleSort("registernumber")}
+              >
+                Reg No <SortIndicator sortKey="registernumber" />
+              </button>
+              <button 
+            className="download-btn compact sort-btn"
+            onClick={handleDownloadExcel}
+            title="Export to Excel"
+          >
+            <FaFileExcel />Excel
+          </button>
+            </div>
           </div>
         </div>
       )}
 
-      {/* Loading indicator */}
+      {/* Main Content */}
       {isLoading ? (
-        <div className="PatientTable-loading-indicator">
-          <div className="loading-container">
-            <img
-              src="https://media.giphy.com/media/YMM6g7x45coCKdrDoj/giphy.gif"
-              alt="Loading..."
-              className="loading-image"
-            />
-          </div>
+        <div className="loading-container compact">
+          <img
+            src="https://media.giphy.com/media/YMM6g7x45coCKdrDoj/giphy.gif"
+            alt="Loading..."
+            className="loading-image compact"
+          />
         </div>
       ) : (
         <>
-          {/* Patient cards */}
-          <div className="PatientTable-patient-cards">
-            {currentPatients.map((patient) => (
-              <div key={patient.id} className="PatientTable-patient-card" onClick={() => handleCardClick(patient.id)}>
-                <div className="PatientTable-profile-pic">
-                  <img src="https://assets-v2.lottiefiles.com/a/c529e71e-1150-11ee-952a-73e31b65ab2d/TiH0Dha3Qs.gif" alt="" />
-                </div>
-                <div className="PatientTable-patient-info">
-                  <h5>{patient.registernumber || "N/A"}</h5>
-                  <h5>{patient.name || "N/A"}</h5>
-                  <p>{patient.address || "N/A"}</p>
-                  <p>{patient.mainCaretakerPhone || "N/A"}</p>
-                  <p>
-                    {normalizeDiagnosis(patient.mainDiagnosis).join(", ") || "N/A"}
-                  </p>
-                  <p style={{ display: "flex", alignItems: "center", gap: "8px", color: patient.deactivated ? "red" : "green" }}>
-                    <span
-                      style={{
-                        width: "10px",
-                        height: "10px",
-                        borderRadius: "50%",
-                        backgroundColor: patient.deactivated ? "red" : "green",
-                        display: "inline-block",
-                      }}
-                    ></span>
-                    {patient.deactivated ? "Inactive" : "Active"}
-                  </p>
-                </div>
+          {/* Patient Cards Grid */}
+          <div className="patient-cards-grid compact">
+            {currentPatients.length > 0 ? (
+              currentPatients.map((patient) => (
+                <PatientCard 
+                  key={patient.id}
+                  patient={patient}
+                  onClick={() => handleCardClick(patient.id)}
+                  normalizeDiagnosis={normalizeDiagnosis}
+                  compact={true}
+                />
+              ))
+            ) : (
+              <div className="no-results compact">
+                No patients found matching your criteria
               </div>
-            ))}
+            )}
           </div>
 
           {/* Pagination */}
-          <div className="PatientTable-pagination">
-            <button onClick={handlePreviousPage} disabled={currentPage === 1} className="PatientTable-pagination-btn">
-              Previous
-            </button>
-            <span>
-              Page {currentPage} of {totalPages}
-            </span>
-            <button onClick={handleNextPage} disabled={currentPage === totalPages} className="PatientTable-pagination-btn">
-              Next
-            </button>
-          </div>
+          {filteredPatients.length > patientsPerPage && (
+            <div className="pagination compact">
+              <button 
+                onClick={handlePreviousPage} 
+                disabled={currentPage === 1} 
+                className="pagination-btn compact"
+              >
+                &lt;
+              </button>
+              
+              <div className="page-info compact">
+                {currentPage} / {totalPages}
+              </div>
+              
+              <button 
+                onClick={handleNextPage} 
+                disabled={currentPage === totalPages} 
+                className="pagination-btn compact"
+              >
+                &gt;
+              </button>
+            </div>
+          )}
         </>
       )}
+    </div>
+  );
+};
+
+// Compact Patient Card Component
+const PatientCard = ({ patient, onClick, normalizeDiagnosis, compact }) => {
+  return (
+    <div className={`patient-card ${compact ? "compact" : ""}`} onClick={onClick}>
+      <div className="card-header">
+     <div className={`profile-pic compact ${patient.deactivated ? "inactive-border" : "active-border"}`}>
+  <img 
+    src={patient.profilePic || "https://cdn-icons-png.flaticon.com/512/3177/3177440.png"} 
+    alt="Patient" 
+    onError={(e) => {
+      e.target.src = "https://cdn-icons-png.flaticon.com/512/3177/3177440.png";
+    }}
+  />
+</div>
+
+        <div className="patient-meta">
+          <h3 className="patient-name compact">{patient.name || "N/A"}</h3>
+          <span className="info-value">{patient.registernumber || "N/A"}</span>
+          
+        </div>
+      </div>
+      
+      <div className="card-body compact">
+        {/* <div className="info-row compact">
+          <span className="info-label">Reg No:</span>
+        </div> */}
+        
+        <div className="info-row compact">
+          <span className="info-label">Address:</span>
+          <span className="info-value">{patient.address || "N/A"}</span>
+        </div>
+        <div className="info-row compact">
+          <span className="info-label">Diagnosis:</span>
+          <span className="info-value" title={normalizeDiagnosis(patient.mainDiagnosis).join(", ")}>
+            {normalizeDiagnosis(patient.mainDiagnosis).join(", ") || "N/A"}
+          </span>
+        </div>
+        
+        {/* <div className="info-row compact">
+      <span className={`status-badge compact ${patient.deactivated ? "inactive" : "active"}`}>
+            {patient.deactivated ? "Inactive" : "Active"}
+          </span>
+        </div> */}
+      </div>
     </div>
   );
 };

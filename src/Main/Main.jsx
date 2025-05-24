@@ -104,16 +104,16 @@ function Main({ isAuthenticated, isNurse }) {
       {/* Bottom Navigation Bar */}
       <nav className="mainhome_bottom-nav">
         <Link to="/main" className="mainhome_nav-item">
-          <i className="bi bi-house-fill"></i>
+          <i className="bi bi-house"></i>
         </Link>
         <Link to="/main/addpt" className="mainhome_nav-item">
           <i className="bi bi-plus-circle"></i>
         </Link>
         <Link to="/main/ptlist" className="mainhome_nav-item">
-          <i className="bi bi-person-fill"></i>
+          <i className="bi bi-person"></i>
         </Link>
         <Link to="/main/allrepots" className="mainhome_nav-item">
-          <i className="bi bi-gear-fill"></i>
+          <i className="bi bi-files"></i>
         </Link>
       </nav>
     </div>
