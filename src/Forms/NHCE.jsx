@@ -63,7 +63,8 @@ const NHCE = () => {
     medicineChanges: "",
     otherActivities: "",
     homeCarePlan: "daily_7_1",
-    
+     thirst:"",
+        digestion:"",
     consultation: "",
     formType: "NHC(E)",
     submittedAt: "",
@@ -216,7 +217,8 @@ const NHCE = () => {
         medicineChanges: "",
         otherActivities: "",
         homeCarePlan: "",
-        
+         thirst:"",
+        digestion:"",
         consultation: "",
         formType: "NHC",
         submittedAt: "",
