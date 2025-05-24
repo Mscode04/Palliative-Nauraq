@@ -136,13 +136,11 @@ const DEATH = () => {
         &larr; Back
       </button>
 
-      <h2 className="DeathAdd-title">DEATH Details for Patient ID: {patientId}</h2>
+      
       {patientData ? (
-        <div className="DeathAdd-patientInfo">
-          <h3 style={{color:"black"}}>Patient Information</h3>
-          <h3 ><strong>Name:</strong> {patientData.name}</h3>
-          <h3 ><strong>Address:</strong> {patientData.address}</h3>
-          
+        <div className="">
+          {/* <h3 ><strong>Name:</strong> {patientData.name}</h3>
+          <h3 ><strong>Address:</strong> {patientData.address}</h3> */}
         </div>
       ) : (
         <div className="loading-container">
@@ -155,7 +153,7 @@ const DEATH = () => {
       )}
 
       <form onSubmit={handleSubmit} className="DeathAdd-form">
-        <h3>Death Details</h3>
+        <h3>Death Details - {patientData.name}</h3>
         <div className="DeathAdd-field">
           <label>Date of Death:</label>
           <input type="date" name="date" value={formData.date} onChange={handleChange} required />

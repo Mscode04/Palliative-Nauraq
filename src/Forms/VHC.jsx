@@ -225,9 +225,6 @@ const VHC = () => {
           <h3>Patient Information</h3>
           <p><strong>Name:</strong> {patientData.name}</p>
           <p><strong>Address:</strong> {patientData.address}</p>
-          <p><strong>Phone Number:</strong> {patientData.phone}</p>
-          <p><strong>Location:</strong> {patientData.location}</p>
-          <p><strong>Age:</strong> {patientData.age}</p>
         </>
       ) : (
         <div className="loading-container">
