@@ -196,6 +196,8 @@ const ReportDetailsDHC = () => {
     addSectionHeader("Basic Matters");
     addTable([
       ["Food", report.food || "N/A"],
+      ["Thirst", report.thirst || "N/A"],
+      ["Digestion", report.digestion || "N/A"],
       ["Drink", report.drink || "N/A"],
       ["Pee", report.pee || "N/A"],
       ["Poop", report.pop || "N/A"],
@@ -221,7 +223,7 @@ const ReportDetailsDHC = () => {
     printWindow.document.write('<div class="section">');
     addSectionHeader("Surroundings");
     addTable([
-      ["Food", report.food || "N/A"],
+     
       ["House", report.house || "N/A"],
       ["Bedroom", report.bedroom || "N/A"],
       ["Bed", report.bed || "N/A"],
@@ -604,6 +606,14 @@ const exportToPrintshort = (report) => {
 <div className="rnhc-field">
   <label>Food:</label>
   <span>{report.food || "N/A"}</span>
+</div>
+<div className="rnhc-field">
+  <label>Thirst:</label>
+  <span>{report.thirst || "N/A"}</span>
+</div>
+<div className="rnhc-field">
+  <label>Digestion:</label>
+  <span>{report.digestion|| "N/A"}</span>
 </div>
 <div className="rnhc-field">
   <label>Drink:</label>
