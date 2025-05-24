@@ -63,7 +63,8 @@ const UpdateDHC = () => {
     medicineChanges: "",
     otherActivities: "",
     homeCarePlan: "daily_7_1",
-    
+     thirst:"",
+        digestion:"",
     consultation: "",
     formType: "DHC",
     submittedAt: "",
@@ -235,31 +236,74 @@ const UpdateDHC = () => {
           </select>
         </label>
 
-        <h3>Section 2: Basic Matters</h3>
-        {["food", "drink", "pee", "pop", "sleep", "selfHygiene", "breath"].map((field) => (
-  <label key={field}>
-    {field === "pee" ? "Pee (Urine)" : field === "pop" ? "Pop (ശോധന)" : field.charAt(0).toUpperCase() + field.slice(1)}:
-    <select name={field} value={formData[field]} onChange={handleChange}>
-      {field === "breath" ? (
-        <>
-          <option value="Normal">Normal</option>
-          <option value="High">High</option>
-          <option value="Low">Low</option>
-          <option value="Varying">Varying</option>
-          <option value="NOT MENTION">NOT MENTION</option>
-        </>
-      ) : (
-        <>
-          <option value="Good">Good</option>
-          <option value="Bad">Bad</option>
-          <option value="Average">Average</option>
-          <option value="Satisfy">Satisfy</option>
-          <option value="NOT MENTION">NOT MENTION</option>
-        </>
-      )}
+             <h3>Section 2: Basic Matters (പ്രാഥമിക കാര്യങ്ങൾ)</h3>
+{[
+  {field: "food", label: "Food (ഭക്ഷണം)", options: ["Good", "Bad", "Average", "Satisfy", "NOT CHECKED"]},
+  {field: "drink", label: "Drink (പാനീയം)", options: ["Good", "Bad", "Average", "Satisfy", "NOT CHECKED"]},
+  {field: "pee", label: "Urine (മൂത്രം)", options: ["Normal", "Retention", "Inconvenience urinary", "NOT CHECKED"]},
+  {field: "pop", label: "Pop (ശോധന)", options: [
+    "Normal", 
+    "Constipation", 
+    "Diarrhea", 
+    "Spurious Diarrhea", 
+    "With the Help of Medicine (Daily)", 
+    "With the Help of Medicine (Alternative Days)", 
+    "With the Help of Medicine (Twice Weekly)",
+    "NOT CHECKED"
+  ]},
+  {field: "sleep", label: "Sleep (ഉറക്കം)", options: [
+    "Normal", 
+    "Support to medicine (good)", 
+    "Support to medicine (bad)",
+    "NOT CHECKED"
+  ]},
+{
+  field: "selfHygiene",
+  label: "Hygiene (ശുചിത്വം)",
+  options: [
+    "Daily bath (എന്നും കുളിക്കുന്നു)", 
+    "Alternative days (ഒരു ദിവസം കൂടുമ്പോഴാണ് കുളിക്കുന്നത്)", 
+    "Once a week (ആഴ്ചയിൽ ഒരു തവണ കുളിക്കുന്നു)", 
+    "Twice a week (ആഴ്ചയിൽ രണ്ട് തവണ കുളിക്കുന്നു)", 
+    "Wetting and licking (നനച്ച് തുടക്കലാണ്)", 
+    "Both bath and Wetting and licking (നനച്ച് തുടക്കുകയും ഇടക്ക് കുളിപ്പിക്കുകയും ചെയ്യാറുണ്ട്)", 
+    "NOT ASKED (ചോദിച്ചിട്ടില്ല)"
+  ]
+},
+  {field: "breath", label: "Breath (ശ്വസനം)", options: [
+    "Normal – സാധാരണ ശ്വാസം", 
+    "Low/Shallow Breathing –  താഴ്ന്ന ശ്വാസോച്ഛ്വാസം", 
+    "Breathing with Support – ഓക്സിജൻ സഹായത്തോടെ ശ്വാസം ", 
+    "Shortness of Breath – ശ്വാസക്കുഴപ്പ് / ശ്വാസം പിടക്കൽ", 
+    "Rapid Breathing – വേഗത്തിലുള്ള ശ്വാസം", 
+    "No Breathing (Apnea) – ശ്വാസം ഇല്ലായ്മ ",
+    "NOT CHECKED"
+  ]},
+  {field: "digestion", label: "Digestion (വിശപ്പ്)", options: [
+    "Normal Digestion – സാധാരണ വിശപ്പ്", 
+    "Indigestion (Dyspepsia) – കുടലൊരുക്കം", 
+    "Acidity", 
+    "Bloating – വയർ നിറഞ്ഞു തോന്നൽ / ഗ്യാസടക്കം",
+    "NOT CHECKED"
+  ]},
+  {field: "thirst", label: "Thirst (ദാഹം)", options: [
+    "Normal Thirst – സാധാരണ ദാഹം", 
+    "Excessive Thirst (Polydipsia) – അത്യധികം ദാഹം", 
+    "Reduced Thirst – കുറവായ ദാഹം", 
+    "No Thirst – ദാഹം ഇല്ലായ്മ",
+    "NOT CHECKED"
+  ]},
+].map((item) => (
+  <label key={item.field}>
+    {item.label}:
+    <select name={item.field} value={formData[item.field]} onChange={handleChange}>
+      {item.options.map(option => (
+        <option key={option} value={option}>{option}</option>
+      ))}
     </select>
   </label>
 ))}
+
 
 
         <label>
