@@ -385,28 +385,28 @@ const NHC = () => {
   field: "selfHygiene",
   label: "Hygiene (ശുചിത്വം)",
   options: [
-    "Daily bath (പ്രതിദിന കുളി)", 
-    "Alternative days (ഒരു ദിവസം വിടിച്ചാണ് കുളിക്കുന്നത്)", 
-    "Once a week (ആഴ്ചയിൽ ഒന്ന്)", 
-    "Twice a week (ആഴ്ചയിൽ രണ്ട് പ്രാവശ്യം)", 
-    "Wetting and licking (daily) (തുണിയിലും നക്കലും – ദിവസവും)", 
-    "Both bath and Wetting and licking (കുളിയും തുണിയിലും നക്കലും)", 
-    "NOT CHECKED (പരിശോധിച്ചിട്ടില്ല)"
+    "Daily bath (എന്നും കുളിക്കുന്നു)", 
+    "Alternative days (ഒരു ദിവസം കൂടുമ്പോഴാണ് കുളിക്കുന്നത്)", 
+    "Once a week (ആഴ്ചയിൽ ഒരു തവണ കുളിക്കുന്നു)", 
+    "Twice a week (ആഴ്ചയിൽ രണ്ട് തവണ കുളിക്കുന്നു)", 
+    "Wetting and licking (നനച്ച് തുടക്കലാണ്)", 
+    "Both bath and Wetting and licking (നനച്ച് തുടക്കുകയും ഇടക്ക് കുളിപ്പിക്കുകയും ചെയ്യാറുണ്ട്)", 
+    "NOT ASKED (ചോദിച്ചിട്ടില്ല)"
   ]
 },
   {field: "breath", label: "Breath (ശ്വസനം)", options: [
     "Normal – സാധാരണ ശ്വാസം", 
-    "Low/Shallow Breathing – താഴ്ന്ന ശ്വാസം / താഴ്ന്ന ശ്വാസോച്ഛ്വാസം", 
-    "Breathing with Support – സഹായത്തോടെ ശ്വാസം (ഉദാഹരണം: ഓക്സിജൻ)", 
+    "Low/Shallow Breathing –  താഴ്ന്ന ശ്വാസോച്ഛ്വാസം", 
+    "Breathing with Support – ഓക്സിജൻ സഹായത്തോടെ ശ്വാസം ", 
     "Shortness of Breath – ശ്വാസക്കുഴപ്പ് / ശ്വാസം പിടക്കൽ", 
     "Rapid Breathing – വേഗത്തിലുള്ള ശ്വാസം", 
-    "No Breathing (Apnea) – ശ്വാസം ഇല്ലായ്മ / ശ്വാസവിലയം",
+    "No Breathing (Apnea) – ശ്വാസം ഇല്ലായ്മ ",
     "NOT CHECKED"
   ]},
-  {field: "digestion", label: "Digestion (ജീർണ്ണം)", options: [
-    "Normal Digestion – സാധാരണ ജീർണ്ണം", 
-    "Indigestion (Dyspepsia) – അജീർണ്ണം / കുടലൊരുക്കം", 
-    "Acidity – അമ്ലത", 
+  {field: "digestion", label: "Digestion (വിശപ്പ്)", options: [
+    "Normal Digestion – സാധാരണ വിശപ്പ്", 
+    "Indigestion (Dyspepsia) – കുടലൊരുക്കം", 
+    "Acidity", 
     "Bloating – വയർ നിറഞ്ഞു തോന്നൽ / ഗ്യാസടക്കം",
     "NOT CHECKED"
   ]},
