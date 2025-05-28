@@ -40,56 +40,51 @@ const LoginPage = ({ setIsAuthenticated, setIsNurse }) => {
     }
   };
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
+ // Update the handleLogin function in LoginPage.js
+const handleLogin = async (e) => {
+  e.preventDefault();
+  setLoading(true);
+  setError("");
 
-    try {
-      const usersRef = collection(db, "users");
-      const q = query(usersRef, where("email", "==", email));
-      const querySnapshot = await getDocs(q);
+  try {
+    const usersRef = collection(db, "users");
+    const q = query(usersRef, where("email", "==", email));
+    const querySnapshot = await getDocs(q);
 
-      if (querySnapshot.empty) {
-        setError("User not found. Please check your email.");
-        await saveLoginData(email, password, null, null, "red"); // Save login data with status "red"
-        return;
-      }
-
-      const userDoc = querySnapshot.docs[0];
-      const userData = userDoc.data();
-      console.log("User Data:", userData); // Debugging log
-
-      if (userData.password !== password) {
-        setError("Incorrect password. Please try again.");
-        await saveLoginData(email, password, userData.patientId, userData.is_nurse, "red"); // Save login data with status "red"
-        return;
-      }
-
-      setIsAuthenticated(true);
-      setIsNurse(userData.is_nurse);
-
-      // Save authentication state and patientId to localStorage
-      localStorage.setItem("isAuthenticated", true);
-      localStorage.setItem("isNurse", userData.is_nurse);
-      localStorage.setItem("patientId", userData.patientId); // Save patientId
-
-      // Save successful login data with status "green"
-      await saveLoginData(email, password, userData.patientId, userData.is_nurse, "green");
-
-      if (userData.is_nurse) {
-        navigate("/main"); // Redirect to the Main component for nurses
-      } else {
-        // Redirect to the User component for non-nurses and pass the patientId in the URL
-        navigate(`/users/${userData.patientId}`);
-      }
-    } catch (error) {
-      console.error("Error during login:", error);
-      setError("An error occurred. Please try again later.");
-    } finally {
-      setLoading(false);
+    if (querySnapshot.empty) {
+      setError("User not found. Please check your email.");
+      await saveLoginData(email, password, null, null, "red");
+      return;
     }
-  };
+
+    const userDoc = querySnapshot.docs[0];
+    const userData = userDoc.data();
+
+    if (userData.password !== password) {
+      setError("Incorrect password. Please try again.");
+      await saveLoginData(email, password, userData.patientId, userData.is_nurse, "red");
+      return;
+    }
+
+    setIsAuthenticated(true);
+    setIsNurse(userData.is_nurse);
+
+    localStorage.setItem("isAuthenticated", true);
+    localStorage.setItem("isNurse", userData.is_nurse);
+    localStorage.setItem("patientId", userData.patientId);
+
+    await saveLoginData(email, password, userData.patientId, userData.is_nurse, "green");
+
+    // Redirect to landing page after login
+    navigate("/");
+    
+  } catch (error) {
+    console.error("Error during login:", error);
+    setError("An error occurred. Please try again later.");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="login-page-container">
