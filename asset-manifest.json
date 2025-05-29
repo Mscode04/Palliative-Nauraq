@@ -1,23 +1,23 @@
 {
   "files": {
-    "main.css": "/Palliative-Nauraq/static/css/main.d112f9d7.css",
-    "main.js": "/Palliative-Nauraq/static/js/main.27b17d86.js",
-    "static/js/239.6e0b9c23.chunk.js": "/Palliative-Nauraq/static/js/239.6e0b9c23.chunk.js",
-    "static/js/213.3088029c.chunk.js": "/Palliative-Nauraq/static/js/213.3088029c.chunk.js",
-    "static/js/455.b93efc79.chunk.js": "/Palliative-Nauraq/static/js/455.b93efc79.chunk.js",
-    "static/media/award.jpg": "/Palliative-Nauraq/static/media/award.5718a58712773c6e4de1.jpg",
-    "static/media/red.jpg": "/Palliative-Nauraq/static/media/red.66c6826500fcb2323986.jpg",
-    "static/media/home-banner-nurse.jpg": "/Palliative-Nauraq/static/media/home-banner-nurse.4187a4847bd8808a8794.jpg",
-    "static/media/logo-1.png": "/Palliative-Nauraq/static/media/logo-1.c2a307f96ab58e7da2cc.png",
-    "index.html": "/Palliative-Nauraq/index.html",
-    "main.d112f9d7.css.map": "/Palliative-Nauraq/static/css/main.d112f9d7.css.map",
-    "main.27b17d86.js.map": "/Palliative-Nauraq/static/js/main.27b17d86.js.map",
-    "239.6e0b9c23.chunk.js.map": "/Palliative-Nauraq/static/js/239.6e0b9c23.chunk.js.map",
-    "213.3088029c.chunk.js.map": "/Palliative-Nauraq/static/js/213.3088029c.chunk.js.map",
-    "455.b93efc79.chunk.js.map": "/Palliative-Nauraq/static/js/455.b93efc79.chunk.js.map"
+    "main.css": "/static/css/main.98b5e9b0.css",
+    "main.js": "/static/js/main.cbb38ad8.js",
+    "static/js/239.6e0b9c23.chunk.js": "/static/js/239.6e0b9c23.chunk.js",
+    "static/js/213.3088029c.chunk.js": "/static/js/213.3088029c.chunk.js",
+    "static/js/455.b93efc79.chunk.js": "/static/js/455.b93efc79.chunk.js",
+    "static/media/award.jpg": "/static/media/award.5718a58712773c6e4de1.jpg",
+    "static/media/red.jpg": "/static/media/red.66c6826500fcb2323986.jpg",
+    "static/media/home-banner-nurse.jpg": "/static/media/home-banner-nurse.4187a4847bd8808a8794.jpg",
+    "static/media/logo-1.png": "/static/media/logo-1.c2a307f96ab58e7da2cc.png",
+    "index.html": "/index.html",
+    "main.98b5e9b0.css.map": "/static/css/main.98b5e9b0.css.map",
+    "main.cbb38ad8.js.map": "/static/js/main.cbb38ad8.js.map",
+    "239.6e0b9c23.chunk.js.map": "/static/js/239.6e0b9c23.chunk.js.map",
+    "213.3088029c.chunk.js.map": "/static/js/213.3088029c.chunk.js.map",
+    "455.b93efc79.chunk.js.map": "/static/js/455.b93efc79.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.d112f9d7.css",
-    "static/js/main.27b17d86.js"
+    "static/css/main.98b5e9b0.css",
+    "static/js/main.cbb38ad8.js"
   ]
 }
