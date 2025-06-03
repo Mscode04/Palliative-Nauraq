@@ -9,12 +9,12 @@
     "@mui/icons-material": "^6.4.7",
     "@mui/material": "^6.4.7",
     "@popperjs/core": "^2.11.8",
-    "istanbul-reports": "3.1.7",
     "bootstrap": "^5.3.3",
     "cra-template": "1.2.0",
     "cra-template-pwa": "^2.0.0",
     "firebase": "^11.2.0",
     "html2canvas": "^1.4.1",
+    "istanbul-reports": "3.1.7",
     "jspdf": "^2.5.2",
     "jspdf-autotable": "^3.8.4",
     "lucide-react": "^0.475.0",
@@ -64,6 +64,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "gh-pages": "^6.3.0"
   }
 }
